@@ -7,7 +7,7 @@ import {
   GLFontSize,
   GLFontsFamily,
   isIOS,
-} from '../../../shared/exporter';
+} from '../../shared/exporter';
 
 const styles = StyleSheet.create({
   container: {

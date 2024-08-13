@@ -1,30 +1,35 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import RNBootSplash from 'react-native-bootsplash';
+import BootSplash from 'react-native-bootsplash';
 import AuthStack from './Stacks/AuthStack';
-import {AppStack} from './BottomTabs';
+import IntroStack from './Stacks/IntroStack';
+import AppStack from './BottomTabs';
 import {useSelector} from 'react-redux';
 
 const Stack = createNativeStackNavigator();
 const AppNavigation = ({}) => {
-  const token = useSelector(state => state?.auth?.accessToken);
+  const {accessToken, isWalkthrough} = useSelector(
+    (state: object | any) => state?.auth,
+  );
 
-  const checkNavigation = () => {
+  const handleNavigation = () => {
     setTimeout(() => {
-      RNBootSplash.hide({fade: true});
-    }, 3000);
+      BootSplash.hide();
+    }, 2000);
   };
 
   return (
-    <NavigationContainer onReady={() => checkNavigation()}>
+    <NavigationContainer onReady={() => handleNavigation()}>
       <Stack.Navigator
-        initialRouteName={token ? 'AppStack' : 'AuthStack'}
+        initialRouteName={accessToken ? 'AppStack' : 'AuthStack'}
         screenOptions={{headerShown: false}}>
-        {token ? (
+        {accessToken ? (
           <Stack.Screen name={'AppStack'} component={AppStack} />
-        ) : (
+        ) : isWalkthrough ? (
           <Stack.Screen name="AuthStack" component={AuthStack} />
+        ) : (
+          <Stack.Screen name="IntroStack" component={IntroStack} />
         )}
       </Stack.Navigator>
     </NavigationContainer>

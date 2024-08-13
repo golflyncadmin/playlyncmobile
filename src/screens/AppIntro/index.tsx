@@ -2,10 +2,10 @@ import React from 'react';
 import {View, Text, StatusBar, ImageBackground} from 'react-native';
 import {useDispatch} from 'react-redux';
 import AppIntroSlider from 'react-native-app-intro-slider';
-import {svgIcon} from '../../../assets/svg/index';
+import {svgIcon} from '../../assets/svg/index';
 import styles from './styles';
-import {Routes, APP_INTRO_SLIDES} from '../../../shared/exporter';
-import {setIsWalkthrough} from '../../../redux/auth/authSlice';
+import {Routes, APP_INTRO_SLIDES} from '../../shared/exporter';
+import {setIsWalkthrough} from '../../redux/auth/authSlice';
 
 interface AppIntroScreenProps {
   navigation: any;

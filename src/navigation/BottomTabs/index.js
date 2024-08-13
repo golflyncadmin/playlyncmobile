@@ -37,4 +37,4 @@ const AppStack = () => {
   );
 };
 
-export {AppStack};
+export default AppStack;

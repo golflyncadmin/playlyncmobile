@@ -9,6 +9,7 @@ module.exports = {
         alias: {
           '@authScreens': './src/screens/Auth',
           '@appScreens': './src/screens/App',
+          '@appIntroScreens': './src/screens/AppIntro',
           '@components': './src/components',
           '@Images': 'src/assets/images',
           '@Icons': 'src/assets/icons',

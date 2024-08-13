@@ -1,29 +1,14 @@
 import React from 'react';
-import {SafeAreaView, StyleSheet, Text} from 'react-native';
-import {GLFontsFamily} from './src/shared/theme/fontFamily';
-import {GLColors, GLFontSize} from './src/shared/exporter';
-import {svgIcon} from './src/assets/svg';
+import AppNavigation from './src/navigation';
+import {Provider} from 'react-redux';
+import {store} from './src/redux/store';
 
 function App(): React.JSX.Element {
   return (
-    <SafeAreaView style={styles.mainContainer}>
-      {svgIcon.ChevronRight}
-      <Text style={styles.titleStyle}>Game Lync</Text>
-    </SafeAreaView>
+    <Provider store={store}>
+      <AppNavigation />
+    </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  mainContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  titleStyle: {
-    color: GLColors.Blue.B1,
-    fontSize: GLFontSize.FONT_SIZE_22,
-    fontFamily: GLFontsFamily.Poppins_Bold,
-  },
-});
 
 export default App;

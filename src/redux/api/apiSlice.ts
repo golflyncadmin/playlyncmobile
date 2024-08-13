@@ -8,9 +8,6 @@ import dayjs from 'dayjs';
 import {logOut, setAccessToken, setRefreshToken} from '../auth/authSlice';
 import {BASE_URL} from '@env';
 
-// import {BASE_URL} from '../../shared/exporter';
-console.log('BASER ENV', BASE_URL);
-
 const baseQuery = fetchBaseQuery({
   baseUrl: BASE_URL,
   prepareHeaders: (headers, {getState}) => {

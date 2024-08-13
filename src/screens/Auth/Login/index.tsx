@@ -5,14 +5,9 @@ import styles from './styles';
 
 interface LoginScreenProps {
   navigation: any;
-  route: {
-    params: {
-      role: string;
-    };
-  };
 }
 
-const LoginScreen = ({navigation, route}: LoginScreenProps) => {
+const LoginScreen = ({navigation}: LoginScreenProps) => {
   return (
     <MainWrapper style={styles.container}>
       <Text style={styles.desText}>Login Screen</Text>

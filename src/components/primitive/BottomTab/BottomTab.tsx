@@ -96,10 +96,9 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     height: 70,
-    backgroundColor: GLColors.Foundation.SnowWhite,
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: GLColors.Standard.Black,
+    shadowColor: GLColors.Natural.Black,
     shadowOffset: {
       width: 0,
       height: 1,

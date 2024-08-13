@@ -1,6 +1,6 @@
 import React from 'react';
-import ChevronRight from './chevron_right.svg';
+import ForwardIcon from './forward_icon.svg';
 
 export const svgIcon = {
-  ChevronRight: <ChevronRight />,
+  ForwardIcon: <ForwardIcon />,
 };

@@ -10,15 +10,21 @@ export const UNEXPECTED_ERROR = 'Something went wrong. Please try again later.';
 export const APP_INTRO_SLIDES = [
   {
     key: 1,
-    image: appImages.appIntroOne,
+    title: 'Feature 1',
+    info: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    image: appImages.feature1,
   },
   {
     key: 2,
-    image: appImages.appIntroTwo,
+    title: 'Feature 2',
+    info: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    image: appImages.feature2,
   },
   {
     key: 3,
-    image: appImages.appIntroThree,
+    title: 'Feature 3',
+    info: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    image: appImages.feature3,
   },
 ];
 

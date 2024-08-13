@@ -8,8 +8,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useState} from 'react';
-import {Input} from 'react-native-elements';
-import {HP, GLColors, GLFonts, WP, GLFontSize} from '../../../shared/exporter';
+import {HP, GLColors, GLFontsFamily, WP, GLFontSize} from '../../../shared/exporter';
 import {GLTextComponent} from '../../index';
 
 interface AppInputProps {
@@ -71,48 +70,13 @@ const AppInput: React.FC<AppInputProps> = ({
   const [showPass, setShowPass] = useState(secureTextEntry);
 
   return (
-    <View style={[styles.container, container]}>
-      <Input
-        textAlignVertical={textAlignVertical}
-        placeholder={placeholder}
-        placeholderTextColor={GLColors.Foundation.PlaceholderGray}
-        value={value}
-        editable={editable}
-        leftIcon={leftIcon}
-        inputContainerStyle={[
-          styles.inputContainerStyle(leftIcon),
-          inputContainerStyle,
-        ]}
-        containerStyle={styles.containerStyle}
-        inputStyle={[styles.inputStyle, inputStyle]}
-        onChangeText={onChangeText}
-        errorMessage={touched && errorMessage}
-        renderErrorMessage={renderErrorMessage}
-        maxLength={maxLength}
-        multiline={multiline}
-        secureTextEntry={showPass}
-        errorStyle={[styles.errorStyle, errorStyle]}
-        onEndEditing={onEndEditing}
-        onSubmitEditing={onSubmitEditing}
-        keyboardType={keyboardType}
-        autoCapitalize={autoCapitalize}
-        rightIcon={
-          <TouchableOpacity
-            disabled={!onPressRightIcon ? true : false}
-            onPress={() => {
-              setShowPass(!showPass);
-            }}>
-            {rightIcon}
-          </TouchableOpacity>
-        }
-      />
+    <View>
       <GLTextComponent
         events={{handleClick: onPressRightTitle}}
         config={{
-          color: GLColors.Foundation.DarkGray,
+          color: GLColors.Natural.N12,
           size: GLFontSize.FONT_SIZE_14,
           font: GLFonts.Foundation.Regular,
-          style: styles.forgotText,
         }}>
         {rightTitle}
       </GLTextComponent>
@@ -120,33 +84,6 @@ const AppInput: React.FC<AppInputProps> = ({
   );
 };
 
-const styles = StyleSheet.create({
-  inputStyle: {
-    fontSize: GLFontSize.FONT_SIZE_16,
-    fontFamily: GLFonts.Foundation.Regular,
-    color: GLColors.Standard.Black,
-  },
-  containerStyle: {
-    borderColor: GLColors.Standard.White,
-    height: HP(8),
-  },
-  inputContainerStyle: (leftIcon: any) => ({
-    borderRadius: 30,
-    borderColor: GLColors.Foundation.UltraLightGray,
-    height: HP(6.5),
-    backgroundColor: GLColors.Foundation.UltraLightGray,
-    paddingLeft: leftIcon ? WP(5) : WP(7),
-  }),
-  container: {
-    width: WP(94),
-  },
-  errorStyle: {
-    paddingLeft: WP(4),
-  },
-  forgotText: {
-    alignSelf: 'flex-end',
-    right: WP(8),
-  },
-});
+const styles = StyleSheet.create({});
 
 export {AppInput};

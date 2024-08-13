@@ -2,10 +2,12 @@ import React from 'react';
 import {SafeAreaView, StyleSheet, Text} from 'react-native';
 import {GLFontsFamily} from './src/shared/theme/fontFamily';
 import {GLColors, GLFontSize} from './src/shared/exporter';
+import {svgIcon} from './src/assets/svg';
 
 function App(): React.JSX.Element {
   return (
     <SafeAreaView style={styles.mainContainer}>
+      {svgIcon.ChevronRight}
       <Text style={styles.titleStyle}>Game Lync</Text>
     </SafeAreaView>
   );

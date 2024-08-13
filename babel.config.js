@@ -8,7 +8,7 @@ module.exports = {
         extensions: ['.ts', '.tsx', 'js', '.svg', '.jsx'],
         alias: {
           '@authScreens': './src/screens/Auth',
-          '@screens': './src/screens',
+          '@appScreens': './src/screens/App',
           '@components': './src/components',
           '@Images': 'src/assets/images',
           '@Icons': 'src/assets/icons',

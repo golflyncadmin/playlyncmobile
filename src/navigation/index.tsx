@@ -2,7 +2,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import RNBootSplash from 'react-native-bootsplash';
-import AuthStack from './authStack';
+import AuthStack from './Stacks/AuthStack';
 import {AppStack} from './BottomTabs';
 import {useSelector} from 'react-redux';
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {BottomTab} from '../../components';
-import RequestsStack from '../RequestStack';
-import AddRequestStack from '../AddRequestStack';
-import AlertsStack from '../AlertsStack';
-import ProfileStack from '../ProfileStack';
+import RequestsStack from '../Stacks/RequestsStack';
+import AddRequestStack from '../Stacks/AddRequestStack';
+import AlertsStack from '../Stacks/AlertsStack';
+import ProfileStack from '../Stacks/ProfileStack';
 
 const Tab = createBottomTabNavigator();
 const AppStack = () => {

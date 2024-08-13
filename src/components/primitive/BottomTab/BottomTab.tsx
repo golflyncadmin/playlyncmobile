@@ -1,14 +1,15 @@
+import React from 'react';
 import {
-  StyleSheet,
   View,
-  TouchableOpacity,
   FlatList,
   Platform,
+  StyleSheet,
+  TouchableOpacity,
   ListRenderItemInfo,
 } from 'react-native';
-import React, {useState} from 'react';
 import {svgIcon} from '../../../assets/svg';
-import {GLColors} from '../../../shared/exporter';
+import {GLColors, WP, isIOS} from '../../../shared/exporter';
+
 type BottomTabProps = {
   state: any;
   descriptors: any;
@@ -20,82 +21,69 @@ type Route = {
   name: string;
 };
 
-export const BottomTab: React.FC<BottomTabProps> = ({
-  state,
-  descriptors,
-  navigation,
-}) => {
-  const [visible, setVisible] = useState(true);
+const TabIcon = ({index, isFocused}: {index: number; isFocused: boolean}) => {
+  switch (index) {
+    case 0:
+      return isFocused ? svgIcon.RequestsIcon : svgIcon.RequestsIcon1;
+    case 1:
+      return isFocused ? svgIcon.AddRequestIcon : svgIcon.AddRequestIcon1;
+    case 2:
+      return isFocused ? svgIcon.AlertsIcon : svgIcon.AlertsIcon1;
+    case 3:
+      return isFocused ? svgIcon.ProfileIcon : svgIcon.ProfileIcon1;
+    default:
+      return null;
+  }
+};
+
+const renderItem = (
+  {item, index}: ListRenderItemInfo<Route>,
+  state: any,
+  navigation: any,
+) => {
+  const isFocused = state.index === index;
+  const onPress = () => {
+    const event = navigation.emit({
+      type: 'tabPress',
+      target: item.key,
+      canPreventDefault: true,
+    });
+
+    if (!isFocused && !event.defaultPrevented) {
+      navigation.navigate({name: item.name, merge: true});
+    }
+  };
 
   return (
-    <View
-      style={{
-        backgroundColor: '#fff',
-        display: visible ? 'flex' : 'none',
-      }}>
-      <View style={styles.container}>
-        <FlatList
-          scrollEnabled={false}
-          numColumns={4}
-          data={state?.routes}
-          renderItem={({item, index}: ListRenderItemInfo<Route>) => {
-            const {options} = descriptors[item.key];
-            const label =
-              options.tabBarLabel !== undefined
-                ? options.tabBarLabel
-                : options.title !== undefined
-                ? options.title
-                : item.name;
-            const isFocused = state.index === index;
-            const onPress = () => {
-              const event = navigation.emit({
-                type: 'tabPress',
-                target: item.key,
-                canPreventDefault: true,
-              });
+    <View style={styles.tabContainer} key={item.key}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={onPress}
+        style={styles.tabContainer}>
+        <TabIcon index={index} isFocused={isFocused} />
+      </TouchableOpacity>
+    </View>
+  );
+};
 
-              if (!isFocused && !event.defaultPrevented) {
-                navigation.navigate({name: item.name, merge: true});
-              }
-            };
-            return (
-              <View style={styles.tabContainer}>
-                <TouchableOpacity
-                  onPress={onPress}
-                  style={[styles.tabContainer]}>
-                  {index === 0
-                    ? isFocused
-                      ? svgIcon.ActiveHome
-                      : svgIcon.HomeInactive
-                    : index === 1
-                    ? isFocused
-                      ? item.name === 'WishlistScreen'
-                        ? svgIcon.ActiveHeart
-                        : svgIcon.ReviewActive
-                      : item.name === 'WishlistScreen'
-                      ? svgIcon.InactiveHeart
-                      : svgIcon.ReviewInActive
-                    : index === 2
-                    ? isFocused
-                      ? svgIcon.NotificationActive
-                      : svgIcon.NotificationInActive
-                    : isFocused
-                    ? svgIcon.ProfileActive
-                    : svgIcon.Profile}
-                </TouchableOpacity>
-              </View>
-            );
-          }}
-        />
-      </View>
+export const BottomTab: React.FC<BottomTabProps> = ({state, navigation}) => {
+  return (
+    <View style={styles.tabsContainer}>
+      <FlatList
+        numColumns={4}
+        data={state?.routes}
+        scrollEnabled={false}
+        keyExtractor={item => item.key}
+        renderItem={props => renderItem(props, state, navigation)}
+      />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  tabsContainer: {
+    height: isIOS() ? WP('20') : WP('17'),
     flexDirection: 'row',
-    height: 70,
     alignItems: 'center',
     justifyContent: 'center',
     shadowColor: GLColors.Natural.Black,
@@ -106,34 +94,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
     elevation: 2,
-  },
-  firstImageStyle: (isFocused: boolean) => ({
-    height: 20,
-    width: 23,
-    resizeMode: 'contain',
-    tintColor: isFocused ? 'red' : 'pink',
-  }),
-  profileImageStyle: {
-    height: 18,
-    width: 18,
-    resizeMode: 'contain',
-  },
-  tabImageStyle: {
-    height: 25,
-    width: 25,
-    resizeMode: 'contain',
+    backgroundColor: GLColors.Natural.White,
   },
   tabContainer: {
-    paddingBottom: Platform.OS === 'android' ? 0 : 5,
     width: '25%',
+    height: WP('20'),
     alignItems: 'center',
-    marginVertical: 5,
     justifyContent: 'center',
+    bottom: isIOS() ? WP('1') : WP('1.6'),
+    paddingBottom: Platform.OS === 'android' ? 0 : 5,
   },
-  tabName: (isFocused: boolean) => ({
-    fontSize: 11,
-    color: isFocused ? 'red' : 'pink',
-    width: '400%',
-    textAlign: 'center',
-  }),
 });

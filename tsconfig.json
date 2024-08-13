@@ -1,6 +1,29 @@
 {
   "compilerOptions": {
-    "jsx": "react"
+    "moduleResolution": "node",
+    "jsx": "react",
+    "target": "es6" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', or 'ESNEXT'. */,
+    "module": "commonjs" /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */,
+    "outDir": "./dist" /* Redirect output structure to the directory. */,
+    "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
+    "baseUrl": "./",
+    "paths": {
+      "*": ["./src/*"],
+      "@authScreens": ["./src/screens/Auth"],
+      "@appScreens": ["./src/screens/App"],
+      "@screens": ["src/screens"],
+      "@components": ["src/components"],
+      "@Images": ["src/assets/images"],
+      "@Icons": ["src/assets/icons"],
+      "@exporter": ["src/shared/exporter/*"],
+      "@assets": ["src/assets"]
+    }
   },
-  "extends": "@react-native/typescript-config/tsconfig.json"
+  "include": ["globals.d.ts", "declaration.d.ts"],
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js"
+  ]
 }

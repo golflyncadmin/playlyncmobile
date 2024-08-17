@@ -12,6 +12,10 @@ import GoogleIcon from './google_icon.svg';
 import AppleIcon from './apple_icon.svg';
 import FBIcon from './fb_icon.svg';
 import InstaIcon from './insta_icon.svg';
+import MailIcon from './mail_icon.svg';
+import LockIcon from './lock_icon.svg';
+import EyeOffIcon from './eye_off_icon.svg';
+import EyeOnIcon from './eye_on_icon.svg';
 
 export const svgIcon = {
   ForwardIcon: <ForwardIcon />,
@@ -27,4 +31,8 @@ export const svgIcon = {
   AppleIcon: <AppleIcon />,
   FBIcon: <FBIcon />,
   InstaIcon: <InstaIcon />,
+  MailIcon: <MailIcon />,
+  LockIcon: <LockIcon />,
+  EyeOffIcon: <EyeOffIcon />,
+  EyeOnIcon: <EyeOnIcon />,
 };

@@ -1,7 +1,6 @@
 // Primitive
-export * from './primitive/TextInput';
+export * from './primitive/AppInput';
 export * from './primitive/MainWrapper';
-export * from './primitive/Text';
 export * from './primitive/Loader';
 export * from './primitive/BottomTab/BottomTab';
 

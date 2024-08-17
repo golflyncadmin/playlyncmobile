@@ -5,7 +5,6 @@ export const loginForm = {
   password: '',
 };
 export const signUpForm = {
-  username: '',
   email: '',
   password: '',
   confirmPassword: '',
@@ -22,16 +21,13 @@ export const resetPassForm = {
 
 export const signUpValidationSchema = () => {
   const baseSchema = {
-    username: yup
-      .string()
-      .required('Username Required')
-      .matches(/^\S*$/, 'Space Not Allowed')
-      .matches(/^[a-zA-Z0-9]*$/, 'Special Characters Are Not Allowed')
-      .max(25, 'Maximum 25 Characters Allowed'),
     email: yup
       .string()
       .required('Email Required')
-      .email('Please provide a valid email address'),
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        'Invalid email address',
+      ),
     password: yup
       .string()
       .min(6, 'Password must be at least 6 characters')
@@ -40,7 +36,7 @@ export const signUpValidationSchema = () => {
     confirmPassword: yup
       .string()
       .min(6, 'Password must be at least 6 characters')
-      .required('Confirm Password Required')
+      .required('Password Confirmation Required')
       .oneOf([yup.ref('password'), null], 'Passwords do not match')
       .max(25, 'Maximum 25 Characters Allowed'),
   };

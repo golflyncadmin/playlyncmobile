@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     flex: 0.6,
     alignItems: 'center',
     marginVertical: WP('2'),
-    marginHorizontal: WP('5'),
+    marginHorizontal: WP('4'),
   },
   accountTextStyle: {
     marginTop: WP('2'),

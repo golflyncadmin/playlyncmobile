@@ -3,4 +3,5 @@ export const Routes = {
   LoginType: 'LoginType',
   Login: 'Login',
   SignUp: 'SignUp',
+  OTPVerification: 'OTPVerification',
 };

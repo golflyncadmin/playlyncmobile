@@ -12,21 +12,24 @@ interface AppButtonProps {
   title: string;
   textStyle?: any;
   buttonStyle?: any;
+  disabled?: boolean;
   handleClick?: () => void;
 }
 
 function AppButton({
   icon,
   title,
+  disabled,
   textStyle,
   buttonStyle,
   handleClick,
 }: AppButtonProps) {
   return (
     <TouchableOpacity
+      disabled={disabled}
       activeOpacity={0.7}
       onPress={handleClick}
-      style={[styles.buttonContainer, buttonStyle]}>
+      style={[styles.buttonContainer(disabled), buttonStyle]}>
       <View style={styles.emptyViewStyle} />
       <Text style={[styles.typeTextStyle, textStyle]}>{title}</Text>
       {icon ? icon : <View style={styles.emptyViewStyle} />}
@@ -35,7 +38,7 @@ function AppButton({
 }
 
 const styles = StyleSheet.create({
-  buttonContainer: {
+  buttonContainer: (isDisabled: boolean) => ({
     width: '100%',
     borderWidth: 1,
     height: WP('12'),
@@ -45,9 +48,9 @@ const styles = StyleSheet.create({
     marginBottom: WP('4'),
     paddingHorizontal: WP('5'),
     justifyContent: 'space-between',
-    borderColor: GLColors.Natural.N15,
-    backgroundColor: GLColors.Blue.B2,
-  },
+    borderColor: isDisabled ? GLColors.Natural.N4 : GLColors.Natural.N15,
+    backgroundColor: isDisabled ? GLColors.Natural.N4 : GLColors.Blue.B2,
+  }),
   typeTextStyle: {
     color: GLColors.Natural.White,
     fontSize: GLFontSize.FONT_SIZE_16,

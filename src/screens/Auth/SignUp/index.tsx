@@ -19,6 +19,7 @@ const SignUp = ({navigation}: SignUpProps) => {
   const formikRef = useRef(null);
   const handleSignUp = (values: any) => {
     console.log('Values => ', values);
+    navigation.navigate(Routes.OTPVerification);
   };
 
   return (
@@ -40,9 +41,16 @@ const SignUp = ({navigation}: SignUpProps) => {
           <Formik
             innerRef={formikRef}
             initialValues={signUpForm}
-            onSubmit={(values: any) => handleSignUp(values)}
-            validationSchema={signUpValidationSchema}>
-            {({values, errors, touched, handleSubmit, handleChange}) => (
+            validationSchema={signUpValidationSchema}
+            onSubmit={(values: any) => handleSignUp(values)}>
+            {({
+              values,
+              errors,
+              touched,
+              isValid,
+              handleSubmit,
+              handleChange,
+            }) => (
               <View style={styles.contentContainer}>
                 <Text style={styles.headingStyle}>Create Account</Text>
                 <AppInput
@@ -77,7 +85,11 @@ const SignUp = ({navigation}: SignUpProps) => {
                   onChangeText={handleChange('confirmPassword')}
                 />
                 <View style={styles.emptyView} />
-                <AppButton title={'Next'} handleClick={handleSubmit} />
+                <AppButton
+                  title={'Next'}
+                  disabled={!isValid}
+                  handleClick={handleSubmit}
+                />
                 <Text style={styles.memberTextStyle}>
                   Already a member?{' '}
                   <Text

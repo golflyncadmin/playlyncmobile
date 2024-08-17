@@ -3451,6 +3451,7 @@ __metadata:
     react-native-reanimated: ^3.15.0
     react-native-safe-area-context: ^4.10.8
     react-native-screens: ^3.34.0
+    react-native-simple-toast: ^3.3.1
     react-native-svg: ^15.5.0
     react-native-svg-transformer: ^1.5.0
     react-redux: ^9.1.2
@@ -9331,6 +9332,16 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 28c1f6e556c318ffcbd79d153b9612cc8a0b8d8b70f909d3cde2fd6d0586a7c151a449e57400d8996f4ee6c3b5140c5c4f643a427e974f6dc573b2bcd8eb7356
+  languageName: node
+  linkType: hard
+
+"react-native-simple-toast@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "react-native-simple-toast@npm:3.3.1"
+  peerDependencies:
+    react: "*"
+    react-native: ">=0.71.0"
+  checksum: 0f535a469b9519f761ee0224828df8e531fb92ad5e9accefdc04aafcd896da4c6fead488fe6911ccc11592f325707499f4b696768afd8c20cefe06fa6cdac50f
   languageName: node
   linkType: hard
 

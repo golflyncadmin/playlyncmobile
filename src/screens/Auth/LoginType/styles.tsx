@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
   },
   signUpStyle: {
     color: GLColors.Blue.B2,
+    fontFamily: GLFontsFamily.Poppins_Medium,
   },
   contactUsStyle: {
     marginTop: WP('8'),

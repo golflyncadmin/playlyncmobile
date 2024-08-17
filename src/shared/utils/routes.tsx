@@ -4,4 +4,6 @@ export const Routes = {
   Login: 'Login',
   SignUp: 'SignUp',
   OTPVerification: 'OTPVerification',
+  ForgotPassword: 'ForgotPassword',
+  AppStack: 'AppStack',
 };

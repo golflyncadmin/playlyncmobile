@@ -12,12 +12,14 @@ import styles from './styles';
 import {Routes, appIcons, isIOS} from '../../../shared/exporter';
 
 interface OTPVerificationProps {
+  route: any;
   navigation: any;
 }
 
 const CELL_COUNT = 6;
 
-const OTPVerification = ({navigation}: OTPVerificationProps) => {
+const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
+  const {email} = route?.params;
   const [timer, setTimer] = useState(30);
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
@@ -78,7 +80,7 @@ const OTPVerification = ({navigation}: OTPVerificationProps) => {
             <Text style={styles.headingStyle}>Almost There</Text>
             <Text style={styles.infoTextStyle}>
               Please enter the 6-digit code sent to your phone number{' '}
-              <Text style={styles.commonTextStyle}>adeel@gmail.com</Text> for
+              <Text style={styles.commonTextStyle}>{email}</Text> for
               verification
             </Text>
             <CodeField

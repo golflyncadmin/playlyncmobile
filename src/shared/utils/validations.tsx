@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 export const loginForm = {
-  username: '',
+  email: '',
   password: '',
 };
 export const signUpForm = {
@@ -44,11 +44,14 @@ export const signUpValidationSchema = () => {
   return yup.object().shape(baseSchema);
 };
 
-export const loginValidation = yup.object().shape({
+export const loginValidationSchema = yup.object().shape({
   email: yup
     .string()
     .required('Email Required')
-    .email('Please provide a valid email address'),
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      'Invalid email address',
+    ),
   password: yup
     .string()
     .min(6, 'Password must be at least 6 characters')
@@ -56,11 +59,14 @@ export const loginValidation = yup.object().shape({
     .max(25, 'Maximum 25 Characters Allowed'),
 });
 
-export const forgotPassValidation = yup.object().shape({
+export const forgotPassValidationSchema = yup.object().shape({
   email: yup
     .string()
     .required('Email Required')
-    .email('Please provide a valid email address'),
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      'Invalid email address',
+    ),
 });
 
 export const resetPassValidation = yup.object().shape({

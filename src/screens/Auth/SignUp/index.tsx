@@ -19,7 +19,7 @@ const SignUp = ({navigation}: SignUpProps) => {
   const formikRef = useRef(null);
   const handleSignUp = (values: any) => {
     console.log('Values => ', values);
-    navigation.navigate(Routes.OTPVerification);
+    navigation.navigate(Routes.OTPVerification, {email: values.email});
   };
 
   return (

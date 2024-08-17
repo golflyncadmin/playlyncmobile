@@ -1,12 +1,12 @@
 import {StyleSheet} from 'react-native';
 import {
-  HP,
   WP,
+  isIOS,
   scrWidth,
   GLColors,
+  scrHeight,
   GLFontSize,
   GLFontsFamily,
-  isIOS,
 } from '../../shared/exporter';
 
 const styles = StyleSheet.create({
@@ -14,8 +14,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   imageStyles: {
-    width: WP('100'),
-    height: HP('100'),
+    flex: 1,
+    width: scrWidth,
+    height: isIOS() ? scrHeight : scrHeight * 1.05,
   },
   textContainer: {
     width: scrWidth,

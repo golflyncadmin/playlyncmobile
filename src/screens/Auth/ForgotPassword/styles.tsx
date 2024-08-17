@@ -1,7 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {
   WP,
-  isIOS,
   GLColors,
   scrHeight,
   GLFontSize,
@@ -12,12 +11,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: GLColors.Natural.White,
-  },
-  scrollViewStyle: {
-    flex: 1,
-  },
-  heightStyle: {
-    minHeight: scrHeight,
   },
   scrollContent: {
     flex: 1,
@@ -44,18 +37,8 @@ const styles = StyleSheet.create({
     fontSize: GLFontSize.FONT_SIZE_32,
     fontFamily: GLFontsFamily.Poppins_SemiBold,
   },
-  emptyView: {
-    flex: isIOS() ? 0.5 : 0.6,
-  },
-  memberTextStyle: {
-    marginTop: WP('2'),
-    color: GLColors.Natural.N9,
-    fontSize: GLFontSize.FONT_SIZE_14,
-    fontFamily: GLFontsFamily.Poppins_Regular,
-  },
-  loginStyle: {
-    color: GLColors.Blue.B2,
-    fontFamily: GLFontsFamily.Poppins_Medium,
+  buttonStyle: {
+    marginTop: WP('5'),
   },
 });
 

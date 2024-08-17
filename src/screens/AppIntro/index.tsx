@@ -17,8 +17,7 @@ const AppIntro = ({navigation}: AppIntroScreenProps) => {
   const renderItem = ({item}: {item: (typeof APP_INTRO_SLIDES)[0]}) => (
     <ImageBackground
       style={styles.imageStyles}
-      source={item.image}
-      resizeMode="cover">
+      source={item.image}>
       <View style={styles.textContainer}>
         <Text style={styles.titleTextStyle}>{item?.title}</Text>
         <Text style={styles.infoTextStyle}>{item?.info}</Text>

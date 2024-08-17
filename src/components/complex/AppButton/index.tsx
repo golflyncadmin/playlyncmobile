@@ -1,78 +1,62 @@
 import React from 'react';
-import {Text, StyleSheet, TouchableOpacity} from 'react-native';
-import {WP} from '../../../shared/exporter';
-import {GLTextComponent} from '@components/primitive/Text';
+import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  WP,
+  GLColors,
+  GLFontSize,
+  GLFontsFamily,
+} from '../../../shared/exporter';
 
-interface ComponentProps {
-  style?: any;
+interface AppButtonProps {
+  icon?: any;
   title: string;
   textStyle?: any;
+  buttonStyle?: any;
   handleClick?: () => void;
 }
 
-function GLButtonComponent({}: ComponentProps) {
+function AppButton({
+  icon,
+  title,
+  textStyle,
+  buttonStyle,
+  handleClick,
+}: AppButtonProps) {
   return (
     <TouchableOpacity
-      // onPress={handleClick}
-      style={styles.shadow}>
-      <Text>Button</Text>
+      activeOpacity={0.7}
+      onPress={handleClick}
+      style={[styles.buttonContainer, buttonStyle]}>
+      <View style={styles.emptyViewStyle} />
+      <Text style={[styles.typeTextStyle, textStyle]}>{title}</Text>
+      {icon ? icon : <View style={styles.emptyViewStyle} />}
     </TouchableOpacity>
   );
 }
 
 const styles = StyleSheet.create({
-  button: {
-    padding: 18,
-    borderRadius: 30,
-    borderCurve: 'continuous',
-    alignContent: 'center',
-    alignItems: 'center',
-    justifyContent: 'center',
+  buttonContainer: {
+    width: '100%',
+    borderWidth: 1,
+    height: WP('12'),
     flexDirection: 'row',
-    gap: 10,
+    alignItems: 'center',
+    borderRadius: WP('1'),
+    marginBottom: WP('4'),
+    paddingHorizontal: WP('5'),
+    justifyContent: 'space-between',
+    borderColor: GLColors.Natural.N15,
+    backgroundColor: GLColors.Blue.B2,
   },
-  buttonSizeSmall: {
-    padding: 6,
-    paddingLeft: 10,
-    paddingRight: 10,
-    width: WP(30),
+  typeTextStyle: {
+    color: GLColors.Natural.White,
+    fontSize: GLFontSize.FONT_SIZE_16,
+    fontFamily: GLFontsFamily.Poppins_Medium,
   },
-  buttonSizeMedium: {
-    padding: 10,
-  },
-  buttonPrimary: {},
-  buttonSecondary: {
-    width: WP(42),
-    padding: 15,
-  },
-  buttonTertiary: {},
-  buttonDisabled: {
-    opacity: 0.5,
-  },
-  text: {
-    fontSize: 18,
-    textAlign: 'center',
-    color: '#fff',
-  },
-  textSmall: {
-    fontSize: 12,
-  },
-  textMedium: {
-    fontSize: 16,
-  },
-  textLarge: {
-    fontSize: 18,
-  },
-  shadow: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 3,
-    },
-    shadowOpacity: 0.27,
-    shadowRadius: 4.65,
-    elevation: 6,
+  emptyViewStyle: {
+    width: WP('7'),
+    height: WP('7'),
   },
 });
 
-export {GLButtonComponent};
+export {AppButton};

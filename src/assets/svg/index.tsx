@@ -8,6 +8,10 @@ import AlertsIcon from './alerts_icon.svg';
 import AlertsIcon1 from './alerts_icon1.svg';
 import ProfileIcon from './profile_icon.svg';
 import ProfileIcon1 from './profile_icon1.svg';
+import GoogleIcon from './google_icon.svg';
+import AppleIcon from './apple_icon.svg';
+import FBIcon from './fb_icon.svg';
+import InstaIcon from './insta_icon.svg';
 
 export const svgIcon = {
   ForwardIcon: <ForwardIcon />,
@@ -19,4 +23,8 @@ export const svgIcon = {
   AlertsIcon1: <AlertsIcon1 />,
   ProfileIcon: <ProfileIcon />,
   ProfileIcon1: <ProfileIcon1 />,
+  GoogleIcon: <GoogleIcon />,
+  AppleIcon: <AppleIcon />,
+  FBIcon: <FBIcon />,
+  InstaIcon: <InstaIcon />,
 };

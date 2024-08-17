@@ -1,5 +1,7 @@
 export {
   showAlert,
+  EMAIL,
+  LOGIN_TYPES,
   IMAGE_OPTIONS,
   UNEXPECTED_ERROR,
   APP_INTRO_SLIDES,

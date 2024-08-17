@@ -1,4 +1,6 @@
 export const Routes = {
-  LoginScreen: 'LoginScreen',
   AppIntro: 'AppIntro',
+  LoginType: 'LoginType',
+  Login: 'Login',
+  SignUp: 'SignUp',
 };

@@ -3,16 +3,16 @@ import {Text} from 'react-native';
 import {MainWrapper} from '../../../components';
 import styles from './styles';
 
-interface LoginProps {
+interface SignUpProps {
   navigation: any;
 }
 
-const Login = ({navigation}: LoginProps) => {
+const SignUp = ({navigation}: SignUpProps) => {
   return (
     <MainWrapper style={styles.container}>
-      <Text style={styles.desText}>Login</Text>
+      <Text style={styles.desText}>SignUp</Text>
     </MainWrapper>
   );
 };
 
-export default Login;
+export default SignUp;

@@ -27,7 +27,7 @@ const AppIntro = ({navigation}: AppIntroScreenProps) => {
   );
 
   const onDone = () => {
-    navigation.navigate(Routes.LoginScreen);
+    navigation.navigate(Routes.Login);
     dispatch(setIsWalkthrough());
   };
 

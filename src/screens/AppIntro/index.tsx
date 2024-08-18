@@ -15,9 +15,7 @@ const AppIntro = ({navigation}: AppIntroScreenProps) => {
   const dispatch = useDispatch();
 
   const renderItem = ({item}: {item: (typeof APP_INTRO_SLIDES)[0]}) => (
-    <ImageBackground
-      style={styles.imageStyles}
-      source={item.image}>
+    <ImageBackground style={styles.imageStyles} source={item.image}>
       <View style={styles.textContainer}>
         <Text style={styles.titleTextStyle}>{item?.title}</Text>
         <Text style={styles.infoTextStyle}>{item?.info}</Text>
@@ -26,8 +24,8 @@ const AppIntro = ({navigation}: AppIntroScreenProps) => {
   );
 
   const onDone = () => {
-    navigation.navigate(Routes.Login);
     dispatch(setIsWalkthrough());
+    navigation.navigate(Routes.AuthStack);
   };
 
   const renderNextButton = () => (

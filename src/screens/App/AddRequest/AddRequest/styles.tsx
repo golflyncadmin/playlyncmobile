@@ -1,13 +1,15 @@
 import {StyleSheet} from 'react-native';
-import {HP} from '../../../../shared/exporter';
+import {GLFontSize, GLFontsFamily} from '../../../../shared/exporter';
 
 const styles = StyleSheet.create({
-  container: {},
-  desText: {
-    fontSize: 22,
-    paddingTop: HP(2),
-    paddingBottom: HP(4),
-    textAlign: 'center',
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  todoTextStyle: {
+    fontSize: GLFontSize.FONT_SIZE_22,
+    fontFamily: GLFontsFamily.Poppins_SemiBold,
   },
 });
 

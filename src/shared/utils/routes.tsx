@@ -6,4 +6,5 @@ export const Routes = {
   OTPVerification: 'OTPVerification',
   ForgotPassword: 'ForgotPassword',
   AppStack: 'AppStack',
+  AddRequestStack: 'AddRequestStack',
 };

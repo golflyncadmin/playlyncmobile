@@ -11,6 +11,7 @@ interface AppButtonProps {
   icon?: any;
   title: string;
   textStyle?: any;
+  isEmpty?: boolean;
   buttonStyle?: any;
   disabled?: boolean;
   handleClick?: () => void;
@@ -23,6 +24,7 @@ function AppButton({
   textStyle,
   buttonStyle,
   handleClick,
+  isEmpty = true,
 }: AppButtonProps) {
   return (
     <TouchableOpacity
@@ -30,7 +32,7 @@ function AppButton({
       activeOpacity={0.7}
       onPress={handleClick}
       style={[styles.buttonContainer(disabled), buttonStyle]}>
-      <View style={styles.emptyViewStyle} />
+      {isEmpty && <View style={styles.emptyViewStyle} />}
       <Text style={[styles.typeTextStyle, textStyle]}>{title}</Text>
       {icon ? icon : <View style={styles.emptyViewStyle} />}
     </TouchableOpacity>

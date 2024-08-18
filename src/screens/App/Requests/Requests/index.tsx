@@ -10,7 +10,7 @@ interface RequestsProps {
 const Requests = ({navigation}: RequestsProps) => {
   return (
     <MainWrapper style={styles.container}>
-      <Text style={styles.desText}>Requests</Text>
+      <Text style={styles.todoTextStyle}>TODO: My Requests</Text>
     </MainWrapper>
   );
 };

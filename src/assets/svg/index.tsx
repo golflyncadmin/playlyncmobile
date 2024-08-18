@@ -16,6 +16,10 @@ import MailIcon from './mail_icon.svg';
 import LockIcon from './lock_icon.svg';
 import EyeOffIcon from './eye_off_icon.svg';
 import EyeOnIcon from './eye_on_icon.svg';
+import SendIcon from './send_icon.svg';
+import NotifyIcon from './notify_icon.svg';
+import ConfirmCircleIcon from './confirm_circle_icon.svg';
+import NotificationsIcon from './notifications_icon.svg';
 
 export const svgIcon = {
   ForwardIcon: <ForwardIcon />,
@@ -35,4 +39,8 @@ export const svgIcon = {
   LockIcon: <LockIcon />,
   EyeOffIcon: <EyeOffIcon />,
   EyeOnIcon: <EyeOnIcon />,
+  SendIcon: <SendIcon />,
+  NotifyIcon: <NotifyIcon />,
+  ConfirmCircleIcon: <ConfirmCircleIcon />,
+  NotificationsIcon: <NotificationsIcon />,
 };

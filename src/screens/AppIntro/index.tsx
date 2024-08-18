@@ -42,7 +42,11 @@ const AppIntro = ({navigation}: AppIntroScreenProps) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar translucent={true} backgroundColor={'transparent'} />
+      <StatusBar
+        translucent={true}
+        barStyle={'dark-content'}
+        backgroundColor={'transparent'}
+      />
       <AppIntroSlider
         data={APP_INTRO_SLIDES}
         showSkipButton

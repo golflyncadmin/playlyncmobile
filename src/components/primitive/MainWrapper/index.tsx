@@ -10,7 +10,11 @@ interface MainWrapperProps {
 const MainWrapper: React.FC<MainWrapperProps> = ({children, style}) => {
   return (
     <SafeAreaView style={[styles.container, style]}>
-      <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} />
+      <StatusBar
+        translucent={false}
+        barStyle={'dark-content'}
+        backgroundColor={GLColors.Natural.White}
+      />
       {children}
     </SafeAreaView>
   );

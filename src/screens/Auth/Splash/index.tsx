@@ -29,7 +29,11 @@ const Splash = ({navigation}: SplashProps) => {
 
   return (
     <View style={styles.container}>
-      <StatusBar translucent={true} backgroundColor={'transparent'} />
+      <StatusBar
+        translucent={true}
+        barStyle={'dark-content'}
+        backgroundColor={'transparent'}
+      />
       <Image
         resizeMode="contain"
         source={appIcons.appLogo}

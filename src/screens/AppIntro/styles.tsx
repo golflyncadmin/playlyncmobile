@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
     backgroundColor: GLColors.Natural.White,
   },
   skipTextStyle: {
-    bottom: isIOS() ? 0 : 1.2,
     color: GLColors.Blue.B1,
+    bottom: isIOS() ? 0 : 1.5,
     fontSize: GLFontSize.FONT_SIZE_16,
     fontFamily: GLFontsFamily.PlusJakartaSans_SemiBold,
   },

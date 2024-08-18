@@ -1,16 +1,106 @@
-import React from 'react';
-import {Text} from 'react-native';
-import {MainWrapper} from '../../../../components';
+import React, {useState} from 'react';
+import {View, Text, TouchableOpacity} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {
+  AppButton,
+  AppHeader,
+  DeleteModal,
+  MainWrapper,
+} from '../../../../components';
 import styles from './styles';
+import {svgIcon} from '../../../../assets/svg';
+import {Routes} from '../../../../shared/exporter';
+import {logOut} from '../../../../redux/auth/authSlice';
 
 interface ProfileProps {
   navigation: any;
 }
 
 const Profile = ({navigation}: ProfileProps) => {
+  const dispatch = useDispatch();
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const deleteAccount = () => {
+    setModalVisible(false);
+    setTimeout(() => {
+      handleNavigation();
+    }, 500);
+  };
+
+  const handleLogout = () => {
+    handleNavigation();
+  };
+
+  const handleNavigation = () => {
+    dispatch(logOut());
+    navigation.replace(Routes.AuthStack);
+  };
+
+  const DisplayOption = ({title, icon, screen}) => (
+    <TouchableOpacity
+      activeOpacity={0.7}
+      style={styles.rowContainer}
+      onPress={() => navigation.navigate(screen)}>
+      <View style={styles.innerRow}>
+        {icon}
+        <Text style={styles.titleTextStyle}>{title}</Text>
+      </View>
+      {svgIcon.RightIcon}
+    </TouchableOpacity>
+  );
+
   return (
     <MainWrapper style={styles.container}>
-      <Text style={styles.desText}>Profile</Text>
+      <AppHeader title="Profile" leftIcon={false} />
+      <View style={styles.innerContainer}>
+        <View style={styles.spacerView} />
+        <Text style={styles.headingTextStyle}>Profile</Text>
+        <DisplayOption
+          screen={''}
+          title="Personal Data"
+          icon={svgIcon.PersonIcon}
+        />
+      </View>
+      <View style={styles.innerContainer}>
+        <Text style={styles.headingTextStyle}>Legal</Text>
+        <DisplayOption
+          screen={''}
+          title="Privacy Policy"
+          icon={svgIcon.LockIcon}
+        />
+        <DisplayOption
+          screen={''}
+          title="Terms of Services"
+          icon={svgIcon.TermsIcon}
+        />
+      </View>
+      <View style={styles.innerContainer}>
+        <Text style={styles.headingTextStyle}>Support</Text>
+        <DisplayOption
+          screen={''}
+          title="Suggest a Course"
+          icon={svgIcon.CourseIcon}
+        />
+        <DisplayOption
+          screen={''}
+          title="Report an issue"
+          icon={svgIcon.HelpIcon}
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <AppButton title={'Log out'} handleClick={() => handleLogout()} />
+        <AppButton
+          title={'Delete profile'}
+          textStyle={styles.textStyle}
+          buttonStyle={styles.buttonStyle}
+          handleClick={() => setModalVisible(true)}
+        />
+      </View>
+      <DeleteModal
+        modalVisible={modalVisible}
+        handleClick={() => deleteAccount()}
+        setModalVisible={() => setModalVisible(false)}
+      />
     </MainWrapper>
   );
 };

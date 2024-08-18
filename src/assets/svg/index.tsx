@@ -20,6 +20,12 @@ import SendIcon from './send_icon.svg';
 import NotifyIcon from './notify_icon.svg';
 import ConfirmCircleIcon from './confirm_circle_icon.svg';
 import NotificationsIcon from './notifications_icon.svg';
+import BackIcon from './back_icon.svg';
+import PersonIcon from './person_icon.svg';
+import TermsIcon from './terms_icon.svg';
+import CourseIcon from './course_icon.svg';
+import HelpIcon from './help_icon.svg';
+import RightIcon from './right_icon.svg';
 
 export const svgIcon = {
   ForwardIcon: <ForwardIcon />,
@@ -43,4 +49,10 @@ export const svgIcon = {
   NotifyIcon: <NotifyIcon />,
   ConfirmCircleIcon: <ConfirmCircleIcon />,
   NotificationsIcon: <NotificationsIcon />,
+  BackIcon: <BackIcon />,
+  PersonIcon: <PersonIcon />,
+  TermsIcon: <TermsIcon />,
+  HelpIcon: <HelpIcon />,
+  CourseIcon: <CourseIcon />,
+  RightIcon: <RightIcon />,
 };

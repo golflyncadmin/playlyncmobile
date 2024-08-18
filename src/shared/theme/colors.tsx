@@ -19,6 +19,7 @@ export const GLColors = {
     P6: '#34BE41',
   },
   Red: {
+    R4: '#DB392E',
     R6: '#F9373F',
   },
   Blue: {

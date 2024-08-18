@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
     height: WP('10'),
   },
   headingTextStyle: {
-    marginBottom: WP('1'),
+    marginBottom: WP('2'),
     color: GLColors.Natural.N11,
     fontSize: GLFontSize.FONT_SIZE_16,
     fontFamily: GLFontsFamily.Poppins_Medium,

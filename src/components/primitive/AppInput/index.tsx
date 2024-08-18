@@ -22,12 +22,15 @@ interface AppInputProps {
   maxLength?: number;
   multiline?: boolean;
   container?: StyleProp<ViewStyle>;
+  inputStyle?: StyleProp<ViewStyle>;
+  inputContainerStyle?: StyleProp<ViewStyle>;
   secureTextEntry?: boolean;
   onEndEditing?: () => void;
   onSubmitEditing?: () => void;
   keyboardType?: string | any;
   autoCapitalize?: string | any;
   rightIcon?: any;
+  textAlignVertical?: string | any;
 }
 
 const AppInput: React.FC<AppInputProps> = ({
@@ -46,12 +49,19 @@ const AppInput: React.FC<AppInputProps> = ({
   keyboardType,
   autoCapitalize,
   rightIcon,
+  inputStyle,
+  textAlignVertical,
+  inputContainerStyle,
 }) => {
   const [showPass, setShowPass] = useState(secureTextEntry);
 
   return (
     <>
-      <View style={styles.inputContainerView(touched && errorMessage)}>
+      <View
+        style={[
+          styles.inputContainerView(touched && errorMessage),
+          inputContainerStyle,
+        ]}>
         {leftIcon}
         <TextInput
           value={value}
@@ -59,7 +69,7 @@ const AppInput: React.FC<AppInputProps> = ({
           placeholder={placeholder}
           onChangeText={onChangeText}
           placeholderTextColor={GLColors.Natural.N7}
-          style={styles.inputContainerStyle(rightIcon)}
+          style={[styles.inputContainerStyle(rightIcon), inputStyle]}
           maxLength={maxLength}
           multiline={multiline}
           secureTextEntry={showPass}
@@ -67,6 +77,7 @@ const AppInput: React.FC<AppInputProps> = ({
           onSubmitEditing={onSubmitEditing}
           keyboardType={keyboardType}
           autoCapitalize={autoCapitalize}
+          textAlignVertical={textAlignVertical}
         />
         {rightIcon && (
           <TouchableOpacity

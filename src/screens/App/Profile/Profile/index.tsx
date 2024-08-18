@@ -62,9 +62,9 @@ const Profile = ({navigation}: ProfileProps) => {
         <View style={styles.spacerView} />
         <Text style={styles.headingTextStyle}>Profile</Text>
         <DisplayOption
-          screen={''}
           title="Personal Data"
           icon={svgIcon.PersonIcon}
+          screen={Routes.PersonalInfo}
         />
       </View>
       <View style={styles.innerContainer}>
@@ -85,14 +85,14 @@ const Profile = ({navigation}: ProfileProps) => {
       <View style={styles.innerContainer}>
         <Text style={styles.headingTextStyle}>Support</Text>
         <DisplayOption
-          screen={''}
           title="Suggest a Course"
           icon={svgIcon.CourseIcon}
+          screen={Routes.SuggestCourse}
         />
         <DisplayOption
-          screen={''}
           title="Report an issue"
           icon={svgIcon.HelpIcon}
+          screen={Routes.ReportIssue}
         />
       </View>
       <View style={styles.buttonContainer}>

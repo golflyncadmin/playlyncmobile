@@ -9,4 +9,7 @@ export const Routes = {
   AppStack: 'AppStack',
   AddRequestStack: 'AddRequestStack',
   PolicyAndTerms: 'PolicyAndTerms',
+  PersonalInfo: 'PersonalInfo',
+  SuggestCourse: 'SuggestCourse',
+  ReportIssue: 'ReportIssue',
 };

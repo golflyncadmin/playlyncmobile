@@ -8,4 +8,5 @@ export const Routes = {
   AuthStack: 'AuthStack',
   AppStack: 'AppStack',
   AddRequestStack: 'AddRequestStack',
+  PolicyAndTerms: 'PolicyAndTerms',
 };

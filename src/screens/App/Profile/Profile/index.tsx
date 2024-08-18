@@ -36,11 +36,17 @@ const Profile = ({navigation}: ProfileProps) => {
     navigation.replace(Routes.AuthStack);
   };
 
-  const DisplayOption = ({title, icon, screen}) => (
+  const DisplayOption = ({title, icon, screen, isParams = false}) => (
     <TouchableOpacity
       activeOpacity={0.7}
       style={styles.rowContainer}
-      onPress={() => navigation.navigate(screen)}>
+      onPress={() => {
+        if (isParams) {
+          navigation.navigate(screen, {privacy: title === 'Privacy Policy'});
+        } else {
+          navigation.navigate(screen);
+        }
+      }}>
       <View style={styles.innerRow}>
         {icon}
         <Text style={styles.titleTextStyle}>{title}</Text>
@@ -64,14 +70,16 @@ const Profile = ({navigation}: ProfileProps) => {
       <View style={styles.innerContainer}>
         <Text style={styles.headingTextStyle}>Legal</Text>
         <DisplayOption
-          screen={''}
+          isParams={true}
           title="Privacy Policy"
           icon={svgIcon.LockIcon}
+          screen={Routes.PolicyAndTerms}
         />
         <DisplayOption
-          screen={''}
+          isParams={true}
           title="Terms of Services"
           icon={svgIcon.TermsIcon}
+          screen={Routes.PolicyAndTerms}
         />
       </View>
       <View style={styles.innerContainer}>

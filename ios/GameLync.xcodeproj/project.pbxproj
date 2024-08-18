@@ -29,6 +29,7 @@
 		F09BDADB7A5B4710B015BC1D /* PlusJakartaSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA4D4403447F470D8FC54579 /* PlusJakartaSans-Medium.ttf */; };
 		FD3DE8B0310840CCBA5B360D /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAF77DEF764941F7B59263D1 /* Poppins-Light.ttf */; };
 		FD3E924FBF1543C18EDBBC67 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CE6D36ACF944F50B2D2149D /* Colors.xcassets */; };
+		E9008773D1B04601AEEC79BF /* PlusJakartaSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 602D14533DE848B38302F9AE /* PlusJakartaSans-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +76,7 @@
 		EE7764C839A8AC8ACF7F061A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = GameLync/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		F87B020DBE584357A239A510 /* Poppins-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Black.ttf"; path = "../src/assets/fonts/Poppins-Black.ttf"; sourceTree = "<group>"; };
 		F96A3A7295BA4F6A8F529A85 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Bold.ttf"; path = "../src/assets/fonts/Poppins-Bold.ttf"; sourceTree = "<group>"; };
+		602D14533DE848B38302F9AE /* PlusJakartaSans-Regular.ttf */ = {isa = PBXFileReference; name = "PlusJakartaSans-Regular.ttf"; path = "../src/assets/fonts/PlusJakartaSans-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,6 +158,7 @@
 				39F902C58AEA4FDA8F927669 /* PlusJakartaSans-ExtraBold.ttf */,
 				EA4D4403447F470D8FC54579 /* PlusJakartaSans-Medium.ttf */,
 				C31FE969462C4AC29B57E9CE /* PlusJakartaSans-SemiBold.ttf */,
+				602D14533DE848B38302F9AE /* PlusJakartaSans-Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -313,6 +316,7 @@
 				FD3E924FBF1543C18EDBBC67 /* Colors.xcassets in Resources */,
 				F09BDADB7A5B4710B015BC1D /* PlusJakartaSans-Medium.ttf in Resources */,
 				46B150F546484BC5BD84174D /* PlusJakartaSans-SemiBold.ttf in Resources */,
+				E9008773D1B04601AEEC79BF /* PlusJakartaSans-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

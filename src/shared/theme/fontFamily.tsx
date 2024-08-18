@@ -9,6 +9,7 @@ export const GLFontsFamily = {
   Poppins_SemiBold: 'Poppins-SemiBold',
   Poppins_ExtraBold: 'Poppins-ExtraBold',
   PlusJakartaSans_Medium: 'PlusJakartaSans-Medium',
+  PlusJakartaSans_Regular: 'PlusJakartaSans_Regular',
   PlusJakartaSans_SemiBold: 'PlusJakartaSans-SemiBold',
   PlusJakartaSans_ExtraBold: 'PlusJakartaSans-ExtraBold',
 };

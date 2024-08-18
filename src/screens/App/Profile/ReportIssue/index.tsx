@@ -41,7 +41,7 @@ const ReportIssue = ({navigation}: ReportIssueProps) => {
           initialValues={reportIssueForm}
           validationSchema={reportIssueSchema}
           onSubmit={(values: any) => handleReportIssue(values)}>
-          {({values, errors, touched, isValid, handleSubmit, handleChange}) => (
+          {({values, errors, touched, handleSubmit, handleChange}) => (
             <View style={styles.contentContainer}>
               <View style={styles.innerView}>
                 <Text style={styles.headingTextStyle}>Email</Text>

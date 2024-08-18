@@ -41,7 +41,7 @@ const PersonalInfo = ({navigation}: PersonalInfoProps) => {
           initialValues={personalInfoForm}
           validationSchema={personalInfoSchema}
           onSubmit={(values: any) => handleUpdateInfo(values)}>
-          {({values, errors, touched, isValid, handleSubmit, handleChange}) => (
+          {({values, errors, touched, handleSubmit, handleChange}) => (
             <View style={styles.contentContainer}>
               <View style={styles.innerView}>
                 <Text style={styles.headingTextStyle}>Email</Text>

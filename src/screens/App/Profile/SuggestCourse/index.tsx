@@ -41,7 +41,7 @@ const SuggestCourse = ({navigation}: SuggestCourseProps) => {
           initialValues={suggestCourseForm}
           validationSchema={suggestCourseSchema}
           onSubmit={(values: any) => handleSuggestCourse(values)}>
-          {({values, errors, touched, isValid, handleSubmit, handleChange}) => (
+          {({values, errors, touched, handleSubmit, handleChange}) => (
             <View style={styles.contentContainer}>
               <View style={styles.innerView}>
                 <Text style={styles.helpTextStyle}>

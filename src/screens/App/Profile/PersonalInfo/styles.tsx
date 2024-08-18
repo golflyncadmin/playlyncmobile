@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   heightStyle: {
-    minHeight: scrHeight,
+    minHeight: scrHeight / 1.2,
   },
   contentContainer: {
     flexGrow: 1,

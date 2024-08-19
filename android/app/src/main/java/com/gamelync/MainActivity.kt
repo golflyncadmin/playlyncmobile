@@ -1,4 +1,4 @@
-package com.gamelync
+package org.golfcorp.PlayLync
 
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate

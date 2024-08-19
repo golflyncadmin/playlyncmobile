@@ -1,4 +1,4 @@
-package com.gamelync
+package org.golfcorp.PlayLync
 
 import android.app.Application
 import com.facebook.react.PackageList

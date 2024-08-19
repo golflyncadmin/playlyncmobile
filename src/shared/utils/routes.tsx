@@ -12,4 +12,5 @@ export const Routes = {
   PersonalInfo: 'PersonalInfo',
   SuggestCourse: 'SuggestCourse',
   ReportIssue: 'ReportIssue',
+  AlertsStack: 'AlertsStack',
 };

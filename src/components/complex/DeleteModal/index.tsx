@@ -10,12 +10,14 @@ import {
 import {AppButton} from '../AppButton';
 
 interface DeleteModalProps {
+  heading: string;
   modalVisible: boolean;
   handleClick: () => void;
   setModalVisible: () => void;
 }
 
 const DeleteModal: React.FC<DeleteModalProps> = ({
+  heading,
   modalVisible,
   handleClick,
   setModalVisible,
@@ -25,9 +27,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
     isVisible={modalVisible}
     onBackdropPress={setModalVisible}
     style={styles.modalContainer}>
-    <Text style={styles.headingStyle}>
-      Are your sure you want to delete your profile?
-    </Text>
+    <Text style={styles.headingStyle}>{heading}</Text>
     <View style={styles.buttonsRow}>
       <AppButton
         title={'No'}

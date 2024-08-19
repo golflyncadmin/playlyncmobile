@@ -1,7 +1,8 @@
 import React from 'react';
-import {StyleSheet, View, TouchableOpacity, Text} from 'react-native';
+import {Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import {
   WP,
+  Routes,
   GLColors,
   GLFontSize,
   GLFontsFamily,
@@ -12,8 +13,13 @@ import {useNavigation} from '@react-navigation/native';
 interface AppHeaderProps {
   title?: string;
   leftIcon?: boolean;
+  rightIcon?: boolean;
 }
-const AppHeader: React.FC<AppHeaderProps> = ({title, leftIcon = true}) => {
+const AppHeader: React.FC<AppHeaderProps> = ({
+  title,
+  leftIcon = true,
+  rightIcon = false,
+}) => {
   const navigation = useNavigation();
 
   return (
@@ -22,7 +28,15 @@ const AppHeader: React.FC<AppHeaderProps> = ({title, leftIcon = true}) => {
         {leftIcon ? svgIcon.BackIcon : <View style={styles.emptyView} />}
       </TouchableOpacity>
       <Text style={styles.textStyle}>{title}</Text>
-      <View style={styles.emptyView} />
+      {rightIcon ? (
+        <TouchableOpacity
+          activeOpacity={0.7}
+          onPress={() => navigation.navigate(Routes.AlertsStack)}>
+          {svgIcon.NotifyIcon}
+        </TouchableOpacity>
+      ) : (
+        <View style={styles.emptyView} />
+      )}
     </View>
   );
 };

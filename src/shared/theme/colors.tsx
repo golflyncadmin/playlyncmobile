@@ -2,6 +2,7 @@ export const GLColors = {
   Natural: {
     White: '#ffffff',
     Black: '#000000',
+    N2: '#F4F5FB',
     N3: '#E8EAF8',
     N4: '#DCDEEC',
     N6: '#B7B9C9',
@@ -16,6 +17,7 @@ export const GLColors = {
     N15: '#00000024',
     N16: '#252525',
     N17: '#E5E5E5',
+    N18: '#050505',
   },
   Primary: {
     P6: '#34BE41',

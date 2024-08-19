@@ -26,6 +26,12 @@ import TermsIcon from './terms_icon.svg';
 import CourseIcon from './course_icon.svg';
 import HelpIcon from './help_icon.svg';
 import RightIcon from './right_icon.svg';
+import MemberIcon from './member_icon.svg';
+import MemberWhiteIcon from './member_white_icon.svg';
+import LocationIcon from './location_icon.svg';
+import CalendarIcon from './calendar_icon.svg';
+import DateIcon from './date_icon.svg';
+import TimeIcon from './time_icon.svg';
 
 export const svgIcon = {
   ForwardIcon: <ForwardIcon />,
@@ -55,4 +61,10 @@ export const svgIcon = {
   HelpIcon: <HelpIcon />,
   CourseIcon: <CourseIcon />,
   RightIcon: <RightIcon />,
+  MemberIcon: <MemberIcon />,
+  MemberWhiteIcon: <MemberWhiteIcon />,
+  LocationIcon: <LocationIcon />,
+  CalendarIcon: <CalendarIcon />,
+  DateIcon: <DateIcon />,
+  TimeIcon: <TimeIcon />,
 };

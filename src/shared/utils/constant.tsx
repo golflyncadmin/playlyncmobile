@@ -15,7 +15,15 @@ export const IMAGE_OPTIONS = {
 };
 
 export const EMAIL = 'Log In with your Email';
-export const APP_INTRO_SLIDES = [
+
+type IntroSlidesTypes = {
+  key: number;
+  title: string;
+  info: string;
+  image: any;
+};
+
+export const APP_INTRO_SLIDES: IntroSlidesTypes[] = [
   {
     key: 1,
     title: 'Feature 1',
@@ -36,7 +44,13 @@ export const APP_INTRO_SLIDES = [
   },
 ];
 
-export const LOGIN_TYPES = [
+type LoginTypes = {
+  id: number;
+  title: string;
+  icon: any;
+};
+
+export const LOGIN_TYPES: LoginTypes[] = [
   {
     id: 1,
     title: 'Continue with Google',
@@ -61,5 +75,61 @@ export const LOGIN_TYPES = [
     id: 5,
     title: 'Log In with your Email',
     icon: null,
+  },
+];
+
+type Requests = {
+  id: number;
+  title: string;
+};
+
+export const MY_REQUESTS: Requests[] = [
+  {
+    id: 1,
+    title: 'Make Game Request',
+  },
+  {
+    id: 2,
+    title: 'Make Game Request',
+  },
+  {
+    id: 3,
+    title: 'Make Game Request',
+  },
+  {
+    id: 4,
+    title: 'Make Game Request',
+  },
+  {
+    id: 5,
+    title: 'Make Game Request',
+  },
+  {
+    id: 6,
+    title: 'Make Game Request',
+  },
+  {
+    id: 7,
+    title: 'Make Game Request',
+  },
+  {
+    id: 8,
+    title: 'Make Game Request',
+  },
+  {
+    id: 9,
+    title: 'Make Game Request',
+  },
+  {
+    id: 10,
+    title: 'Make Game Request',
+  },
+  {
+    id: 11,
+    title: 'Make Game Request',
+  },
+  {
+    id: 12,
+    title: 'Make Game Request',
   },
 ];

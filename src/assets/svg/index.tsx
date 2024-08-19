@@ -32,6 +32,10 @@ import LocationIcon from './location_icon.svg';
 import CalendarIcon from './calendar_icon.svg';
 import DateIcon from './date_icon.svg';
 import TimeIcon from './time_icon.svg';
+import MemberBlueIcon from './member_blue_icon.svg';
+import CalendarWhiteIcon from './calendar_white_icon.svg';
+import DateWhiteIcon from './date_white_icon.svg';
+import TimeWhiteIcon from './time_white_icon.svg';
 
 export const svgIcon = {
   ForwardIcon: <ForwardIcon />,
@@ -67,4 +71,8 @@ export const svgIcon = {
   CalendarIcon: <CalendarIcon />,
   DateIcon: <DateIcon />,
   TimeIcon: <TimeIcon />,
+  MemberBlueIcon: <MemberBlueIcon />,
+  CalendarWhiteIcon: <CalendarWhiteIcon />,
+  DateWhiteIcon: <DateWhiteIcon style={{marginLeft: 10}} />,
+  TimeWhiteIcon: <TimeWhiteIcon />,
 };

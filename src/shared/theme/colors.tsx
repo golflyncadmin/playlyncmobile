@@ -18,6 +18,7 @@ export const GLColors = {
     N16: '#252525',
     N17: '#E5E5E5',
     N18: '#050505',
+    N19: '#093D5F',
   },
   Primary: {
     P6: '#34BE41',

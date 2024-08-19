@@ -1,10 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {Text, View, FlatList, ListRenderItemInfo} from 'react-native';
 import {
   AppButton,
   AppHeader,
   DeleteModal,
   MainWrapper,
+  PreviousReqSheet,
 } from '../../../../components';
 import styles from './styles';
 import {svgIcon} from '../../../../assets/svg';
@@ -45,6 +46,7 @@ interface RequestsProps {
 }
 
 const Requests = ({navigation}: RequestsProps) => {
+  const sheetRef = useRef(null);
   const [allRequests, setAllRequests] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -132,7 +134,7 @@ const Requests = ({navigation}: RequestsProps) => {
       <View style={styles.spacerView} />
       <Text
         suppressHighlighting
-        onPress={() => {}}
+        onPress={() => sheetRef.current.open()}
         style={styles.previousRequestsStyle}>
         Previous requests
       </Text>
@@ -157,6 +159,7 @@ const Requests = ({navigation}: RequestsProps) => {
         setModalVisible={() => setModalVisible(false)}
         heading="Are your sure you want to delete this request?"
       />
+      <PreviousReqSheet ref={sheetRef} data={[1, 2, 3, 4, 5, 6, 7, 8, 9]} />
     </MainWrapper>
   );
 };

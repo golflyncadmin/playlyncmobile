@@ -1,6 +1,7 @@
 export const GLFontSize = {
   FONT_SIZE_8: 8,
   FONT_SIZE_10: 10,
+  FONT_SIZE_11: 11,
   FONT_SIZE_12: 12,
   FONT_SIZE_13: 13,
   FONT_SIZE_14: 14,

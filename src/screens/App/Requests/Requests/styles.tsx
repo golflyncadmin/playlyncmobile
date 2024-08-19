@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {
   WP,
+  isIOS,
   GLColors,
   GLFontSize,
   GLFontsFamily,
@@ -60,6 +61,7 @@ const styles = StyleSheet.create({
   },
   memberCountStyle: {
     marginLeft: 2,
+    top: isIOS() ? 0 : 2,
     color: GLColors.Natural.N7,
     fontSize: GLFontSize.FONT_SIZE_16,
     fontFamily: GLFontsFamily.Poppins_Regular,

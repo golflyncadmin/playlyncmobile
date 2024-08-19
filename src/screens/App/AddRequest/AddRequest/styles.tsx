@@ -1,15 +1,96 @@
 import {StyleSheet} from 'react-native';
-import {GLFontSize, GLFontsFamily} from '../../../../shared/exporter';
+import {
+  WP,
+  isIOS,
+  GLColors,
+  scrHeight,
+  GLFontSize,
+  GLFontsFamily,
+} from '../../../../shared/exporter';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: GLColors.Natural.White,
   },
-  todoTextStyle: {
-    fontSize: GLFontSize.FONT_SIZE_22,
-    fontFamily: GLFontsFamily.Poppins_SemiBold,
+  spacerView: {
+    height: WP('4'),
+  },
+  scrollViewStyle: {
+    flex: 1,
+  },
+  heightStyle: {
+    minHeight: scrHeight / 1.2,
+  },
+  contentContainer: {
+    flexGrow: 1,
+    marginVertical: WP('5'),
+  },
+  innerView: {
+    flexGrow: 1,
+    marginHorizontal: WP('5'),
+  },
+  headingTextStyle: {
+    marginTop: WP('4'),
+    marginBottom: WP('-1'),
+    color: GLColors.Natural.N8,
+    fontSize: GLFontSize.FONT_SIZE_14,
+    fontFamily: GLFontsFamily.Poppins_Medium,
+  },
+  inputStyle: {
+    width: '100%',
+    fontFamily: GLFontsFamily.Poppins_Medium,
+  },
+  countContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  countButtonStyle: {
+    borderWidth: 1,
+    width: WP('14'),
+    height: WP('12'),
+    alignItems: 'center',
+    borderRadius: WP('1'),
+    marginVertical: WP('3'),
+    justifyContent: 'center',
+    borderColor: GLColors.Natural.N3,
+  },
+  countButtonText: {
+    top: isIOS() ? 0 : 2,
+    color: GLColors.Natural.N7,
+    fontSize: GLFontSize.FONT_SIZE_24,
+    fontFamily: GLFontsFamily.Poppins_Regular,
+  },
+  countTextStyle: {
+    width: WP('6'),
+    textAlign: 'center',
+    top: isIOS() ? 0 : 2,
+    marginHorizontal: WP('1'),
+    color: GLColors.Natural.N11,
+    fontSize: GLFontSize.FONT_SIZE_16,
+    fontFamily: GLFontsFamily.Poppins_Medium,
+  },
+  checkboxContainer: {
+    marginTop: WP('1.5'),
+    flexDirection: 'row',
+    alignItems: 'center',
+    left: isIOS() ? 2 : -2,
+  },
+  checkboxStyle: {
+    width: WP('5'),
+    height: WP('5'),
+    marginRight: WP('3'),
+  },
+  labelStyle: {
+    marginRight: WP('3'),
+    bottom: isIOS() ? 1.5 : 0,
+    color: GLColors.Natural.N11,
+    fontSize: GLFontSize.FONT_SIZE_14,
+    fontFamily: GLFontsFamily.Poppins_Medium,
+  },
+  bottomView: {
+    bottom: WP('8'),
+    position: 'absolute',
   },
 });
 

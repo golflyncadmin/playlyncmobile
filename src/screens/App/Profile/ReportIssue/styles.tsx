@@ -42,11 +42,13 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     width: '100%',
+    fontFamily: GLFontsFamily.Poppins_Medium,
   },
   descInputStyle: {
     width: '100%',
     height: WP('18'),
     textAlignVertical: 'top',
+    fontFamily: GLFontsFamily.Poppins_Medium,
   },
   limitTextStyle: {
     marginTop: WP('1'),

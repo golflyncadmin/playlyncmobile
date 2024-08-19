@@ -41,6 +41,7 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     width: '100%',
+    fontFamily: GLFontsFamily.Poppins_Medium,
   },
   bottomView: {
     bottom: 0,

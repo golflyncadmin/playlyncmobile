@@ -108,7 +108,7 @@ const Profile = ({navigation}: ProfileProps) => {
         modalVisible={modalVisible}
         handleClick={() => deleteAccount()}
         setModalVisible={() => setModalVisible(false)}
-        heading="Are your sure you want to delete your profile?"
+        heading="Are you sure you want to delete your profile?"
       />
     </MainWrapper>
   );

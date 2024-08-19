@@ -36,6 +36,10 @@ export const reportIssueForm = {
   description: '',
 };
 
+export const addRequestForm = {
+  location: '',
+};
+
 export const signUpValidationSchema = () => {
   const baseSchema = {
     email: yup
@@ -141,4 +145,8 @@ export const reportIssueSchema = yup.object().shape({
     .string()
     .required('Description Required')
     .max(1000, 'Maximum 1,000 Characters Allowed'),
+});
+
+export const addRequestSchema = yup.object().shape({
+  location: yup.string().required('Location Required'),
 });

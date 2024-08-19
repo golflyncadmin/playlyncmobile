@@ -157,7 +157,7 @@ const Requests = ({navigation}: RequestsProps) => {
         modalVisible={modalVisible}
         handleClick={() => deleteRequest()}
         setModalVisible={() => setModalVisible(false)}
-        heading="Are your sure you want to delete this request?"
+        heading="Are you sure you want to delete this request?"
       />
       <PreviousReqSheet ref={sheetRef} data={[1, 2, 3, 4, 5, 6, 7, 8, 9]} />
     </MainWrapper>

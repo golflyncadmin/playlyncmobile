@@ -108,9 +108,8 @@ const styles = StyleSheet.create({
     borderColor: isError ? GLColors.Red.R6 : GLColors.Natural.N3,
   }),
   inputContainerStyle: (rightIcon: any) => ({
-    height: WP('11'),
+    height: WP('12'),
     width: rightIcon ? '80%' : '90%',
-    backgroundColor: GLColors.Natural.White,
   }),
   errorTxtStyle: {
     marginVertical: WP('1'),

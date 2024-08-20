@@ -1,5 +1,5 @@
 import {Alert} from 'react-native';
-import {appImages} from '../exporter';
+import {GLColors, GLFontSize, GLFontsFamily, appImages} from '../exporter';
 import {svgIcon} from '../../assets/svg';
 
 export function showAlert(type: string, des: string) {
@@ -26,20 +26,20 @@ type IntroSlidesTypes = {
 export const APP_INTRO_SLIDES: IntroSlidesTypes[] = [
   {
     key: 1,
-    title: 'Feature 1',
-    info: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    title: 'Search Tee Times',
+    info: 'Easily book golf tee times for a specific day, time, and number of players.',
     image: appImages.feature1,
   },
   {
     key: 2,
-    title: 'Feature 2',
-    info: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    title: 'Book Tee Times',
+    info: 'Never miss a game with our seamless booking system. Reserve your tee times in advance and enjoy a hassle-free experience.',
     image: appImages.feature2,
   },
   {
     key: 3,
-    title: 'Feature 3',
-    info: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+    title: 'Enjoy Your Game',
+    info: 'Arrive at the course and have a great round of golf!',
     image: appImages.feature3,
   },
 ];
@@ -133,3 +133,20 @@ export const MY_REQUESTS: Requests[] = [
     title: 'Make Game Request',
   },
 ];
+
+export const CALENDAR_THEME = {
+  textDayFontWeight: '400',
+  textMonthFontWeight: '600',
+  textDayHeaderFontWeight: '400',
+  dayTextColor: GLColors.Natural.N11,
+  monthTextColor: GLColors.Natural.N10,
+  textDayFontSize: GLFontSize.FONT_SIZE_14,
+  textSectionTitleColor: GLColors.Natural.N8,
+  textMonthFontSize: GLFontSize.FONT_SIZE_16,
+  textDayHeaderFontSize: GLFontSize.FONT_SIZE_14,
+  textDayFontFamily: GLFontsFamily.Poppins_Medium,
+  textMonthFontFamily: GLFontsFamily.Poppins_Medium,
+  textDayHeaderFontFamily: GLFontsFamily.Poppins_Medium,
+};
+
+export const DAY_NAME_SHORT = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];

@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   },
   headingTextStyle: {
     marginTop: WP('4'),
-    marginBottom: WP('-1'),
+    marginBottom: WP('-2'),
     color: GLColors.Natural.N8,
     fontSize: GLFontSize.FONT_SIZE_14,
     fontFamily: GLFontsFamily.Poppins_Medium,
@@ -41,7 +41,12 @@ const styles = StyleSheet.create({
     width: '100%',
     fontFamily: GLFontsFamily.Poppins_Medium,
   },
+  dateInputStyle: {
+    width: '90%',
+    fontFamily: GLFontsFamily.Poppins_Medium,
+  },
   countContainer: {
+    marginTop: WP('1'),
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -79,10 +84,10 @@ const styles = StyleSheet.create({
   checkboxStyle: {
     width: WP('5'),
     height: WP('5'),
-    marginRight: WP('3'),
+    marginRight: WP('2.5'),
   },
   labelStyle: {
-    marginRight: WP('3'),
+    marginRight: WP('3.5'),
     bottom: isIOS() ? 1.5 : 0,
     color: GLColors.Natural.N11,
     fontSize: GLFontSize.FONT_SIZE_14,

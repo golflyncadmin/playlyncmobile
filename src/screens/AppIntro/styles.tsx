@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     width: scrWidth,
+    height: WP('35'),
     position: 'absolute',
     paddingHorizontal: WP('5'),
     bottom: isIOS() ? WP('25') : WP('20'),

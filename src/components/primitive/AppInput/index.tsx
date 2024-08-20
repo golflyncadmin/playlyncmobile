@@ -27,9 +27,11 @@ interface AppInputProps {
   secureTextEntry?: boolean;
   onEndEditing?: () => void;
   onSubmitEditing?: () => void;
+  rightIconPress?: () => void;
   keyboardType?: string | any;
   autoCapitalize?: string | any;
   rightIcon?: any;
+  icon?: any;
   textAlignVertical?: string | any;
 }
 
@@ -50,8 +52,10 @@ const AppInput: React.FC<AppInputProps> = ({
   autoCapitalize,
   rightIcon,
   inputStyle,
+  icon,
   textAlignVertical,
   inputContainerStyle,
+  rightIconPress,
 }) => {
   const [showPass, setShowPass] = useState(secureTextEntry);
 
@@ -82,8 +86,8 @@ const AppInput: React.FC<AppInputProps> = ({
         {rightIcon && (
           <TouchableOpacity
             activeOpacity={0.7}
-            onPress={() => setShowPass(!showPass)}>
-            {showPass ? svgIcon.EyeOffIcon : svgIcon.EyeOnIcon}
+            onPress={() => (icon ? rightIconPress() : setShowPass(!showPass))}>
+            {icon ? icon : showPass ? svgIcon.EyeOffIcon : svgIcon.EyeOnIcon}
           </TouchableOpacity>
         )}
       </View>

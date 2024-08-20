@@ -4,6 +4,7 @@ export {
   LOGIN_TYPES,
   MY_REQUESTS,
   IMAGE_OPTIONS,
+  CALENDAR_THEME,
   UNEXPECTED_ERROR,
   APP_INTRO_SLIDES,
 } from '../utils/constant.tsx';

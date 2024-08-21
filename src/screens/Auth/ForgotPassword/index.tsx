@@ -51,6 +51,7 @@ const ForgotPassword = ({navigation}: ForgotPasswordProps) => {
                 <Text style={styles.headingStyle}>Forgot Password</Text>
                 <AppInput
                   placeholder="Email*"
+                  // placeholder="Email or Phone Number*"
                   value={values.email}
                   touched={touched.email}
                   autoCapitalize="none"

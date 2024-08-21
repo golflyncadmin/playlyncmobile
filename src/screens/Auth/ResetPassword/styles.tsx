@@ -32,13 +32,13 @@ const styles = StyleSheet.create({
     marginHorizontal: WP('4'),
   },
   headingStyle: {
-    marginBottom: WP('1'),
+    marginBottom: WP('2'),
     color: GLColors.Natural.N11,
     fontSize: GLFontSize.FONT_SIZE_32,
     fontFamily: GLFontsFamily.Poppins_SemiBold,
   },
   buttonStyle: {
-    marginTop: WP('5'),
+    marginTop: WP('9'),
   },
 });
 

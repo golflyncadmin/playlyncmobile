@@ -39,6 +39,7 @@ import TimeWhiteIcon from './time_white_icon.svg';
 import RightBlueIcon from './right_blue_icon.svg';
 import LeftBlueIcon from './left_blue_icon.svg';
 import CalendarGrayIcon from './calendar_gray_icon.svg';
+import PhoneIcon from './phone_icon.svg';
 
 export const svgIcon = {
   ForwardIcon: <ForwardIcon />,
@@ -81,4 +82,5 @@ export const svgIcon = {
   RightBlueIcon: <RightBlueIcon />,
   LeftBlueIcon: <LeftBlueIcon />,
   CalendarGrayIcon: <CalendarGrayIcon />,
+  PhoneIcon: <PhoneIcon />,
 };

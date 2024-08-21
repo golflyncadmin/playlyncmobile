@@ -21,7 +21,10 @@ const SignUp = ({navigation}: SignUpProps) => {
 
   const handleSignUp = (values: any) => {
     console.log('Values => ', values);
-    navigation.navigate(Routes.OTPVerification, {email: values.email});
+    navigation.navigate(Routes.OTPVerification, {
+      email: values.email,
+      phone: '1234567890',
+    });
   };
 
   return (
@@ -68,6 +71,16 @@ const SignUp = ({navigation}: SignUpProps) => {
                     leftIcon={svgIcon.MailIcon}
                     errorMessage={errors.email}
                     onChangeText={handleChange('email')}
+                  />
+                  <AppInput
+                    placeholder="Phone Number*"
+                    value={values.phoneNumber}
+                    touched={touched.phoneNumber}
+                    autoCapitalize="none"
+                    keyboardType="phone-pad"
+                    leftIcon={svgIcon.PhoneIcon}
+                    errorMessage={errors.phoneNumber}
+                    onChangeText={handleChange('phoneNumber')}
                   />
                   <AppInput
                     placeholder="Password*"

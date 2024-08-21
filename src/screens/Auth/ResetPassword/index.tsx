@@ -47,7 +47,7 @@ const ResetPassword = ({navigation, route}: ResetPasswordProps) => {
             }
             return (
               <View style={styles.contentContainer}>
-                <Text style={styles.headingStyle}>Reset Password</Text>
+                <Text style={styles.headingStyle}>Set New Password</Text>
                 <AppInput
                   placeholder="Password*"
                   value={values.password}
@@ -71,7 +71,7 @@ const ResetPassword = ({navigation, route}: ResetPasswordProps) => {
                   onChangeText={handleChange('confirmPassword')}
                 />
                 <AppButton
-                  title={'Reset Password'}
+                  title={'Continue'}
                   disabled={!isValid}
                   handleClick={handleSubmit}
                   buttonStyle={styles.buttonStyle}

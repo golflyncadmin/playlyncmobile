@@ -19,7 +19,7 @@ interface OTPVerificationProps {
 const CELL_COUNT = 6;
 
 const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
-  const {email, reset} = route?.params;
+  const {email, phone, reset} = route?.params;
   const [timer, setTimer] = useState(30);
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
@@ -53,12 +53,13 @@ const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
   };
 
   const verifyTheOTP = () => {
-    navigation.replace(!reset ? Routes.Login : Routes.ResetPassword, {
+    navigation.replace(phone ? Routes.Login : Routes.ResetPassword, {
       email: email,
     });
   };
 
   const resendOTP = () => {
+    setTimer(30);
     Alert.alert('Resent OTP', 'The OTP has been resent.');
   };
 
@@ -81,8 +82,9 @@ const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
           <View style={styles.contentContainer}>
             <Text style={styles.headingStyle}>Almost There</Text>
             <Text style={styles.infoTextStyle}>
-              Please enter the 6-digit code sent to your phone number{' '}
-              <Text style={styles.commonTextStyle}>{email}</Text> for
+              Please enter the 6-digit code sent to your{' '}
+              {phone ? 'phone number ' : 'email '}
+              <Text style={styles.commonTextStyle}>{phone}</Text> for
               verification
             </Text>
             <CodeField

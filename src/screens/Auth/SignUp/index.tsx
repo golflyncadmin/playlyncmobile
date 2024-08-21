@@ -18,6 +18,7 @@ interface SignUpProps {
 const SignUp = ({navigation}: SignUpProps) => {
   let isValidForm = true;
   const formikRef = useRef(null);
+
   const handleSignUp = (values: any) => {
     console.log('Values => ', values);
     navigation.navigate(Routes.OTPVerification, {email: values.email});

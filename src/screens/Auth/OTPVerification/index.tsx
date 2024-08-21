@@ -19,7 +19,7 @@ interface OTPVerificationProps {
 const CELL_COUNT = 6;
 
 const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
-  const {email} = route?.params;
+  const {email, reset} = route?.params;
   const [timer, setTimer] = useState(30);
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
@@ -53,7 +53,9 @@ const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
   };
 
   const verifyTheOTP = () => {
-    navigation.replace(Routes.Login);
+    navigation.replace(!reset ? Routes.Login : Routes.ResetPassword, {
+      email: email,
+    });
   };
 
   const resendOTP = () => {

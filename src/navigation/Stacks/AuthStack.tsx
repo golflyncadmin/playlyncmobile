@@ -5,15 +5,17 @@ import Login from '@authScreens/Login';
 import SignUp from '@authScreens/SignUp';
 import OTPVerification from '@authScreens/OTPVerification';
 import ForgotPassword from '@authScreens/ForgotPassword';
+import ResetPassword from '@authScreens/ResetPassword';
 
 type AuthStackParamList = {
   LoginType: LoginType;
   Login: Login;
   SignUp: SignUp;
   OTPVerification: OTPVerification;
-  ForgotPassword: OTPVerification;
+  ForgotPassword: ForgotPassword;
+  ResetPassword: ResetPassword;
 };
-
+ 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
 const AuthStack: React.FC = () => {
@@ -24,6 +26,7 @@ const AuthStack: React.FC = () => {
       <Stack.Screen name={'SignUp'} component={SignUp} />
       <Stack.Screen name={'OTPVerification'} component={OTPVerification} />
       <Stack.Screen name={'ForgotPassword'} component={ForgotPassword} />
+      <Stack.Screen name={'ResetPassword'} component={ResetPassword} />
     </Stack.Navigator>
   );
 };

@@ -5,25 +5,24 @@ import {AppButton, AppInput, MainWrapper} from '../../../components';
 import styles from './styles';
 import {Routes, appIcons} from '../../../shared/exporter';
 import {
-  forgotPassForm,
-  forgotPassValidationSchema,
+  resetPassForm,
+  resetPassSchema,
 } from '../../../shared/utils/validations';
 import {svgIcon} from '../../../assets/svg';
 
-interface ForgotPasswordProps {
+interface ResetPasswordProps {
+  route: any;
   navigation: any;
 }
 
-const ForgotPassword = ({navigation}: ForgotPasswordProps) => {
+const ResetPassword = ({navigation, route}: ResetPasswordProps) => {
   let isValidForm = true;
+  const {email} = route?.params;
   const formikRef = useRef(null);
 
-  const handleForgotPassword = (values: any) => {
+  const handleResetPassword = (values: any) => {
     console.log('Values => ', values);
-    navigation.replace(Routes.OTPVerification, {
-      email: values.email,
-      reset: true,
-    });
+    navigation.replace(Routes.Login);
   };
 
   return (
@@ -38,9 +37,9 @@ const ForgotPassword = ({navigation}: ForgotPasswordProps) => {
         </View>
         <Formik
           innerRef={formikRef}
-          initialValues={forgotPassForm}
-          validationSchema={forgotPassValidationSchema}
-          onSubmit={(values: any) => handleForgotPassword(values)}>
+          initialValues={resetPassForm}
+          validationSchema={resetPassSchema}
+          onSubmit={(values: any) => handleResetPassword(values)}>
           {({values, errors, touched, isValid, handleSubmit, handleChange}) => {
             if (isValidForm) {
               isValid = false;
@@ -48,18 +47,31 @@ const ForgotPassword = ({navigation}: ForgotPasswordProps) => {
             }
             return (
               <View style={styles.contentContainer}>
-                <Text style={styles.headingStyle}>Forgot Password</Text>
+                <Text style={styles.headingStyle}>Reset Password</Text>
                 <AppInput
-                  placeholder="Email*"
-                  value={values.email}
-                  touched={touched.email}
+                  placeholder="Password*"
+                  value={values.password}
                   autoCapitalize="none"
-                  leftIcon={svgIcon.MailIcon}
-                  errorMessage={errors.email}
-                  onChangeText={handleChange('email')}
+                  touched={touched.password}
+                  leftIcon={svgIcon.LockIcon}
+                  rightIcon={svgIcon.EyeOffIcon}
+                  errorMessage={errors.password}
+                  secureTextEntry={true}
+                  onChangeText={handleChange('password')}
+                />
+                <AppInput
+                  placeholder="Password Confirmation*"
+                  autoCapitalize="none"
+                  leftIcon={svgIcon.LockIcon}
+                  rightIcon={svgIcon.EyeOnIcon}
+                  value={values.confirmPassword}
+                  touched={touched.confirmPassword}
+                  errorMessage={errors.confirmPassword}
+                  secureTextEntry={true}
+                  onChangeText={handleChange('confirmPassword')}
                 />
                 <AppButton
-                  title={'Send'}
+                  title={'Reset Password'}
                   disabled={!isValid}
                   handleClick={handleSubmit}
                   buttonStyle={styles.buttonStyle}
@@ -73,4 +85,4 @@ const ForgotPassword = ({navigation}: ForgotPasswordProps) => {
   );
 };
 
-export default ForgotPassword;
+export default ResetPassword;

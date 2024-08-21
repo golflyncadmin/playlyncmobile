@@ -91,7 +91,7 @@ export const forgotPassValidationSchema = yup.object().shape({
     ),
 });
 
-export const resetPassValidation = yup.object().shape({
+export const resetPassSchema = yup.object().shape({
   password: yup
     .string()
     .min(6, 'Password must be at least 6 characters')
@@ -101,6 +101,7 @@ export const resetPassValidation = yup.object().shape({
     .string()
     .min(6, 'Password must be at least 6 characters')
     .required('Confirm Password Required')
+    .max(25, 'Maximum 25 Characters Allowed')
     .oneOf([yup.ref('password')], 'Passwords do not match'),
 });
 

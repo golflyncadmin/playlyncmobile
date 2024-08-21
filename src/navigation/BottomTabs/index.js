@@ -14,22 +14,22 @@ const AppStack = () => {
       screenOptions={{headerShown: false}}
       tabBar={props => <BottomTab {...props} />}>
       <Tab.Screen
-        options={{unmountOnBlur: true}}
+        options={{unmountOnBlur: false}}
         component={RequestsStack}
         name={'RequestsStack'}
       />
       <Tab.Screen
-        options={{unmountOnBlur: true}}
+        options={{unmountOnBlur: false}}
         component={AddRequestStack}
         name={'AddRequestStack'}
       />
       <Tab.Screen
-        options={{unmountOnBlur: true}}
+        options={{unmountOnBlur: false}}
         component={AlertsStack}
         name={'AlertsStack'}
       />
       <Tab.Screen
-        options={{unmountOnBlur: true}}
+        options={{unmountOnBlur: false}}
         component={ProfileStack}
         name={'ProfileStack'}
       />

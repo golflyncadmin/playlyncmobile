@@ -5,7 +5,7 @@ import Modal from 'react-native-modal';
 import {WP, GLColors, CALENDAR_THEME} from '../../../shared/exporter';
 import {svgIcon} from '../../../assets/svg';
 import {AppButton} from '../AppButton';
-import {DAY_NAME_SHORT} from '../../../shared/utils/constant';
+import {CURRENT_DATE, DAY_NAME_SHORT} from '../../../shared/utils/constant';
 
 interface DateRangePickerProps {
   modalVisible: boolean;
@@ -124,19 +124,20 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
         hideArrows={false}
         markingType={'period'}
         theme={CALENDAR_THEME}
+        current={CURRENT_DATE}
+        minDate={CURRENT_DATE}
         renderArrow={renderArrow}
         markedDates={markedDates}
         showScrollIndicator={false}
         onDayPress={handleDayPress}
-        minDate={new Date().toISOString().split('T')[0]}
       />
       <View style={styles.buttonsRow}>
         <AppButton
-          title="No"
+          title="Cancel"
           isEmpty={false}
-          textStyle={styles.noTextStyle}
+          textStyle={styles.cancelTextStyle}
           handleClick={setModalVisible}
-          buttonStyle={styles.noButtonStyle}
+          buttonStyle={styles.cancelButtonStyle}
         />
         <AppButton
           title="Select"
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: WP('2'),
     justifyContent: 'space-evenly',
   },
-  noButtonStyle: {
+  cancelButtonStyle: {
     width: '42%',
     borderWidth: 1,
     height: WP('11'),
@@ -179,10 +180,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     height: WP('11'),
   },
-  noTextStyle: {
+  cancelTextStyle: {
     width: '100%',
     textAlign: 'center',
-    color: GLColors.Natural.Black,
+    color: GLColors.Natural.N9,
   },
   yesTextStyle: {
     width: '100%',

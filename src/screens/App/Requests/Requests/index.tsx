@@ -132,12 +132,12 @@ const Requests = ({navigation}: RequestsProps) => {
     <MainWrapper style={styles.container}>
       <AppHeader title="Game Requests" leftIcon={false} rightIcon={true} />
       <View style={styles.spacerView} />
-      <Text
+      {/* <Text
         suppressHighlighting
         onPress={() => sheetRef.current.open()}
         style={styles.previousRequestsStyle}>
         Previous requests
-      </Text>
+      </Text> */}
       {allRequests?.length > 0 && (
         <FlatList
           data={allRequests}
@@ -159,7 +159,7 @@ const Requests = ({navigation}: RequestsProps) => {
         setModalVisible={() => setModalVisible(false)}
         heading="Are you sure you want to delete this request?"
       />
-      <PreviousReqSheet ref={sheetRef} data={[1, 2, 3, 4, 5, 6, 7, 8, 9]} />
+      {/* <PreviousReqSheet ref={sheetRef} data={[1, 2, 3, 4, 5, 6, 7, 8, 9]} /> */}
     </MainWrapper>
   );
 };

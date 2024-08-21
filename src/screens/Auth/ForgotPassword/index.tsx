@@ -15,6 +15,7 @@ interface ForgotPasswordProps {
 }
 
 const ForgotPassword = ({navigation}: ForgotPasswordProps) => {
+  let isValidForm = true;
   const formikRef = useRef(null);
   const handleForgotPassword = (values: any) => {
     console.log('Values => ', values);
@@ -36,26 +37,32 @@ const ForgotPassword = ({navigation}: ForgotPasswordProps) => {
           initialValues={forgotPassForm}
           validationSchema={forgotPassValidationSchema}
           onSubmit={(values: any) => handleForgotPassword(values)}>
-          {({values, errors, touched, isValid, handleSubmit, handleChange}) => (
-            <View style={styles.contentContainer}>
-              <Text style={styles.headingStyle}>Forgot Password</Text>
-              <AppInput
-                placeholder="Email*"
-                value={values.email}
-                touched={touched.email}
-                autoCapitalize="none"
-                leftIcon={svgIcon.MailIcon}
-                errorMessage={errors.email}
-                onChangeText={handleChange('email')}
-              />
-              <AppButton
-                title={'Send'}
-                disabled={!isValid}
-                handleClick={handleSubmit}
-                buttonStyle={styles.buttonStyle}
-              />
-            </View>
-          )}
+          {({values, errors, touched, isValid, handleSubmit, handleChange}) => {
+            if (isValidForm) {
+              isValid = false;
+              isValidForm = false;
+            }
+            return (
+              <View style={styles.contentContainer}>
+                <Text style={styles.headingStyle}>Forgot Password</Text>
+                <AppInput
+                  placeholder="Email*"
+                  value={values.email}
+                  touched={touched.email}
+                  autoCapitalize="none"
+                  leftIcon={svgIcon.MailIcon}
+                  errorMessage={errors.email}
+                  onChangeText={handleChange('email')}
+                />
+                <AppButton
+                  title={'Send'}
+                  disabled={!isValid}
+                  handleClick={handleSubmit}
+                  buttonStyle={styles.buttonStyle}
+                />
+              </View>
+            );
+          }}
         </Formik>
       </View>
     </MainWrapper>

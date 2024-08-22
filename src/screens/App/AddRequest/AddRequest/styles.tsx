@@ -20,11 +20,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   heightStyle: {
-    minHeight: scrHeight / 1.2,
+    minHeight: scrHeight / 1.25,
   },
   contentContainer: {
     flexGrow: 1,
-    marginVertical: WP('5'),
+    marginTop: WP('5'),
+    marginBottom: WP('1'),
   },
   innerView: {
     flexGrow: 1,
@@ -39,10 +40,12 @@ const styles = StyleSheet.create({
   },
   inputStyle: {
     width: '100%',
+    top: isIOS() ? 0 : 2,
     fontFamily: GLFontsFamily.Poppins_Medium,
   },
   dateInputStyle: {
     width: '90%',
+    top: isIOS() ? 0 : 2,
     fontFamily: GLFontsFamily.Poppins_Medium,
   },
   countContainer: {
@@ -94,7 +97,7 @@ const styles = StyleSheet.create({
     fontFamily: GLFontsFamily.Poppins_Medium,
   },
   bottomView: {
-    bottom: WP('8'),
+    bottom: 0,
     position: 'absolute',
   },
 });

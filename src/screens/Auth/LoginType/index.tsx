@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
-import {View, Text, Image, Alert} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Text, Image} from 'react-native';
+import {useAppleSignIn} from '../../../hooks';
 import {AppButton, MainWrapper, AgreementModal} from '../../../components';
 import styles from './styles';
 import {
@@ -7,6 +8,7 @@ import {
   Routes,
   GLColors,
   appIcons,
+  showAlert,
   LOGIN_TYPES,
 } from '../../../shared/exporter';
 
@@ -17,6 +19,32 @@ interface LoginTypeProps {
 const LoginType = ({navigation}: LoginTypeProps) => {
   const [isSelected, setSelection] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [appleToken, setAppleToken] = useState<string | null>(null);
+
+  const {signInWithApple} = useAppleSignIn(setAppleToken);
+
+  useEffect(() => {
+    if (appleToken) {
+      console.log('APPLE TOKEN : ', appleToken);
+    }
+  }, [appleToken]);
+
+  const handleLogin = (type: string) => {
+    switch (type) {
+      case 'Google':
+        break;
+      case 'Apple':
+        signInWithApple();
+        break;
+      case 'Facebook':
+        break;
+      case 'Instagram':
+        break;
+
+      default:
+        break;
+    }
+  };
 
   const handleNavigation = () => {
     if (isSelected) {
@@ -25,7 +53,7 @@ const LoginType = ({navigation}: LoginTypeProps) => {
         navigation.replace(Routes.Login);
       }, 500);
     } else {
-      Alert.alert('Missing Selection', 'Select agreement to proceed further.');
+      showAlert('Missing Selection', 'Select agreement to proceed further.');
     }
   };
 
@@ -43,7 +71,7 @@ const LoginType = ({navigation}: LoginTypeProps) => {
           <AppButton
             icon={item?.icon}
             title={item?.title}
-            handleClick={() => setModalVisible(true)}
+            handleClick={() => handleLogin(item?.type)}
             textStyle={
               item?.title !== EMAIL ? {color: GLColors.Natural.Black} : {}
             }

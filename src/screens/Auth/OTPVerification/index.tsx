@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, Image, Alert} from 'react-native';
+import {Text, View, Image} from 'react-native';
 import {
   Cursor,
   CodeField,
@@ -9,7 +9,7 @@ import {
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {AppButton, MainWrapper} from '../../../components';
 import styles from './styles';
-import {Routes, appIcons, isIOS} from '../../../shared/exporter';
+import {Routes, appIcons, isIOS, showAlert} from '../../../shared/exporter';
 
 interface OTPVerificationProps {
   route: any;
@@ -41,9 +41,9 @@ const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
   const handleVerifyOTP = () => {
     if (value === '') {
       // Toast.show('Please enter an OTP.', Toast.SHORT, ['UIAlertController']);
-      Alert.alert('Verify OTP', 'Please enter an OTP.');
+      showAlert('Verify OTP', 'Please enter an OTP.');
     } else if (value.length < 6) {
-      Alert.alert('Verify OTP', 'Please enter complete OTP.');
+      showAlert('Verify OTP', 'Please enter complete OTP.');
       // Toast.show('Please enter complete OTP.', Toast.SHORT, [
       //   'UIAlertController',
       // ]);
@@ -60,7 +60,7 @@ const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
 
   const resendOTP = () => {
     setTimer(30);
-    Alert.alert('Resent OTP', 'The OTP has been resent.');
+    showAlert('Resent OTP', 'The OTP has been resent.');
   };
 
   return (

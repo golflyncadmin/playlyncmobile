@@ -4,14 +4,35 @@ export const authApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
     login: builder.mutation({
       query: data => ({
-        url: 'session',
+        url: 'auth/login',
         method: 'POST',
         body: data,
       }),
     }),
-    googleLogin: builder.mutation({
+    socialLogin: builder.mutation({
       query: data => ({
-        url: 'social_logins/google_login',
+        url: '',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    signUp: builder.mutation({
+      query: data => ({
+        url: 'auth/signup',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    verifyOTP: builder.mutation({
+      query: data => ({
+        url: 'registrations/otp_verification',
+        method: 'POST',
+        body: data,
+      }),
+    }),
+    resendOTP: builder.mutation({
+      query: data => ({
+        url: 'registrations/resend_otp',
         method: 'POST',
         body: data,
       }),
@@ -30,30 +51,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
-    signUp: builder.mutation({
-      query: data => ({
-        url: 'registrations',
-        method: 'POST',
-        body: data,
-      }),
-    }),
-    verifyOtpEmail: builder.mutation({
-      query: data => ({
-        url: 'registrations/otp_verification_email',
-        method: 'POST',
-        body: data,
-      }),
-    }),
-    refreshToken: builder.mutation({
-      query: data => ({
-        url: '/auth/refresh-tokens',
-        method: 'POST',
-        body: data,
-      }),
-    }),
     logoutUser: builder.mutation({
       query: data => ({
-        url: '/auth/logout',
+        url: '',
         method: 'POST',
         body: data,
       }),
@@ -64,11 +64,9 @@ export const authApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useLoginMutation,
-  useForgotPasswordMutation,
   useSignUpMutation,
-  useRefreshTokenMutation,
   useLogoutUserMutation,
-  useGoogleLoginMutation,
-  useVerifyOtpEmailMutation,
+  useSocialLoginMutation,
   useResetPasswordMutation,
+  useForgotPasswordMutation,
 } = authApiSlice;

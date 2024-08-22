@@ -3,6 +3,7 @@ export const Routes = {
   LoginType: 'LoginType',
   Login: 'Login',
   SignUp: 'SignUp',
+  UserDetails: 'UserDetails',
   OTPVerification: 'OTPVerification',
   ForgotPassword: 'ForgotPassword',
   ResetPassword: 'ResetPassword',

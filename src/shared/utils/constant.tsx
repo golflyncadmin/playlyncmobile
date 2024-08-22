@@ -1,5 +1,11 @@
 import {Alert} from 'react-native';
-import {GLColors, GLFontSize, GLFontsFamily, appImages} from '../exporter';
+import {
+  isIOS,
+  GLColors,
+  appImages,
+  GLFontSize,
+  GLFontsFamily,
+} from '../exporter';
 import {svgIcon} from '../../assets/svg';
 
 export function showAlert(type: string, description: string) {
@@ -58,12 +64,16 @@ export const LOGIN_TYPES: LoginTypes[] = [
     title: 'Continue with Google',
     icon: svgIcon.GoogleIcon,
   },
-  {
-    id: 2,
-    type: 'Apple',
-    title: 'Continue with Apple',
-    icon: svgIcon.AppleIcon,
-  },
+  ...(isIOS()
+    ? [
+        {
+          id: 2,
+          type: 'Apple',
+          title: 'Continue with Apple',
+          icon: svgIcon.AppleIcon,
+        },
+      ]
+    : []),
   {
     id: 3,
     type: 'Facebook',

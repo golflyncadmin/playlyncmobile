@@ -11,7 +11,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
     }),
     socialLogin: builder.mutation({
       query: data => ({
-        url: '',
+        url: 'auth/social_login',
         method: 'POST',
         body: data,
       }),
@@ -53,7 +53,7 @@ export const authApiSlice = apiSlice.injectEndpoints({
     }),
     logoutUser: builder.mutation({
       query: data => ({
-        url: '',
+        url: 'auth/logout',
         method: 'POST',
         body: data,
       }),

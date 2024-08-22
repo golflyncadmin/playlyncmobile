@@ -12,6 +12,10 @@ export const signUpForm = {
   confirmPassword: '',
 };
 
+export const userDetailsForm = {
+  phoneNumber: '',
+};
+
 export const forgotPassForm = {
   email: '',
 };
@@ -80,6 +84,23 @@ export const signUpValidationSchema = () => {
 
   return yup.object().shape(baseSchema);
 };
+
+export const userDetailsValidationSchema = yup.object().shape({
+  phoneNumber: yup
+    .string()
+    .required('Phone Number Required')
+    .matches(/^[a-zA-Z0-9]*$/, 'Special Characters Are Not Allowed')
+    .test(
+      'starts-with-1',
+      'Phone number must start with 1',
+      value => !value || value.startsWith('1'),
+    )
+    .test(
+      'has-11-digits',
+      'Phone number must contain exactly 11 digits',
+      value => !value || value.length === 11,
+    ),
+});
 
 export const loginValidationSchema = yup.object().shape({
   email: yup

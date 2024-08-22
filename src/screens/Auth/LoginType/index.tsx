@@ -26,19 +26,23 @@ const LoginType = ({navigation}: LoginTypeProps) => {
   useEffect(() => {
     if (appleToken) {
       console.log('APPLE TOKEN : ', appleToken);
+      navigation.navigate('UserDetails');
     }
   }, [appleToken]);
 
   const handleLogin = (type: string) => {
     switch (type) {
       case 'Google':
+        navigation.navigate('UserDetails');
         break;
       case 'Apple':
         signInWithApple();
         break;
       case 'Facebook':
+        navigation.navigate('UserDetails');
         break;
       case 'Instagram':
+        navigation.navigate('UserDetails');
         break;
 
       default:

@@ -75,14 +75,18 @@ const Login = ({navigation}: LoginProps) => {
                   <Text style={styles.headingStyle}>Login</Text>
                   <Text style={styles.loginWithStyle}>or login with</Text>
                   <View style={styles.iconContainer}>
-                    {LOGIN_TYPES?.slice(0, 4)?.map((item: object | any) => (
-                      <TouchableOpacity
-                        activeOpacity={0.7}
-                        onPress={() => handleSocialLogin()}
-                        style={styles.iconView}>
-                        {item?.icon}
-                      </TouchableOpacity>
-                    ))}
+                    {LOGIN_TYPES?.slice(0, 4)?.map((item: object | any) => {
+                      const isNoIcon = item?.icon === null;
+                      if (isNoIcon) return;
+                      return (
+                        <TouchableOpacity
+                          activeOpacity={0.7}
+                          onPress={() => handleSocialLogin()}
+                          style={styles.iconView}>
+                          {item?.icon}
+                        </TouchableOpacity>
+                      );
+                    })}
                   </View>
                   <AppInput
                     placeholder="Email*"

@@ -18,7 +18,6 @@ export const useFacebookSignIn = (
         const data = await AccessToken.getCurrentAccessToken();
         if (data) {
           const accessToken = data.accessToken.toString();
-          showAlert('Login success', `AccessToken: ${accessToken}`);
           setFacebookToken(accessToken); // Store the token using the setter passed
         }
       }

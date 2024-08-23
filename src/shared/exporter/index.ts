@@ -6,9 +6,9 @@ export {
   CURRENT_DATE,
   IMAGE_OPTIONS,
   CALENDAR_THEME,
-  LOGIN_FAIL_TEXT,
-  UNEXPECTED_ERROR,
   APP_INTRO_SLIDES,
+  UNEXPECTED_ERROR,
+  GENERIC_ERROR_TEXT,
 } from '../utils/constant.tsx';
 
 export {appImages, appIcons} from '../theme/assets.tsx';

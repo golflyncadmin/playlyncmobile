@@ -4,9 +4,9 @@ import {useDispatch} from 'react-redux';
 import {useAppleSignIn, useFacebookSignIn} from '../../../hooks';
 import {
   AppButton,
+  AppLoader,
   MainWrapper,
   AgreementModal,
-  AppLoader,
 } from '../../../components';
 import {useSocialLoginMutation} from '../../../redux/auth/authApiSlice';
 import {setAccessToken, setLoginUser} from '../../../redux/auth/authSlice';
@@ -18,7 +18,7 @@ import {
   appIcons,
   showAlert,
   LOGIN_TYPES,
-  LOGIN_FAIL_TEXT,
+  GENERIC_ERROR_TEXT,
 } from '../../../shared/exporter';
 
 interface LoginTypeProps {
@@ -27,6 +27,7 @@ interface LoginTypeProps {
 
 const LoginType = ({navigation}: LoginTypeProps) => {
   const dispatch = useDispatch();
+  const [apiRes, setApiRes] = useState(false);
   const [isSelected, setSelection] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [appleToken, setAppleToken] = useState<string | null>(null);
@@ -54,12 +55,15 @@ const LoginType = ({navigation}: LoginTypeProps) => {
 
       const resp = await socialLogin(data);
       if (resp?.data) {
-        handleLoginSuccess(resp?.data);
+        console.log('RES => ', resp);
+        return;
+        setApiRes(resp?.data);
+        setModalVisible(true);
       } else {
-        showAlert('Login Error', resp?.error.data?.message[0]);
+        showAlert('Error', resp?.error?.data?.message);
       }
-    } catch (e) {
-      showAlert('Login Error', LOGIN_FAIL_TEXT);
+    } catch (error: any) {
+      showAlert('Error', GENERIC_ERROR_TEXT);
     }
   };
 
@@ -77,6 +81,9 @@ const LoginType = ({navigation}: LoginTypeProps) => {
       case 'Instagram':
         navigation.navigate('UserDetails');
         break;
+      case 'Manual':
+        navigation.navigate(Routes.Login);
+        break;
 
       default:
         break;
@@ -84,25 +91,20 @@ const LoginType = ({navigation}: LoginTypeProps) => {
   };
 
   const handleNavigation = () => {
+    // TODO: Check if account is verified or not
     if (isSelected) {
       setModalVisible(false);
       setTimeout(() => {
-        navigation.replace(Routes.Login);
+        setAppleToken(null);
+        setFacebookToken(null);
+        dispatch(setLoginUser(apiRes?.data));
+        dispatch(setAccessToken(apiRes?.data?.token));
+
+        navigation.replace(Routes.AppStack);
       }, 500);
     } else {
       showAlert('Missing Selection', 'Select agreement to proceed further.');
     }
-  };
-
-  const handleLoginSuccess = (res: any) => {
-    console.log('Res => ', res);
-
-    // dispatch(setLoginUser(res?.data?.user));
-    // dispatch(setAccessToken(res?.token));
-
-    // if (res?.data) {
-    //   navigation.replace('AppStack');
-    // }
   };
 
   return (

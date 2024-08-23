@@ -17,7 +17,7 @@ export const userDetailsForm = {
 };
 
 export const forgotPassForm = {
-  email: '',
+  phoneNumber: '',
 };
 
 export const resetPassForm = {
@@ -118,12 +118,19 @@ export const loginValidationSchema = yup.object().shape({
 });
 
 export const forgotPassValidationSchema = yup.object().shape({
-  email: yup
+  phoneNumber: yup
     .string()
-    .required('Email Required')
-    .matches(
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      'Invalid email address',
+    .required('Phone Number Required')
+    .matches(/^[a-zA-Z0-9]*$/, 'Special Characters Are Not Allowed')
+    .test(
+      'starts-with-1',
+      'Phone number must start with 1',
+      value => !value || value.startsWith('1'),
+    )
+    .test(
+      'has-11-digits',
+      'Phone number must contain exactly 11 digits',
+      value => !value || value.length === 11,
     ),
 });
 

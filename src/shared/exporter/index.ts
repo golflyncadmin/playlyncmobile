@@ -6,6 +6,7 @@ export {
   CURRENT_DATE,
   IMAGE_OPTIONS,
   CALENDAR_THEME,
+  LOGIN_FAIL_TEXT,
   UNEXPECTED_ERROR,
   APP_INTRO_SLIDES,
 } from '../utils/constant.tsx';

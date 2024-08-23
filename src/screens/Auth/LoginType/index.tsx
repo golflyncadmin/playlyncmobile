@@ -1,7 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, Image} from 'react-native';
-import {useAppleSignIn} from '../../../hooks';
-import {AppButton, MainWrapper, AgreementModal} from '../../../components';
+import {useDispatch} from 'react-redux';
+import {useAppleSignIn, useFacebookSignIn} from '../../../hooks';
+import {
+  AppButton,
+  MainWrapper,
+  AgreementModal,
+  AppLoader,
+} from '../../../components';
+import {useSocialLoginMutation} from '../../../redux/auth/authApiSlice';
+import {setAccessToken, setLoginUser} from '../../../redux/auth/authSlice';
 import styles from './styles';
 import {
   EMAIL,
@@ -10,6 +18,7 @@ import {
   appIcons,
   showAlert,
   LOGIN_TYPES,
+  LOGIN_FAIL_TEXT,
 } from '../../../shared/exporter';
 
 interface LoginTypeProps {
@@ -17,18 +26,42 @@ interface LoginTypeProps {
 }
 
 const LoginType = ({navigation}: LoginTypeProps) => {
+  const dispatch = useDispatch();
   const [isSelected, setSelection] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [appleToken, setAppleToken] = useState<string | null>(null);
+  const [facebookToken, setFacebookToken] = useState<string | null>(null);
 
   const {signInWithApple} = useAppleSignIn(setAppleToken);
+  const {signInWithFacebook} = useFacebookSignIn(setFacebookToken);
+
+  const [socialLogin, {isLoading}] = useSocialLoginMutation();
 
   useEffect(() => {
-    if (appleToken) {
-      console.log('APPLE TOKEN : ', appleToken);
-      navigation.navigate('UserDetails');
-    }
+    if (appleToken) handleSocialLogin(appleToken, 'apple');
   }, [appleToken]);
+
+  useEffect(() => {
+    if (facebookToken) handleSocialLogin(facebookToken, 'facebook');
+  }, [facebookToken]);
+
+  const handleSocialLogin = async (token: string, provider: string) => {
+    try {
+      const data = {
+        token: token,
+        provider: provider,
+      };
+
+      const resp = await socialLogin(data);
+      if (resp?.data) {
+        handleLoginSuccess(resp?.data);
+      } else {
+        showAlert('Login Error', resp?.error.data?.message[0]);
+      }
+    } catch (e) {
+      showAlert('Login Error', LOGIN_FAIL_TEXT);
+    }
+  };
 
   const handleLogin = (type: string) => {
     switch (type) {
@@ -39,7 +72,7 @@ const LoginType = ({navigation}: LoginTypeProps) => {
         signInWithApple();
         break;
       case 'Facebook':
-        navigation.navigate('UserDetails');
+        signInWithFacebook();
         break;
       case 'Instagram':
         navigation.navigate('UserDetails');
@@ -59,6 +92,17 @@ const LoginType = ({navigation}: LoginTypeProps) => {
     } else {
       showAlert('Missing Selection', 'Select agreement to proceed further.');
     }
+  };
+
+  const handleLoginSuccess = (res: any) => {
+    console.log('Res => ', res);
+
+    // dispatch(setLoginUser(res?.data?.user));
+    // dispatch(setAccessToken(res?.token));
+
+    // if (res?.data) {
+    //   navigation.replace('AppStack');
+    // }
   };
 
   return (
@@ -109,6 +153,7 @@ const LoginType = ({navigation}: LoginTypeProps) => {
         setSelection={() => setSelection(!isSelected)}
         setModalVisible={() => setModalVisible(false)}
       />
+      {isLoading && <AppLoader />}
     </MainWrapper>
   );
 };

@@ -168,3 +168,5 @@ export const CALENDAR_THEME = {
 export const DAY_NAME_SHORT = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
 export const CURRENT_DATE = new Date().toISOString().split('T')[0];
+
+export const LOGIN_FAIL_TEXT = 'Failed to login. Please try again later.';

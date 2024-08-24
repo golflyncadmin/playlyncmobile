@@ -2,8 +2,10 @@ import React, {useRef, useState, useEffect} from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 import {Formik} from 'formik';
 import {useDispatch} from 'react-redux';
+import InstagramLogin from 'react-native-instagram-login';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {useAppleSignIn, useFacebookSignIn} from '../../../hooks';
+import {INS_APP_ID, INS_APP_SECRET, INS_REDIRECTION_URL} from '@env';
 import {
   useLoginMutation,
   useSocialLoginMutation,
@@ -16,6 +18,7 @@ import {
   Routes,
   appIcons,
   showAlert,
+  INS_SCOPES,
   LOGIN_TYPES,
   GENERIC_ERROR_TEXT,
 } from '../../../shared/exporter';
@@ -31,8 +34,10 @@ interface LoginProps {
 
 const Login = ({navigation}: LoginProps) => {
   let isValidForm = true;
+  const insRef = useRef();
   const dispatch = useDispatch();
   const formikRef = useRef(null);
+  const [insToken, setInsToken] = useState<string | null>(null);
   const [appleToken, setAppleToken] = useState<string | null>(null);
   const [facebookToken, setFacebookToken] = useState<string | null>(null);
 
@@ -50,6 +55,10 @@ const Login = ({navigation}: LoginProps) => {
     if (facebookToken) handleSocialLogin(facebookToken, 'facebook');
   }, [facebookToken]);
 
+  useEffect(() => {
+    if (insToken) handleSocialLogin(insToken, 'instagram');
+  }, [insToken]);
+
   const handleSocialLogin = async (token: string, provider: string) => {
     try {
       const data = {
@@ -61,6 +70,9 @@ const Login = ({navigation}: LoginProps) => {
       if (resp?.data) {
         handleLoginSuccess(resp?.data);
       } else {
+        setInsToken(null);
+        setAppleToken(null);
+        setFacebookToken(null);
         showAlert('Login Error', resp?.error?.data?.message);
       }
     } catch (error: any) {
@@ -99,7 +111,7 @@ const Login = ({navigation}: LoginProps) => {
         signInWithFacebook();
         break;
       case 'Instagram':
-        navigation.navigate('');
+        insRef.current.show();
         break;
 
       default:
@@ -109,6 +121,7 @@ const Login = ({navigation}: LoginProps) => {
 
   const handleLoginSuccess = (res: any) => {
     // TODO: Check if account is verified or not
+    setInsToken(null);
     setAppleToken(null);
     setFacebookToken(null);
     dispatch(setLoginUser(res?.data));
@@ -221,6 +234,20 @@ const Login = ({navigation}: LoginProps) => {
         </View>
       </KeyboardAwareScrollView>
       {(loading || isLoading) && <AppLoader />}
+      <InstagramLogin
+        ref={insRef}
+        appId={INS_APP_ID}
+        scopes={INS_SCOPES}
+        appSecret={INS_APP_SECRET}
+        redirectUrl={INS_REDIRECTION_URL}
+        closeStyle={styles.closeStyle}
+        wrapperStyle={styles.wrapperStyle}
+        containerStyle={styles.containerStyle}
+        onLoginSuccess={(token: object | any) =>
+          setInsToken(token?.access_token)
+        }
+        onLoginFailure={(data: any) => console.log('Ins Error => ', data)}
+      />
     </MainWrapper>
   );
 };

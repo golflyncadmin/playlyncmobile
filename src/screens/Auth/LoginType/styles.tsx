@@ -43,6 +43,19 @@ const styles = StyleSheet.create({
     fontSize: GLFontSize.FONT_SIZE_15,
     fontFamily: GLFontsFamily.Poppins_Medium,
   },
+  closeStyle: {
+    top: WP('12'),
+    right: WP('4.5'),
+  },
+  wrapperStyle: {
+    borderWidth: 3,
+    borderRadius: WP('3'),
+    borderColor: GLColors.Blue.B2,
+  },
+  containerStyle: {
+    borderRadius: WP('2'),
+    borderColor: GLColors.Blue.B2,
+  },
 });
 
 export default styles;

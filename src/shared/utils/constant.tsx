@@ -170,3 +170,5 @@ export const DAY_NAME_SHORT = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 export const CURRENT_DATE = new Date().toISOString().split('T')[0];
 
 export const GENERIC_ERROR_TEXT = 'Something went wrong. Please try again.';
+
+export const INS_SCOPES = ['user_profile', 'user_media']

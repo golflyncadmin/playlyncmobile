@@ -27,12 +27,12 @@
             <string>Editor</string>
             <key>CFBundleURLSchemes</key>
             <array>
-                <string>fb3684951991766210</string>
+                <string>fb491364600289754</string>
             </array>
             <key>FacebookAppID</key>
-            <string>3684951991766210</string>
+            <string>491364600289754</string>
             <key>FacebookClientToken</key>
-            <string>da395385f254c20349c2aca80a2b0916</string>
+            <string>93df21fc5825386e0ca948ddbd3a4063</string>
             <key>FacebookDisplayName</key>
             <string>PlayLync</string>
         </dict>

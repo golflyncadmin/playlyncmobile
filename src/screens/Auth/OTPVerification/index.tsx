@@ -78,7 +78,7 @@ const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
             navigation.replace(Routes.Login);
           }
         } else {
-          navigation.replace(Routes.ResetPassword, {email: phone});
+          navigation.navigate(Routes.ResetPassword, {email: phone});
         }
       } else {
         showAlert('Error', resp?.error?.data?.message);

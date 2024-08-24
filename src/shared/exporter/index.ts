@@ -1,6 +1,7 @@
 export {
-  showAlert,
   EMAIL,
+  showAlert,
+  INS_SCOPES,
   LOGIN_TYPES,
   MY_REQUESTS,
   CURRENT_DATE,

@@ -4,11 +4,14 @@ import {Formik} from 'formik';
 import CheckBox from '@react-native-community/checkbox';
 import {
   AppInput,
+  Dropdown,
   AppButton,
   AppHeader,
+  AppLoader,
   MainWrapper,
   DateRangePicker,
 } from '../../../../components';
+import {useCreateRequestMutation} from '../../../../redux/app/appApiSlice';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   addRequestForm,
@@ -16,7 +19,15 @@ import {
 } from '../../../../shared/utils/validations';
 import styles from './styles';
 import {svgIcon} from '../../../../assets/svg';
-import {GLColors, WP, isIOS, showAlert} from '../../../../shared/exporter';
+import {
+  WP,
+  isIOS,
+  Routes,
+  GLColors,
+  showAlert,
+  GENERIC_ERROR_TEXT,
+} from '../../../../shared/exporter';
+import {LOCATIONS_DATA} from '../../../../shared/utils/constant';
 
 interface AddRequestProps {
   navigation: any;
@@ -35,20 +46,49 @@ const options: Option[] = [
 
 const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
   const formikRef = useRef<any>(null);
+  const [endDate, setEndDate] = useState('');
+  const [location, setLocation] = useState('');
+  const [startDate, setStartDate] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [playersCount, setPlayersCount] = useState<number>(1);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
-  const handleCheckBoxChange = (id: number) =>
-    setSelectedId(prevId => (prevId === id ? null : id));
+  const [createRequest, {isLoading}] = useCreateRequestMutation();
 
-  const handleAddRequest = (values: any) => {
+  const handleCheckBoxChange = (label: string) =>
+    setSelectedTime(prevLabel => (prevLabel === label ? null : label));
+
+  const handleAddRequest = async (values: any) => {
+    if (location === '') return showAlert('Error', 'Please select Location');
     if (playersCount <= 0)
       return showAlert('Error', 'Please select number of players');
-    if (selectedId === null) return showAlert('Error', 'Please select time');
-    console.log('Values => ', values);
-    console.log('Player => ', playersCount);
-    console.log('Time => ', selectedId);
+    if (selectedTime === null) return showAlert('Error', 'Please select time');
+
+    try {
+      const data = {
+        start_date: startDate,
+        end_date: endDate,
+        time: selectedTime,
+        location: location,
+        players: playersCount,
+      };
+      const resp = await createRequest(data);
+      if (resp?.data) {
+        showAlert('Request Submitted', resp?.data?.message, () => {
+          navigation.navigate(Routes.RequestsStack);
+          // setLocation('');
+          setPlayersCount(1);
+          setEndDate('');
+          setStartDate('');
+          setSelectedTime(null);
+          formikRef?.current?.setFieldValue('dateRange', '');
+        });
+      } else {
+        showAlert('Error', resp?.error?.data?.message);
+      }
+    } catch (error: any) {
+      showAlert('Error', GENERIC_ERROR_TEXT);
+    }
   };
 
   const incrementPlayers = () => setPlayersCount(prevCount => prevCount + 1);
@@ -80,8 +120,15 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
   );
 
   const handleSelectRange = (range: {startDate: string; endDate: string}) => {
+    setEndDate(range?.endDate);
+    setStartDate(range?.startDate);
+
     const formattedDate = formatDateRange(range);
     formikRef.current?.setFieldValue('dateRange', formattedDate);
+  };
+
+  const onChange = (item: any) => {
+    setLocation(item?.label);
   };
 
   return (
@@ -103,14 +150,10 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
             <View style={styles.contentContainer}>
               <View style={styles.innerView}>
                 <Text style={styles.headingTextStyle}>Location*</Text>
-                <AppInput
-                  placeholder="Enter Location"
-                  value={values.location}
-                  touched={touched.location}
-                  autoCapitalize="none"
-                  inputStyle={styles.inputStyle}
-                  errorMessage={errors.location}
-                  onChangeText={handleChange('location')}
+                <Dropdown
+                  onChange={onChange}
+                  placeholder="Pick Location"
+                  locationsArr={LOCATIONS_DATA}
                 />
                 <Text style={[styles.headingTextStyle, {marginTop: WP('6')}]}>
                   Number of players *
@@ -155,11 +198,11 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
                     <View key={option.id} style={styles.checkboxContainer}>
                       <CheckBox
                         boxType="square"
-                        value={selectedId === option.id}
+                        value={selectedTime === option.label}
                         style={styles.checkboxStyle}
-                        onValueChange={() => handleCheckBoxChange(option.id)}
+                        onValueChange={() => handleCheckBoxChange(option.label)}
                         tintColor={
-                          selectedId === option.id
+                          selectedTime === option.label
                             ? GLColors.Blue.B2
                             : GLColors.Natural.N4
                         }
@@ -183,6 +226,7 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
           )}
         </Formik>
       </KeyboardAwareScrollView>
+      {isLoading && <AppLoader />}
     </MainWrapper>
   );
 };

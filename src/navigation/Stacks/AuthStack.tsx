@@ -3,7 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import LoginType from '@authScreens/LoginType';
 import Login from '@authScreens/Login';
 import SignUp from '@authScreens/SignUp';
-// import UserDetails from '@authScreens/UserDetails';
+import AccountVerification from '@authScreens/AccountVerification';
 import OTPVerification from '@authScreens/OTPVerification';
 import ForgotPassword from '@authScreens/ForgotPassword';
 import ResetPassword from '@authScreens/ResetPassword';
@@ -12,7 +12,7 @@ type AuthStackParamList = {
   LoginType: LoginType;
   Login: Login;
   SignUp: SignUp;
-  // UserDetails: UserDetails;
+  AccountVerification: AccountVerification;
   OTPVerification: OTPVerification;
   ForgotPassword: ForgotPassword;
   ResetPassword: ResetPassword;
@@ -26,7 +26,10 @@ const AuthStack: React.FC = () => {
       <Stack.Screen name={'LoginType'} component={LoginType} />
       <Stack.Screen name={'Login'} component={Login} />
       <Stack.Screen name={'SignUp'} component={SignUp} />
-      {/* <Stack.Screen name={'UserDetails'} component={UserDetails} /> */}
+      <Stack.Screen
+        name={'AccountVerification'}
+        component={AccountVerification}
+      />
       <Stack.Screen name={'OTPVerification'} component={OTPVerification} />
       <Stack.Screen name={'ForgotPassword'} component={ForgotPassword} />
       <Stack.Screen name={'ResetPassword'} component={ResetPassword} />

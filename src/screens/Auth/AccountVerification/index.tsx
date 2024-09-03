@@ -18,20 +18,23 @@ import {
   Routes,
   appIcons,
   showAlert,
+  EMAIL_ENUM,
+  PHONE_ENUM,
   GENERIC_ERROR_TEXT,
 } from '../../../shared/exporter';
 
-interface OTPVerificationProps {
+interface AccountVerificationProps {
   route: any;
   navigation: any;
 }
 
 const CELL_COUNT = 6;
 
-const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
+const AccountVerification = ({navigation, route}: AccountVerificationProps) => {
   const {email, phone} = route?.params;
   const [value, setValue] = useState('');
   const [timer, setTimer] = useState(90);
+  const [verifyType, setVerifyType] = useState(EMAIL_ENUM);
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
@@ -40,6 +43,10 @@ const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
 
   const [resendOTP, {isLoading}] = useResendOTPMutation();
   const [verifyOTP, {isLoading: loading}] = useVerifyOTPMutation();
+
+  useEffect(() => {
+    if (!email) setVerifyType(PHONE_ENUM);
+  }, [route]);
 
   useEffect(() => {
     if (timer > 0) {
@@ -63,19 +70,25 @@ const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
 
   const verifyTheOTP = async () => {
     try {
-      const data = email
-        ? {
-            email: email,
-            email_otp: value,
-          }
-        : {
-            phone_otp: value,
-            phone_number: phone,
-          };
+      const data =
+        verifyType === EMAIL_ENUM
+          ? {
+              email: email,
+              email_otp: value,
+            }
+          : {
+              phone_otp: value,
+              phone_number: phone,
+            };
 
       const resp = await verifyOTP(data);
       if (resp?.data) {
-        navigation.navigate(Routes.ResetPassword, {email: email, phone: phone});
+        if (verifyType === EMAIL_ENUM) {
+          setValue('');
+          setVerifyType(PHONE_ENUM);
+        } else {
+          navigation.replace(Routes.Login);
+        }
       } else {
         showAlert('Error', resp?.error?.data?.message);
       }
@@ -86,7 +99,8 @@ const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
 
   const handleResendOTP = async () => {
     try {
-      const data = email ? {email: email} : {phone_number: phone};
+      const data =
+        verifyType === EMAIL_ENUM ? {email: email} : {phone_number: phone};
 
       const resp = await resendOTP(data);
       if (resp?.data) {
@@ -120,9 +134,9 @@ const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
             <Text style={styles.headingStyle}>Almost There</Text>
             <Text style={styles.infoTextStyle}>
               Please enter the 6-digit code sent to your{' '}
-              {email ? 'email ' : 'phone number '}
+              {verifyType === PHONE_ENUM ? 'phone number ' : 'email '}
               <Text style={styles.commonTextStyle}>
-                {email ? email : phone}
+                {verifyType === PHONE_ENUM ? phone : email}
               </Text>{' '}
               for verification.
             </Text>
@@ -174,4 +188,4 @@ const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
   );
 };
 
-export default OTPVerification;
+export default AccountVerification;

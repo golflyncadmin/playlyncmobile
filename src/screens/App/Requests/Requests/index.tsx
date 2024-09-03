@@ -1,45 +1,26 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {Text, View, FlatList, ListRenderItemInfo} from 'react-native';
+import {useIsFocused} from '@react-navigation/native';
 import {
   AppButton,
   AppHeader,
+  AppLoader,
   DeleteModal,
   MainWrapper,
   PreviousReqSheet,
 } from '../../../../components';
 import styles from './styles';
+import {
+  useGetRequestsQuery,
+  useDeleteRequestMutation,
+} from '../../../../redux/app/appApiSlice';
 import {svgIcon} from '../../../../assets/svg';
-import {MY_REQUESTS, Routes} from '../../../../shared/exporter';
-
-type CreatedRequests = {
-  id: number;
-  location: string;
-  day: string;
-  date: string;
-  time: string;
-};
-
-type Alert = {
-  id: number;
-  title: string;
-};
-
-const CREATED_REQUESTS: CreatedRequests[] = [
-  {
-    id: 1,
-    location: 'Riverside Golf Course',
-    day: 'Monday, Saturday',
-    date: '5/18-24/2024',
-    time: 'Evening',
-  },
-  {
-    id: 2,
-    location: 'Riverside Golf Course',
-    day: 'Monday, Saturday',
-    date: '5/18-24/2024',
-    time: 'Evening',
-  },
-];
+import {
+  Routes,
+  showAlert,
+  MY_REQUESTS,
+  GENERIC_ERROR_TEXT,
+} from '../../../../shared/exporter';
 
 interface RequestsProps {
   navigation: any;
@@ -47,17 +28,34 @@ interface RequestsProps {
 
 const Requests = ({navigation}: RequestsProps) => {
   const sheetRef = useRef(null);
+  const isFocused = useIsFocused();
+  const [reqId, setReqId] = useState('');
   const [allRequests, setAllRequests] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
 
+  const {
+    data: requestsData,
+    isLoading: reqLoading,
+    refetch: requestsRefetch,
+  } = useGetRequestsQuery(undefined);
+
+  const [deleteRequest, {isLoading: delLoading}] = useDeleteRequestMutation();
+
   useEffect(() => {
-    const n = CREATED_REQUESTS.length;
-    const mergedRequests: any = [...MY_REQUESTS];
-    for (let i = 0; i < n; i++) {
-      mergedRequests[i] = CREATED_REQUESTS[i];
+    if (isFocused) requestsRefetch();
+  }, [isFocused]);
+
+  useEffect(() => {
+    const {data} = requestsData;
+    if (data) {
+      const n = data.length;
+      const mergedRequests: any = [...MY_REQUESTS];
+      for (let i = 0; i < n; i++) {
+        mergedRequests[i] = data[i];
+      }
+      setAllRequests(mergedRequests);
     }
-    setAllRequests(mergedRequests);
-  }, []);
+  }, [requestsData]);
 
   const DisplayInfo = ({icon, label}) => (
     <View style={styles.innerRow}>
@@ -66,7 +64,7 @@ const Requests = ({navigation}: RequestsProps) => {
     </View>
   );
 
-  const renderItem = ({item, index}: ListRenderItemInfo<Alert>) => {
+  const renderItem = ({item, index}: any) => {
     const isCreated = item?.hasOwnProperty('location');
     return (
       <View
@@ -87,28 +85,24 @@ const Requests = ({navigation}: RequestsProps) => {
                 styles.memberCountStyle,
                 isCreated ? styles.activeMemberCountStyle : {},
               ]}>
-              {isCreated ? '3' : '0'}
+              {isCreated ? item?.players : '0'}
             </Text>
           </View>
         </View>
         <View style={styles.contentContainer}>
           {isCreated ? (
             <View>
-              <DisplayInfo
-                icon={svgIcon.LocationIcon}
-                label="Riverside Golf Course"
-              />
-              <DisplayInfo
-                icon={svgIcon.CalendarIcon}
-                label="Monday, Saturday"
-              />
+              <DisplayInfo icon={svgIcon.LocationIcon} label={item?.location} />
               <DisplayInfo icon={svgIcon.DateIcon} label="5/18-24/2024" />
-              <DisplayInfo icon={svgIcon.TimeIcon} label="Evening" />
+              <DisplayInfo icon={svgIcon.TimeIcon} label={item?.time} />
               <AppButton
                 title={'Delete Request'}
                 textStyle={styles.textStyle}
                 buttonStyle={styles.buttonStyle}
-                handleClick={() => setModalVisible(true)}
+                handleClick={() => {
+                  setReqId(item?.id);
+                  setModalVisible(true);
+                }}
               />
             </View>
           ) : (
@@ -124,8 +118,20 @@ const Requests = ({navigation}: RequestsProps) => {
     );
   };
 
-  const deleteRequest = () => {
-    setModalVisible(false);
+  const handleDeleteRequest = async () => {
+    try {
+      const resp = await deleteRequest(reqId);
+      if (resp?.data) {
+        console.log('Del RES => ', resp);
+        setReqId('');
+        setModalVisible(false);
+        requestsRefetch();
+      } else {
+        showAlert('Error', resp?.error?.data?.message);
+      }
+    } catch (error: any) {
+      showAlert('Error', GENERIC_ERROR_TEXT);
+    }
   };
 
   return (
@@ -148,17 +154,14 @@ const Requests = ({navigation}: RequestsProps) => {
           keyExtractor={item => item.id.toString()}
         />
       )}
-      {/* {allRequests?.length === 0 && (
-        <View style={styles.noDataContainer}>
-          <Text style={styles.noRecordTextStyle}>No Requests Found</Text>
-        </View>
-      )} */}
       <DeleteModal
         modalVisible={modalVisible}
-        handleClick={() => deleteRequest()}
+        handleClick={() => handleDeleteRequest()}
         setModalVisible={() => setModalVisible(false)}
         heading="Are you sure you want to delete this request?"
       />
+
+      {(reqLoading || delLoading) && <AppLoader />}
       {/* <PreviousReqSheet ref={sheetRef} data={[1, 2, 3, 4, 5, 6, 7, 8, 9]} /> */}
     </MainWrapper>
   );

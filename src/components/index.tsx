@@ -5,6 +5,7 @@ export * from './primitive/MainWrapper';
 export * from './primitive/BottomTab/BottomTab';
 
 // Complex
+export * from './complex/Dropdown'
 export * from './complex/AppButton';
 export * from './complex/AppHeader';
 export * from './complex/DeleteModal';

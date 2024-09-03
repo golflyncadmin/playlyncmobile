@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   titleStyle: {
+    width: '70%',
     color: GLColors.Natural.N11,
     fontSize: GLFontSize.FONT_SIZE_16,
     fontFamily: GLFontsFamily.Poppins_Medium,

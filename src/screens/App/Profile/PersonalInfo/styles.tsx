@@ -77,13 +77,13 @@ const styles = StyleSheet.create({
     marginBottom: WP('2'),
   },
   cancelTextStyle: {
-    width: WP('41'),
+    width: WP('43'),
     textAlign: 'center',
     color: GLColors.Natural.N9,
     fontSize: GLFontSize.FONT_SIZE_14,
   },
   actionTextStyle: {
-    width: WP('41'),
+    width: WP('43'),
     textAlign: 'center',
     fontSize: GLFontSize.FONT_SIZE_14,
   },

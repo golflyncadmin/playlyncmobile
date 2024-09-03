@@ -2,13 +2,20 @@ import React, {useRef} from 'react';
 import {View, Text, Image} from 'react-native';
 import {Formik} from 'formik';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {AppButton, AppInput, MainWrapper} from '../../../components';
-import styles from './styles';
-import {Routes, appIcons, isIOS} from '../../../shared/exporter';
+import {AppButton, AppInput, AppLoader, MainWrapper} from '../../../components';
+import {
+  isIOS,
+  Routes,
+  appIcons,
+  showAlert,
+  GENERIC_ERROR_TEXT,
+} from '../../../shared/exporter';
+import {useSignUpMutation} from '../../../redux/auth/authApiSlice';
 import {
   signUpForm,
   signUpValidationSchema,
 } from '../../../shared/utils/validations';
+import styles from './styles';
 import {svgIcon} from '../../../assets/svg';
 
 interface SignUpProps {
@@ -19,12 +26,30 @@ const SignUp = ({navigation}: SignUpProps) => {
   let isValidForm = true;
   const formikRef = useRef(null);
 
-  const handleSignUp = (values: any) => {
-    console.log('Values => ', values);
-    navigation.navigate(Routes.OTPVerification, {
-      email: values.email,
-      phone: '1234567890',
-    });
+  const [signUp, {isLoading}] = useSignUpMutation();
+
+  const handleSignUp = async (values: any) => {
+    const {email, phoneNumber, password} = values;
+    try {
+      const data = {
+        email: email,
+        password: password,
+        phone_number: phoneNumber,
+      };
+
+      const resp = await signUp(data);
+      if (resp?.data) {
+        navigation.navigate(Routes.OTPVerification, {
+          email: email,
+          isForgot: false,
+          phone: phoneNumber,
+        });
+      } else {
+        showAlert('Error', resp?.error?.data?.message?.join('\n'));
+      }
+    } catch (error: any) {
+      showAlert('Error', GENERIC_ERROR_TEXT);
+    }
   };
 
   return (
@@ -125,6 +150,7 @@ const SignUp = ({navigation}: SignUpProps) => {
           </Formik>
         </View>
       </KeyboardAwareScrollView>
+      {isLoading && <AppLoader />}
     </MainWrapper>
   );
 };

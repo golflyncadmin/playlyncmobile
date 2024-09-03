@@ -20,6 +20,23 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>fb491364600289754</string>
+            </array>
+            <key>FacebookAppID</key>
+            <string>491364600289754</string>
+            <key>FacebookClientToken</key>
+            <string>93df21fc5825386e0ca948ddbd3a4063</string>
+            <key>FacebookDisplayName</key>
+            <string>PlayLync</string>
+        </dict>
+    </array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>

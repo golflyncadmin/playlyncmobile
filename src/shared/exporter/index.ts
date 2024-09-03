@@ -1,13 +1,15 @@
 export {
-  showAlert,
   EMAIL,
+  showAlert,
+  INS_SCOPES,
   LOGIN_TYPES,
   MY_REQUESTS,
   CURRENT_DATE,
   IMAGE_OPTIONS,
   CALENDAR_THEME,
-  UNEXPECTED_ERROR,
   APP_INTRO_SLIDES,
+  UNEXPECTED_ERROR,
+  GENERIC_ERROR_TEXT,
 } from '../utils/constant.tsx';
 
 export {appImages, appIcons} from '../theme/assets.tsx';

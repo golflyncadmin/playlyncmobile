@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
 import {useDispatch} from 'react-redux';
+import {LoginManager} from 'react-native-fbsdk-next';
+import CookieManager from '@react-native-cookies/cookies';
 import {
   AppButton,
   AppHeader,
@@ -31,8 +33,10 @@ const Profile = ({navigation}: ProfileProps) => {
     handleNavigation();
   };
 
-  const handleNavigation = () => {
+  const handleNavigation = async () => {
     dispatch(logOut());
+    LoginManager.logOut(); // FB logout
+    await CookieManager.clearAll(true); // Ins logout
     navigation.replace(Routes.AuthStack);
   };
 

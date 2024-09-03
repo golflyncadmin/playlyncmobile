@@ -1,15 +1,25 @@
 import React, {useState, useEffect} from 'react';
-import {Text, View, Image, Alert} from 'react-native';
+import {Text, View, Image} from 'react-native';
 import {
   Cursor,
   CodeField,
   useBlurOnFulfill,
   useClearByFocusCell,
 } from 'react-native-confirmation-code-field';
+import {
+  useVerifyOTPMutation,
+  useResendOTPMutation,
+} from '../../../redux/auth/authApiSlice';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {AppButton, MainWrapper} from '../../../components';
+import {AppButton, AppLoader, MainWrapper} from '../../../components';
 import styles from './styles';
-import {Routes, appIcons, isIOS} from '../../../shared/exporter';
+import {
+  isIOS,
+  Routes,
+  appIcons,
+  showAlert,
+  GENERIC_ERROR_TEXT,
+} from '../../../shared/exporter';
 
 interface OTPVerificationProps {
   route: any;
@@ -19,14 +29,18 @@ interface OTPVerificationProps {
 const CELL_COUNT = 6;
 
 const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
-  const {email, phone, reset} = route?.params;
-  const [timer, setTimer] = useState(30);
+  const {email, phone, isForgot} = route?.params;
+  const [timer, setTimer] = useState(120);
   const [value, setValue] = useState('');
+  const [verifyType, setVerifyType] = useState('email');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
     setValue,
   });
+
+  const [resendOTP, {isLoading}] = useResendOTPMutation();
+  const [verifyOTP, {isLoading: loading}] = useVerifyOTPMutation();
 
   useEffect(() => {
     if (timer > 0) {
@@ -39,28 +53,57 @@ const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
   }, [timer]);
 
   const handleVerifyOTP = () => {
-    if (value === '') {
-      // Toast.show('Please enter an OTP.', Toast.SHORT, ['UIAlertController']);
-      Alert.alert('Verify OTP', 'Please enter an OTP.');
-    } else if (value.length < 6) {
-      Alert.alert('Verify OTP', 'Please enter complete OTP.');
-      // Toast.show('Please enter complete OTP.', Toast.SHORT, [
-      //   'UIAlertController',
-      // ]);
-    } else {
-      verifyTheOTP();
+    if (!value) {
+      return showAlert('Verify OTP', 'Please enter an OTP.');
+    }
+    if (value.length < 6) {
+      return showAlert('Verify OTP', 'Please enter complete OTP.');
+    }
+    verifyTheOTP();
+  };
+
+  const verifyTheOTP = async () => {
+    try {
+      const data = {
+        otp: value,
+        phone_number: phone,
+      };
+
+      const resp = await verifyOTP(data);
+      if (resp?.data) {
+        if (phone) {
+          if (verifyType === 'email') {
+            setVerifyType('phone');
+          } else {
+            navigation.replace(Routes.Login);
+          }
+        } else {
+          navigation.navigate(Routes.ResetPassword, {email: phone});
+        }
+      } else {
+        showAlert('Error', resp?.error?.data?.message);
+      }
+    } catch (error: any) {
+      showAlert('Error', error?.message);
     }
   };
 
-  const verifyTheOTP = () => {
-    navigation.replace(phone ? Routes.Login : Routes.ResetPassword, {
-      email: email,
-    });
-  };
+  const handleResendOTP = async () => {
+    try {
+      const data = {
+        phone_number: phone,
+      };
 
-  const resendOTP = () => {
-    setTimer(30);
-    Alert.alert('Resent OTP', 'The OTP has been resent.');
+      const resp = await resendOTP(data);
+      if (resp?.data) {
+        setTimer(120);
+        showAlert('Resent OTP', 'The OTP has been resent.');
+      } else {
+        showAlert('Error', resp?.error?.data?.message);
+      }
+    } catch (error: any) {
+      showAlert('Error', GENERIC_ERROR_TEXT);
+    }
   };
 
   return (
@@ -83,9 +126,11 @@ const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
             <Text style={styles.headingStyle}>Almost There</Text>
             <Text style={styles.infoTextStyle}>
               Please enter the 6-digit code sent to your{' '}
-              {phone ? 'phone number ' : 'email '}
-              <Text style={styles.commonTextStyle}>{phone}</Text> for
-              verification
+              {verifyType === 'phone' || isForgot ? 'phone number ' : 'email '}
+              <Text style={styles.commonTextStyle}>
+                {verifyType === 'phone' || isForgot ? phone : email}
+              </Text>{' '}
+              for verification.
             </Text>
             <CodeField
               ref={ref}
@@ -115,13 +160,14 @@ const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
             />
             <Text style={styles.codeTextStyle}>
               Didn’t receive any code?{' '}
-              <Text
-                suppressHighlighting
-                disabled={timer !== 0}
-                style={styles.commonTextStyle}
-                onPress={() => resendOTP()}>
-                Resend Again
-              </Text>
+              {timer === 0 && (
+                <Text
+                  suppressHighlighting
+                  style={styles.commonTextStyle}
+                  onPress={() => handleResendOTP()}>
+                  Resend Again
+                </Text>
+              )}
             </Text>
             <Text style={styles.newCodeStyle}>
               Request new code {timer !== 0 ? `in 00:${timer}` : ''}
@@ -129,6 +175,7 @@ const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
           </View>
         </View>
       </KeyboardAwareScrollView>
+      {(loading || isLoading) && <AppLoader />}
     </MainWrapper>
   );
 };

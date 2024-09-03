@@ -1,12 +1,27 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
 import {Formik} from 'formik';
 import {useDispatch} from 'react-redux';
+import InstagramLogin from 'react-native-instagram-login';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {AppButton, AppInput, MainWrapper} from '../../../components';
+import {useAppleSignIn, useFacebookSignIn} from '../../../hooks';
+import {INS_APP_ID, INS_APP_SECRET, INS_REDIRECTION_URL} from '@env';
+import {
+  useLoginMutation,
+  useSocialLoginMutation,
+} from '../../../redux/auth/authApiSlice';
+import {AppButton, AppInput, AppLoader, MainWrapper} from '../../../components';
 import {setAccessToken, setLoginUser} from '../../../redux/auth/authSlice';
 import styles from './styles';
-import {LOGIN_TYPES, Routes, appIcons, isIOS} from '../../../shared/exporter';
+import {
+  isIOS,
+  Routes,
+  appIcons,
+  showAlert,
+  INS_SCOPES,
+  LOGIN_TYPES,
+  GENERIC_ERROR_TEXT,
+} from '../../../shared/exporter';
 import {
   loginForm,
   loginValidationSchema,
@@ -19,21 +34,99 @@ interface LoginProps {
 
 const Login = ({navigation}: LoginProps) => {
   let isValidForm = true;
+  const insRef = useRef();
   const dispatch = useDispatch();
   const formikRef = useRef(null);
+  const [insToken, setInsToken] = useState<string | null>(null);
+  const [appleToken, setAppleToken] = useState<string | null>(null);
+  const [facebookToken, setFacebookToken] = useState<string | null>(null);
 
-  const handleLogin = (values: any) => {
-    console.log('Values => ', values);
-    handleLoginSuccess([]);
+  const {signInWithApple} = useAppleSignIn(setAppleToken);
+  const {signInWithFacebook} = useFacebookSignIn(setFacebookToken);
+
+  const [login, {isLoading: loading}] = useLoginMutation();
+  const [socialLogin, {isLoading}] = useSocialLoginMutation();
+
+  useEffect(() => {
+    if (appleToken) handleSocialLogin(appleToken, 'apple');
+  }, [appleToken]);
+
+  useEffect(() => {
+    if (facebookToken) handleSocialLogin(facebookToken, 'facebook');
+  }, [facebookToken]);
+
+  useEffect(() => {
+    if (insToken) handleSocialLogin(insToken, 'instagram');
+  }, [insToken]);
+
+  const handleSocialLogin = async (token: string, provider: string) => {
+    try {
+      const data = {
+        token: token,
+        provider: provider,
+      };
+
+      const resp = await socialLogin(data);
+      if (resp?.data) {
+        handleLoginSuccess(resp?.data);
+      } else {
+        setInsToken(null);
+        setAppleToken(null);
+        setFacebookToken(null);
+        showAlert('Login Error', resp?.error?.data?.message);
+      }
+    } catch (error: any) {
+      showAlert('Login Error', GENERIC_ERROR_TEXT);
+    }
   };
 
-  const handleSocialLogin = () => {
-    handleLoginSuccess([]);
+  const handleLogin = async (values: any) => {
+    const {email, password} = values;
+    try {
+      const data = {
+        email: email,
+        password: password,
+      };
+
+      const resp = await login(data);
+      if (resp?.data) {
+        handleLoginSuccess(resp?.data);
+      } else {
+        showAlert('Error', resp?.error?.data?.message);
+      }
+    } catch (error: any) {
+      showAlert('Error', GENERIC_ERROR_TEXT);
+    }
+  };
+
+  const handleSocialSignIn = (type: string) => {
+    switch (type) {
+      case 'Google':
+        navigation.navigate('');
+        break;
+      case 'Apple':
+        signInWithApple();
+        break;
+      case 'Facebook':
+        signInWithFacebook();
+        break;
+      case 'Instagram':
+        insRef.current.show();
+        break;
+
+      default:
+        break;
+    }
   };
 
   const handleLoginSuccess = (res: any) => {
-    dispatch(setLoginUser({name: 'adeel', email: 'adeel@gmail.com'}));
-    dispatch(setAccessToken('SDFGSD#$@%DFSGS'));
+    // TODO: Check if account is verified or not
+    setInsToken(null);
+    setAppleToken(null);
+    setFacebookToken(null);
+    dispatch(setLoginUser(res?.data));
+    dispatch(setAccessToken(res?.data?.token));
+
     navigation.replace(Routes.AppStack);
   };
 
@@ -75,14 +168,18 @@ const Login = ({navigation}: LoginProps) => {
                   <Text style={styles.headingStyle}>Login</Text>
                   <Text style={styles.loginWithStyle}>or login with</Text>
                   <View style={styles.iconContainer}>
-                    {LOGIN_TYPES?.slice(0, 4)?.map((item: object | any) => (
-                      <TouchableOpacity
-                        activeOpacity={0.7}
-                        onPress={() => handleSocialLogin()}
-                        style={styles.iconView}>
-                        {item?.icon}
-                      </TouchableOpacity>
-                    ))}
+                    {LOGIN_TYPES?.slice(0, 4)?.map((item: object | any) => {
+                      const isNoIcon = item?.icon === null;
+                      if (isNoIcon) return;
+                      return (
+                        <TouchableOpacity
+                          activeOpacity={0.7}
+                          onPress={() => handleSocialSignIn(item?.type)}
+                          style={styles.iconView}>
+                          {item?.icon}
+                        </TouchableOpacity>
+                      );
+                    })}
                   </View>
                   <AppInput
                     placeholder="Email*"
@@ -136,6 +233,21 @@ const Login = ({navigation}: LoginProps) => {
           </Formik>
         </View>
       </KeyboardAwareScrollView>
+      {(loading || isLoading) && <AppLoader />}
+      <InstagramLogin
+        ref={insRef}
+        appId={INS_APP_ID}
+        scopes={INS_SCOPES}
+        appSecret={INS_APP_SECRET}
+        redirectUrl={INS_REDIRECTION_URL}
+        closeStyle={styles.closeStyle}
+        wrapperStyle={styles.wrapperStyle}
+        containerStyle={styles.containerStyle}
+        onLoginSuccess={(token: object | any) =>
+          setInsToken(token?.access_token)
+        }
+        onLoginFailure={(data: any) => console.log('Ins Error => ', data)}
+      />
     </MainWrapper>
   );
 };

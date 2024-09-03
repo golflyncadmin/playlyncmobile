@@ -1,13 +1,19 @@
 import React, {useRef} from 'react';
 import {View, Text, Image} from 'react-native';
 import {Formik} from 'formik';
-import {AppButton, AppInput, MainWrapper} from '../../../components';
-import styles from './styles';
-import {Routes, appIcons} from '../../../shared/exporter';
+import {AppButton, AppInput, AppLoader, MainWrapper} from '../../../components';
+import {
+  Routes,
+  appIcons,
+  showAlert,
+  GENERIC_ERROR_TEXT,
+} from '../../../shared/exporter';
+import {useForgotPasswordMutation} from '../../../redux/auth/authApiSlice';
 import {
   forgotPassForm,
   forgotPassValidationSchema,
 } from '../../../shared/utils/validations';
+import styles from './styles';
 import {svgIcon} from '../../../assets/svg';
 
 interface ForgotPasswordProps {
@@ -18,12 +24,26 @@ const ForgotPassword = ({navigation}: ForgotPasswordProps) => {
   let isValidForm = true;
   const formikRef = useRef(null);
 
-  const handleForgotPassword = (values: any) => {
-    console.log('Values => ', values);
-    navigation.replace(Routes.OTPVerification, {
-      email: values.email,
-      reset: true,
-    });
+  const [forgotPassword, {isLoading}] = useForgotPasswordMutation();
+
+  const handleForgotPassword = async (values: any) => {
+    try {
+      const data = {
+        phone_number: values?.phoneNumber,
+      };
+
+      const resp = await forgotPassword(data);
+      if (resp?.data) {
+        navigation.replace(Routes.OTPVerification, {
+          isForgot: true,
+          email: values.phoneNumber,
+        });
+      } else {
+        showAlert('Error', resp?.error?.data?.message);
+      }
+    } catch (error: any) {
+      showAlert('Error', GENERIC_ERROR_TEXT);
+    }
   };
 
   return (
@@ -50,14 +70,14 @@ const ForgotPassword = ({navigation}: ForgotPasswordProps) => {
               <View style={styles.contentContainer}>
                 <Text style={styles.headingStyle}>Forgot Password</Text>
                 <AppInput
-                  placeholder="Email*"
-                  // placeholder="Email or Phone Number*"
-                  value={values.email}
-                  touched={touched.email}
+                  placeholder="Phone Number*"
+                  value={values.phoneNumber}
+                  touched={touched.phoneNumber}
                   autoCapitalize="none"
-                  leftIcon={svgIcon.MailIcon}
-                  errorMessage={errors.email}
-                  onChangeText={handleChange('email')}
+                  keyboardType="phone-pad"
+                  leftIcon={svgIcon.PhoneIcon}
+                  errorMessage={errors.phoneNumber}
+                  onChangeText={handleChange('phoneNumber')}
                 />
                 <AppButton
                   title={'Send'}
@@ -70,6 +90,7 @@ const ForgotPassword = ({navigation}: ForgotPasswordProps) => {
           }}
         </Formik>
       </View>
+      {isLoading && <AppLoader />}
     </MainWrapper>
   );
 };

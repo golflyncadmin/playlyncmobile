@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {
   WP,
+  isIOS,
   GLColors,
   scrHeight,
   GLFontSize,
@@ -50,12 +51,12 @@ const styles = StyleSheet.create({
     fontFamily: GLFontsFamily.Poppins_Regular,
   },
   iconContainer: {
-    width: '95%',
     marginTop: WP('3'),
     marginBottom: WP('3'),
     flexDirection: 'row',
     alignItems: 'center',
     marginHorizontal: WP('5'),
+    width: isIOS() ? '95%' : '75%',
     justifyContent: 'space-between',
   },
   iconView: {
@@ -90,6 +91,19 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     fontSize: GLFontSize.FONT_SIZE_15,
     fontFamily: GLFontsFamily.Poppins_Medium,
+  },
+  closeStyle: {
+    top: WP('12'),
+    right: WP('4.5'),
+  },
+  wrapperStyle: {
+    borderWidth: WP('1'),
+    borderRadius: WP('3'),
+    borderColor: GLColors.Blue.B2,
+  },
+  containerStyle: {
+    borderRadius: WP('2'),
+    borderColor: GLColors.Blue.B2,
   },
 });
 

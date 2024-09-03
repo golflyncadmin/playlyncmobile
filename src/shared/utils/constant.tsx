@@ -1,9 +1,15 @@
 import {Alert} from 'react-native';
-import {GLColors, GLFontSize, GLFontsFamily, appImages} from '../exporter';
+import {
+  isIOS,
+  GLColors,
+  appImages,
+  GLFontSize,
+  GLFontsFamily,
+} from '../exporter';
 import {svgIcon} from '../../assets/svg';
 
-export function showAlert(type: string, des: string) {
-  Alert.alert(type, des);
+export function showAlert(type: string, description: string) {
+  Alert.alert(type, description);
 }
 
 export const UNEXPECTED_ERROR = 'Something went wrong. Please try again later.';
@@ -46,6 +52,7 @@ export const APP_INTRO_SLIDES: IntroSlidesTypes[] = [
 
 type LoginTypes = {
   id: number;
+  type: string;
   title: string;
   icon: any;
 };
@@ -53,26 +60,35 @@ type LoginTypes = {
 export const LOGIN_TYPES: LoginTypes[] = [
   {
     id: 1,
+    type: 'Google',
     title: 'Continue with Google',
     icon: svgIcon.GoogleIcon,
   },
-  {
-    id: 2,
-    title: 'Continue with Apple',
-    icon: svgIcon.AppleIcon,
-  },
+  ...(isIOS()
+    ? [
+        {
+          id: 2,
+          type: 'Apple',
+          title: 'Continue with Apple',
+          icon: svgIcon.AppleIcon,
+        },
+      ]
+    : []),
   {
     id: 3,
+    type: 'Facebook',
     title: 'Continue with Facebook',
     icon: svgIcon.FBIcon,
   },
   {
     id: 4,
+    type: 'Instagram',
     title: 'Continue with Instagram',
     icon: svgIcon.InstaIcon,
   },
   {
     id: 5,
+    type: 'Manual',
     title: 'Log In with your Email',
     icon: null,
   },
@@ -151,4 +167,8 @@ export const CALENDAR_THEME = {
 
 export const DAY_NAME_SHORT = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
 
-export const CURRENT_DATE = new Date().toISOString().split('T')[0]
+export const CURRENT_DATE = new Date().toISOString().split('T')[0];
+
+export const GENERIC_ERROR_TEXT = 'Something went wrong. Please try again.';
+
+export const INS_SCOPES = ['user_profile', 'user_media']

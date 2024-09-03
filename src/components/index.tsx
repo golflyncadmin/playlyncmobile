@@ -1,5 +1,5 @@
 // Primitive
-export * from './primitive/Loader';
+export * from './primitive/AppLoader';
 export * from './primitive/AppInput';
 export * from './primitive/MainWrapper';
 export * from './primitive/BottomTab/BottomTab';

@@ -1,13 +1,27 @@
-import React, {useState} from 'react';
-import {View, Text, Image, Alert} from 'react-native';
-import {AppButton, MainWrapper, AgreementModal} from '../../../components';
+import React, {useRef, useState, useEffect} from 'react';
+import {View, Text, Image} from 'react-native';
+import {useDispatch} from 'react-redux';
+import InstagramLogin from 'react-native-instagram-login';
+import {useAppleSignIn, useFacebookSignIn} from '../../../hooks';
+import {
+  AppButton,
+  AppLoader,
+  MainWrapper,
+  AgreementModal,
+} from '../../../components';
+import {INS_APP_ID, INS_APP_SECRET, INS_REDIRECTION_URL} from '@env';
+import {useSocialLoginMutation} from '../../../redux/auth/authApiSlice';
+import {setAccessToken, setLoginUser} from '../../../redux/auth/authSlice';
 import styles from './styles';
 import {
   EMAIL,
   Routes,
   GLColors,
   appIcons,
+  showAlert,
+  INS_SCOPES,
   LOGIN_TYPES,
+  GENERIC_ERROR_TEXT,
 } from '../../../shared/exporter';
 
 interface LoginTypeProps {
@@ -15,17 +29,93 @@ interface LoginTypeProps {
 }
 
 const LoginType = ({navigation}: LoginTypeProps) => {
+  const insRef = useRef();
+  const dispatch = useDispatch();
+  const [apiRes, setApiRes] = useState(false);
   const [isSelected, setSelection] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [insToken, setInsToken] = useState<string | null>(null);
+  const [appleToken, setAppleToken] = useState<string | null>(null);
+  const [facebookToken, setFacebookToken] = useState<string | null>(null);
+
+  const {signInWithApple} = useAppleSignIn(setAppleToken);
+  const {signInWithFacebook} = useFacebookSignIn(setFacebookToken);
+
+  const [socialLogin, {isLoading}] = useSocialLoginMutation();
+
+  useEffect(() => {
+    if (appleToken) handleSocialLogin(appleToken, 'apple');
+  }, [appleToken]);
+
+  useEffect(() => {
+    if (facebookToken) handleSocialLogin(facebookToken, 'facebook');
+  }, [facebookToken]);
+
+  useEffect(() => {
+    if (insToken) handleSocialLogin(insToken, 'instagram');
+  }, [insToken]);
+
+  const handleSocialLogin = async (token: string, provider: string) => {
+    try {
+      const data = {
+        token: token,
+        provider: provider,
+      };
+
+      const resp = await socialLogin(data);
+
+      if (resp?.data) {
+        setApiRes(resp?.data);
+        setModalVisible(true);
+      } else {
+        setInsToken(null);
+        setAppleToken(null);
+        setFacebookToken(null);
+        showAlert('Error', resp?.error?.data?.message);
+      }
+    } catch (error: any) {
+      showAlert('Error', GENERIC_ERROR_TEXT);
+    }
+  };
+
+  const handleLogin = (type: string) => {
+    switch (type) {
+      case 'Google':
+        navigation.navigate('UserDetails');
+        break;
+      case 'Apple':
+        signInWithApple();
+        break;
+      case 'Facebook':
+        signInWithFacebook();
+        break;
+      case 'Instagram':
+        insRef.current.show();
+        break;
+      case 'Manual':
+        navigation.navigate(Routes.Login);
+        break;
+
+      default:
+        break;
+    }
+  };
 
   const handleNavigation = () => {
+    // TODO: Check if account is verified or not
     if (isSelected) {
       setModalVisible(false);
       setTimeout(() => {
-        navigation.replace(Routes.Login);
+        setInsToken(null);
+        setAppleToken(null);
+        setFacebookToken(null);
+        dispatch(setLoginUser(apiRes?.data));
+        dispatch(setAccessToken(apiRes?.data?.token));
+
+        navigation.replace(Routes.AppStack);
       }, 500);
     } else {
-      Alert.alert('Missing Selection', 'Select agreement to proceed further.');
+      showAlert('Missing Selection', 'Select agreement to proceed further.');
     }
   };
 
@@ -43,7 +133,7 @@ const LoginType = ({navigation}: LoginTypeProps) => {
           <AppButton
             icon={item?.icon}
             title={item?.title}
-            handleClick={() => setModalVisible(true)}
+            handleClick={() => handleLogin(item?.type)}
             textStyle={
               item?.title !== EMAIL ? {color: GLColors.Natural.Black} : {}
             }
@@ -76,6 +166,21 @@ const LoginType = ({navigation}: LoginTypeProps) => {
         handleClick={() => handleNavigation()}
         setSelection={() => setSelection(!isSelected)}
         setModalVisible={() => setModalVisible(false)}
+      />
+      {isLoading && <AppLoader />}
+      <InstagramLogin
+        ref={insRef}
+        appId={INS_APP_ID}
+        scopes={INS_SCOPES}
+        appSecret={INS_APP_SECRET}
+        redirectUrl={INS_REDIRECTION_URL}
+        closeStyle={styles.closeStyle}
+        wrapperStyle={styles.wrapperStyle}
+        containerStyle={styles.containerStyle}
+        onLoginSuccess={(token: object | any) =>
+          setInsToken(token?.access_token)
+        }
+        onLoginFailure={(data: any) => console.log('Ins Error => ', data)}
       />
     </MainWrapper>
   );

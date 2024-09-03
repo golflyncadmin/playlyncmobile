@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PlayLync</string>
+    <string name="facebook_app_id">491364600289754</string>
+    <string name="facebook_client_token">93df21fc5825386e0ca948ddbd3a4063</string>
 </resources>

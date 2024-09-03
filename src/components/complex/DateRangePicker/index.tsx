@@ -1,11 +1,15 @@
 import React, {useState, useCallback} from 'react';
-import {View, Alert, StyleSheet} from 'react-native';
+import {View, StyleSheet} from 'react-native';
 import {CalendarList, LocaleConfig} from 'react-native-calendars';
 import Modal from 'react-native-modal';
 import {WP, GLColors, CALENDAR_THEME} from '../../../shared/exporter';
 import {svgIcon} from '../../../assets/svg';
 import {AppButton} from '../AppButton';
-import {CURRENT_DATE, DAY_NAME_SHORT} from '../../../shared/utils/constant';
+import {
+  showAlert,
+  CURRENT_DATE,
+  DAY_NAME_SHORT,
+} from '../../../shared/utils/constant';
 
 interface DateRangePickerProps {
   modalVisible: boolean;
@@ -41,9 +45,9 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
         });
       } else {
         if (new Date(dateString) <= new Date(startDate)) {
-          Alert.alert('Error', 'End date must be greater than start date.');
+          showAlert('Error', 'End date must be greater than start date.');
         } else if (getDateDifference(startDate, dateString) > 29) {
-          Alert.alert('Error', 'The date range cannot exceed 30 days.');
+          showAlert('Error', 'The date range cannot exceed 30 days.');
         } else {
           setEndDate(dateString);
           setMarkedDates(createRange(startDate, dateString));
@@ -94,7 +98,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
       handleClick({startDate, endDate});
       setModalVisible();
     } else {
-      Alert.alert('Error', 'Both start and end dates must be selected.');
+      showAlert('Error', 'Both start and end dates must be selected.');
     }
   };
 

@@ -16,7 +16,7 @@ import {
 } from '../../../../shared/utils/validations';
 import styles from './styles';
 import {svgIcon} from '../../../../assets/svg';
-import {GLColors, WP, isIOS} from '../../../../shared/exporter';
+import {GLColors, WP, isIOS, showAlert} from '../../../../shared/exporter';
 
 interface AddRequestProps {
   navigation: any;
@@ -43,8 +43,9 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
     setSelectedId(prevId => (prevId === id ? null : id));
 
   const handleAddRequest = (values: any) => {
-    if (playersCount <= 0) return alert('Please select number of players');
-    if (selectedId === null) return alert('Please select time');
+    if (playersCount <= 0)
+      return showAlert('Error', 'Please select number of players');
+    if (selectedId === null) return showAlert('Error', 'Please select time');
     console.log('Values => ', values);
     console.log('Player => ', playersCount);
     console.log('Time => ', selectedId);

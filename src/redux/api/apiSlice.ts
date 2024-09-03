@@ -1,7 +1,7 @@
 import {
-  BaseQueryApi,
   FetchArgs,
   createApi,
+  BaseQueryApi,
   fetchBaseQuery,
 } from '@reduxjs/toolkit/query/react';
 import dayjs from 'dayjs';
@@ -17,7 +17,8 @@ const baseQuery = fetchBaseQuery({
       headers.set('Authorization', `Bearer ${token}`);
     }
     headers.set('Accept', '*/*');
-    headers.set('Content-Type', 'multipart/form-data');
+    headers.set('Content-Type', 'application/json');
+    // headers.set('Content-Type', 'multipart/form-data');
     return headers;
   },
 });

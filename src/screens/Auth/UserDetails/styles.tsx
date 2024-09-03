@@ -1,7 +1,9 @@
 import {StyleSheet} from 'react-native';
 import {
   WP,
+  isIOS,
   GLColors,
+  scrHeight,
   GLFontSize,
   GLFontsFamily,
 } from '../../../shared/exporter';
@@ -11,8 +13,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: GLColors.Natural.White,
   },
+  scrollViewStyle: {
+    flex: 1,
+  },
+  heightStyle: {
+    minHeight: scrHeight,
+  },
+  scrollContent: {
+    flex: 1,
+    minHeight: scrHeight,
+  },
   logoContainer: {
-    flex: 0.4,
+    flex: 0.3,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -21,40 +33,29 @@ const styles = StyleSheet.create({
     height: WP('31'),
   },
   contentContainer: {
-    flex: 0.6,
+    flex: 0.7,
     alignItems: 'center',
-    marginVertical: WP('2'),
+    marginBottom: WP('2'),
     marginHorizontal: WP('4'),
   },
-  accountTextStyle: {
+  headingStyle: {
+    marginBottom: WP('1'),
+    color: GLColors.Natural.N11,
+    fontSize: GLFontSize.FONT_SIZE_32,
+    fontFamily: GLFontsFamily.Poppins_SemiBold,
+  },
+  emptyView: {
+    flex: isIOS() ? 0.3 : 0.4,
+  },
+  memberTextStyle: {
     marginTop: WP('2'),
     color: GLColors.Natural.N9,
     fontSize: GLFontSize.FONT_SIZE_14,
     fontFamily: GLFontsFamily.Poppins_Regular,
   },
-  signUpStyle: {
+  loginStyle: {
     color: GLColors.Blue.B2,
     fontFamily: GLFontsFamily.Poppins_Medium,
-  },
-  contactUsStyle: {
-    marginTop: WP('8'),
-    color: GLColors.Blue.B2,
-    textDecorationLine: 'underline',
-    fontSize: GLFontSize.FONT_SIZE_15,
-    fontFamily: GLFontsFamily.Poppins_Medium,
-  },
-  closeStyle: {
-    top: WP('12'),
-    right: WP('4.5'),
-  },
-  wrapperStyle: {
-    borderWidth: 3,
-    borderRadius: WP('3'),
-    borderColor: GLColors.Blue.B2,
-  },
-  containerStyle: {
-    borderRadius: WP('2'),
-    borderColor: GLColors.Blue.B2,
   },
 });
 

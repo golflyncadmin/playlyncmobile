@@ -1,13 +1,19 @@
 import React, {useRef} from 'react';
 import {View, Text, Image} from 'react-native';
 import {Formik} from 'formik';
-import {AppButton, AppInput, MainWrapper} from '../../../components';
-import styles from './styles';
-import {Routes, appIcons} from '../../../shared/exporter';
+import {AppButton, AppInput, AppLoader, MainWrapper} from '../../../components';
+import {
+  GENERIC_ERROR_TEXT,
+  Routes,
+  appIcons,
+  showAlert,
+} from '../../../shared/exporter';
+import {useResetPasswordMutation} from '../../../redux/auth/authApiSlice';
 import {
   resetPassForm,
   resetPassSchema,
 } from '../../../shared/utils/validations';
+import styles from './styles';
 import {svgIcon} from '../../../assets/svg';
 
 interface ResetPasswordProps {
@@ -17,12 +23,26 @@ interface ResetPasswordProps {
 
 const ResetPassword = ({navigation, route}: ResetPasswordProps) => {
   let isValidForm = true;
-  const {email} = route?.params;
   const formikRef = useRef(null);
+  const {phoneNumber} = route?.params;
+  const [resetPassword, {isLoading}] = useResetPasswordMutation();
 
-  const handleResetPassword = (values: any) => {
-    console.log('Values => ', values);
-    navigation.replace(Routes.Login);
+  const handleResetPassword = async (values: any) => {
+    try {
+      const data = {
+        phone_number: phoneNumber,
+        password: values?.password,
+      };
+
+      const resp = await resetPassword(data);
+      if (resp?.data) {
+        navigation.replace(Routes.Login);
+      } else {
+        showAlert('Error', resp?.error?.data?.message);
+      }
+    } catch (error: any) {
+      showAlert('Error', GENERIC_ERROR_TEXT);
+    }
   };
 
   return (
@@ -81,6 +101,7 @@ const ResetPassword = ({navigation, route}: ResetPasswordProps) => {
           }}
         </Formik>
       </View>
+      {isLoading && <AppLoader />}
     </MainWrapper>
   );
 };

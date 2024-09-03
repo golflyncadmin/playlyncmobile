@@ -5,6 +5,10 @@ import AuthStack from './Stacks/AuthStack';
 import IntroStack from './Stacks/IntroStack';
 import AppStack from './BottomTabs';
 import Splash from '@authScreens/Splash';
+import PolicyAndTerms from '@appScreens/Profile/PolicyAndTerms';
+import PersonalInfo from '@appScreens/Profile/PersonalInfo';
+import SuggestCourse from '@appScreens/Profile/SuggestCourse';
+import ReportIssue from '@appScreens/Profile/ReportIssue';
 
 const Stack = createNativeStackNavigator();
 
@@ -13,12 +17,17 @@ const AppNavigation = () => {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName="Splash"
-        screenOptions={{headerShown: false, animation: 'slide_from_right'}}
-      >
+        screenOptions={{headerShown: false, animation: 'slide_from_right'}}>
         <Stack.Screen name="Splash" component={Splash} />
         <Stack.Screen name="AppStack" component={AppStack} />
         <Stack.Screen name="AuthStack" component={AuthStack} />
         <Stack.Screen name="IntroStack" component={IntroStack} />
+
+        {/* General */}
+        <Stack.Screen name={'PolicyAndTerms'} component={PolicyAndTerms} />
+        <Stack.Screen name={'PersonalInfo'} component={PersonalInfo} />
+        <Stack.Screen name={'SuggestCourse'} component={SuggestCourse} />
+        <Stack.Screen name={'ReportIssue'} component={ReportIssue} />
       </Stack.Navigator>
     </NavigationContainer>
   );

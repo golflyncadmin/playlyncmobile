@@ -6,9 +6,11 @@ import {
   AppInput,
   AppButton,
   AppHeader,
+  AppLoader,
   MainWrapper,
   DateRangePicker,
 } from '../../../../components';
+import {useCreateRequestMutation} from '../../../../redux/app/appApiSlice';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   addRequestForm,
@@ -16,7 +18,13 @@ import {
 } from '../../../../shared/utils/validations';
 import styles from './styles';
 import {svgIcon} from '../../../../assets/svg';
-import {GLColors, WP, isIOS, showAlert} from '../../../../shared/exporter';
+import {
+  WP,
+  isIOS,
+  GLColors,
+  showAlert,
+  GENERIC_ERROR_TEXT,
+} from '../../../../shared/exporter';
 
 interface AddRequestProps {
   navigation: any;
@@ -35,20 +43,39 @@ const options: Option[] = [
 
 const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
   const formikRef = useRef<any>(null);
+  const [endDate, setEndDate] = useState('');
+  const [startDate, setStartDate] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [playersCount, setPlayersCount] = useState<number>(1);
-  const [selectedId, setSelectedId] = useState<number | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
 
-  const handleCheckBoxChange = (id: number) =>
-    setSelectedId(prevId => (prevId === id ? null : id));
+  const [createRequest, {isLoading}] = useCreateRequestMutation();
 
-  const handleAddRequest = (values: any) => {
+  const handleCheckBoxChange = (label: string) =>
+    setSelectedTime(prevLabel => (prevLabel === label ? null : label));
+
+  const handleAddRequest = async (values: any) => {
     if (playersCount <= 0)
       return showAlert('Error', 'Please select number of players');
-    if (selectedId === null) return showAlert('Error', 'Please select time');
-    console.log('Values => ', values);
-    console.log('Player => ', playersCount);
-    console.log('Time => ', selectedId);
+    if (selectedTime === null) return showAlert('Error', 'Please select time');
+
+    try {
+      const data = {
+        start_date: startDate,
+        end_date: endDate,
+        time: selectedTime?.toLocaleLowerCase(),
+        location: values?.location,
+        players: playersCount,
+      };
+      const resp = await createRequest(data);
+      if (resp?.data) {
+        console.log('Add RES => ', resp);
+      } else {
+        showAlert('Error', resp?.error?.data?.message);
+      }
+    } catch (error: any) {
+      showAlert('Error', GENERIC_ERROR_TEXT);
+    }
   };
 
   const incrementPlayers = () => setPlayersCount(prevCount => prevCount + 1);
@@ -80,6 +107,9 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
   );
 
   const handleSelectRange = (range: {startDate: string; endDate: string}) => {
+    setEndDate(range?.endDate);
+    setStartDate(range?.startDate);
+
     const formattedDate = formatDateRange(range);
     formikRef.current?.setFieldValue('dateRange', formattedDate);
   };
@@ -155,11 +185,11 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
                     <View key={option.id} style={styles.checkboxContainer}>
                       <CheckBox
                         boxType="square"
-                        value={selectedId === option.id}
+                        value={selectedTime === option.label}
                         style={styles.checkboxStyle}
-                        onValueChange={() => handleCheckBoxChange(option.id)}
+                        onValueChange={() => handleCheckBoxChange(option.label)}
                         tintColor={
-                          selectedId === option.id
+                          selectedTime === option.label
                             ? GLColors.Blue.B2
                             : GLColors.Natural.N4
                         }
@@ -183,6 +213,7 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
           )}
         </Formik>
       </KeyboardAwareScrollView>
+      {isLoading && <AppLoader />}
     </MainWrapper>
   );
 };

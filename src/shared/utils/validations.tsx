@@ -16,7 +16,11 @@ export const userDetailsForm = {
   phoneNumber: '',
 };
 
-export const forgotPassForm = {
+export const forgotPassEmailForm = {
+  email: '',
+};
+
+export const forgotPassPhoneForm = {
   phoneNumber: '',
 };
 
@@ -117,7 +121,17 @@ export const loginValidationSchema = yup.object().shape({
     .max(25, 'Maximum 25 Characters Allowed'),
 });
 
-export const forgotPassValidationSchema = yup.object().shape({
+export const forgotPassEmailSchema = yup.object().shape({
+  email: yup
+    .string()
+    .required('Email Required')
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      'Invalid email address',
+    ),
+});
+
+export const forgotPassPhoneSchema = yup.object().shape({
   phoneNumber: yup
     .string()
     .required('Phone Number Required')

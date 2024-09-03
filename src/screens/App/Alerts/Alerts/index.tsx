@@ -1,6 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, Image, FlatList, ListRenderItemInfo} from 'react-native';
-import {AppButton, MainWrapper} from '../../../../components';
+import {useIsFocused} from '@react-navigation/native';
+import {AppButton, AppLoader, MainWrapper} from '../../../../components';
+import {useGetRequestAlertsQuery} from '../../../../redux/app/appApiSlice';
 import styles from './styles';
 import {appIcons} from '../../../../shared/exporter';
 import {svgIcon} from '../../../../assets/svg';
@@ -36,7 +38,22 @@ const MY_ALERTS: Alert[] = [
 const ALL_TIME_SLOTS = [1, 2, 3, 4, 5, 6, 7];
 
 const Alerts = ({navigation}: AlertsProps) => {
+  const isFocused = useIsFocused();
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+
+  const {
+    data: alertsData,
+    isLoading: alertsLoading,
+    refetch: alertsRefetch,
+  } = useGetRequestAlertsQuery(undefined);
+
+  useEffect(() => {
+    if (isFocused) alertsRefetch();
+  }, [isFocused]);
+
+  useEffect(() => {
+    console.log('Alerts => ', alertsData);
+  }, [alertsData]);
 
   const toggleSeeAll = (index: number) => {
     setExpandedIndex(expandedIndex === index ? null : index);
@@ -129,6 +146,7 @@ const Alerts = ({navigation}: AlertsProps) => {
         </View>
       )}
       {MY_ALERTS?.length === 0 && <NoAlertView />}
+      {/* {alertsLoading && <AppLoader />} */}
     </MainWrapper>
   );
 };

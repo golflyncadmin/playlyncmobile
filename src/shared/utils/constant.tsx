@@ -20,6 +20,8 @@ export const IMAGE_OPTIONS = {
   includeBase64: false,
 };
 
+export const EMAIL_ENUM = 'email';
+export const PHONE_ENUM = 'phone';
 export const EMAIL = 'Log In with your Email';
 
 type IntroSlidesTypes = {
@@ -171,4 +173,4 @@ export const CURRENT_DATE = new Date().toISOString().split('T')[0];
 
 export const GENERIC_ERROR_TEXT = 'Something went wrong. Please try again.';
 
-export const INS_SCOPES = ['user_profile', 'user_media']
+export const INS_SCOPES = ['user_profile', 'user_media'];

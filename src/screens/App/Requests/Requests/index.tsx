@@ -22,36 +22,6 @@ import {
   GENERIC_ERROR_TEXT,
 } from '../../../../shared/exporter';
 
-type CreatedRequests = {
-  id: number;
-  location: string;
-  day: string;
-  date: string;
-  time: string;
-};
-
-type Alert = {
-  id: number;
-  title: string;
-};
-
-const CREATED_REQUESTS: CreatedRequests[] = [
-  {
-    id: 1,
-    location: 'Riverside Golf Course',
-    day: 'Monday, Saturday',
-    date: '5/18-24/2024',
-    time: 'Evening',
-  },
-  {
-    id: 2,
-    location: 'Riverside Golf Course',
-    day: 'Monday, Saturday',
-    date: '5/18-24/2024',
-    time: 'Evening',
-  },
-];
-
 interface RequestsProps {
   navigation: any;
 }
@@ -76,13 +46,12 @@ const Requests = ({navigation}: RequestsProps) => {
   }, [isFocused]);
 
   useEffect(() => {
-    if (requestsData) {
-      console.log('Req Data => ', requestsData);
-      return;
-      const n = CREATED_REQUESTS.length;
+    const {data} = requestsData;
+    if (data) {
+      const n = data.length;
       const mergedRequests: any = [...MY_REQUESTS];
       for (let i = 0; i < n; i++) {
-        mergedRequests[i] = CREATED_REQUESTS[i];
+        mergedRequests[i] = data[i];
       }
       setAllRequests(mergedRequests);
     }
@@ -95,7 +64,7 @@ const Requests = ({navigation}: RequestsProps) => {
     </View>
   );
 
-  const renderItem = ({item, index}: ListRenderItemInfo<Alert>) => {
+  const renderItem = ({item, index}: any) => {
     const isCreated = item?.hasOwnProperty('location');
     return (
       <View
@@ -116,23 +85,16 @@ const Requests = ({navigation}: RequestsProps) => {
                 styles.memberCountStyle,
                 isCreated ? styles.activeMemberCountStyle : {},
               ]}>
-              {isCreated ? '3' : '0'}
+              {isCreated ? item?.players : '0'}
             </Text>
           </View>
         </View>
         <View style={styles.contentContainer}>
           {isCreated ? (
             <View>
-              <DisplayInfo
-                icon={svgIcon.LocationIcon}
-                label="Riverside Golf Course"
-              />
-              <DisplayInfo
-                icon={svgIcon.CalendarIcon}
-                label="Monday, Saturday"
-              />
+              <DisplayInfo icon={svgIcon.LocationIcon} label={item?.location} />
               <DisplayInfo icon={svgIcon.DateIcon} label="5/18-24/2024" />
-              <DisplayInfo icon={svgIcon.TimeIcon} label="Evening" />
+              <DisplayInfo icon={svgIcon.TimeIcon} label={item?.time} />
               <AppButton
                 title={'Delete Request'}
                 textStyle={styles.textStyle}
@@ -191,13 +153,6 @@ const Requests = ({navigation}: RequestsProps) => {
           contentContainerStyle={styles.flContainer}
           keyExtractor={item => item.id.toString()}
         />
-      )}
-      {allRequests?.length === 0 && (
-        <View style={styles.noDataContainer}>
-          <Text style={styles.noRecordTextStyle}>
-            {reqLoading ? '' : 'No Requests Found'}
-          </Text>
-        </View>
       )}
       <DeleteModal
         modalVisible={modalVisible}

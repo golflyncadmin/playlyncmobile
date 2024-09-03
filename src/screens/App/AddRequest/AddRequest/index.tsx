@@ -4,6 +4,7 @@ import {Formik} from 'formik';
 import CheckBox from '@react-native-community/checkbox';
 import {
   AppInput,
+  Dropdown,
   AppButton,
   AppHeader,
   AppLoader,
@@ -21,10 +22,12 @@ import {svgIcon} from '../../../../assets/svg';
 import {
   WP,
   isIOS,
+  Routes,
   GLColors,
   showAlert,
   GENERIC_ERROR_TEXT,
 } from '../../../../shared/exporter';
+import {LOCATIONS_DATA} from '../../../../shared/utils/constant';
 
 interface AddRequestProps {
   navigation: any;
@@ -44,6 +47,7 @@ const options: Option[] = [
 const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
   const formikRef = useRef<any>(null);
   const [endDate, setEndDate] = useState('');
+  const [location, setLocation] = useState('');
   const [startDate, setStartDate] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [playersCount, setPlayersCount] = useState<number>(1);
@@ -55,6 +59,7 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
     setSelectedTime(prevLabel => (prevLabel === label ? null : label));
 
   const handleAddRequest = async (values: any) => {
+    if (location === '') return showAlert('Error', 'Please select Location');
     if (playersCount <= 0)
       return showAlert('Error', 'Please select number of players');
     if (selectedTime === null) return showAlert('Error', 'Please select time');
@@ -63,13 +68,21 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
       const data = {
         start_date: startDate,
         end_date: endDate,
-        time: selectedTime?.toLocaleLowerCase(),
-        location: values?.location,
+        time: selectedTime,
+        location: location,
         players: playersCount,
       };
       const resp = await createRequest(data);
       if (resp?.data) {
-        console.log('Add RES => ', resp);
+        showAlert('Request Submitted', resp?.data?.message, () => {
+          navigation.navigate(Routes.RequestsStack);
+          // setLocation('');
+          setPlayersCount(1);
+          setEndDate('');
+          setStartDate('');
+          setSelectedTime(null);
+          formikRef?.current?.setFieldValue('dateRange', '');
+        });
       } else {
         showAlert('Error', resp?.error?.data?.message);
       }
@@ -114,6 +127,10 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
     formikRef.current?.setFieldValue('dateRange', formattedDate);
   };
 
+  const onChange = (item: any) => {
+    setLocation(item?.label);
+  };
+
   return (
     <MainWrapper style={styles.container}>
       <AppHeader title="Game Request" leftIcon={false} />
@@ -133,14 +150,10 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
             <View style={styles.contentContainer}>
               <View style={styles.innerView}>
                 <Text style={styles.headingTextStyle}>Location*</Text>
-                <AppInput
-                  placeholder="Enter Location"
-                  value={values.location}
-                  touched={touched.location}
-                  autoCapitalize="none"
-                  inputStyle={styles.inputStyle}
-                  errorMessage={errors.location}
-                  onChangeText={handleChange('location')}
+                <Dropdown
+                  onChange={onChange}
+                  placeholder="Pick Location"
+                  locationsArr={LOCATIONS_DATA}
                 />
                 <Text style={[styles.headingTextStyle, {marginTop: WP('6')}]}>
                   Number of players *

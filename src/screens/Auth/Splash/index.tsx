@@ -15,8 +15,6 @@ const Splash = ({navigation}: SplashProps) => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace('AppStack');
-      return;
       if (accessToken) {
         navigation.replace('AppStack');
       } else if (isWalkthrough) {

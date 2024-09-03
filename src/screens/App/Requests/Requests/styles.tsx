@@ -102,16 +102,6 @@ const styles = StyleSheet.create({
     color: GLColors.Red.R4,
     fontSize: GLFontSize.FONT_SIZE_14,
   },
-  noDataContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  noRecordTextStyle: {
-    color: GLColors.Natural.Black,
-    fontSize: GLFontSize.FONT_SIZE_22,
-    fontFamily: GLFontsFamily.Poppins_SemiBold,
-  },
 });
 
 export default styles;

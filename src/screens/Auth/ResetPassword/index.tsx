@@ -32,11 +32,11 @@ const ResetPassword = ({navigation, route}: ResetPasswordProps) => {
       const data = email
         ? {
             email: email,
-            password: values?.password,
+            new_password: values?.password,
           }
         : {
             phone_number: phone,
-            password: values?.password,
+            new_password: values?.password,
           };
 
       const resp = await resetPassword(data);

@@ -46,7 +46,6 @@ export const reportIssueForm = {
 };
 
 export const addRequestForm = {
-  location: '',
   dateRange: '',
 };
 
@@ -207,6 +206,5 @@ export const reportIssueSchema = yup.object().shape({
 });
 
 export const addRequestSchema = yup.object().shape({
-  location: yup.string().required('Location Required'),
-  dateRange: yup.string().required('Location Required'),
+  dateRange: yup.string().required('Date Range Required'),
 });

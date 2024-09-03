@@ -8,11 +8,24 @@ import {
 } from '../exporter';
 import {svgIcon} from '../../assets/svg';
 
-export function showAlert(type: string, description: string) {
-  Alert.alert(type, description);
+export function showAlert(type: string, des: string, onPress?: () => void) {
+  Alert.alert(type, des, [
+    {
+      onPress: onPress,
+    },
+  ]);
 }
 
 export const UNEXPECTED_ERROR = 'Something went wrong. Please try again later.';
+
+export const VERIFY_BOTH =
+  'Please verify both your phone number and email before login. OTPs have been sent.';
+  
+export const VERIFY_EMAIL =
+  'Please verify your email before login. An OTP has been sent to your email.';
+
+export const VERIFY_PHONE =
+  'Please verify your phone number before login. An OTP has been sent to your phone.';
 
 export const IMAGE_OPTIONS = {
   quality: 10,
@@ -174,3 +187,10 @@ export const CURRENT_DATE = new Date().toISOString().split('T')[0];
 export const GENERIC_ERROR_TEXT = 'Something went wrong. Please try again.';
 
 export const INS_SCOPES = ['user_profile', 'user_media'];
+
+export const LOCATIONS_DATA = [
+  {id: 0, value: 'Rochester, NY, US', label: 'Rochester, NY, US'},
+  {id: 1, value: 'Rochester Hills, MI, US', label: 'Rochester Hills, MI, US'},
+  {id: 2, value: 'Orlando, FL, US', label: 'Orlando, FL, US'},
+  {id: 3, value: 'Rochelle, GA, US', label: 'Rochelle, GA, US'},
+];

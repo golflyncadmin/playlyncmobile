@@ -31,7 +31,7 @@ const CELL_COUNT = 6;
 const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
   const {email, phone} = route?.params;
   const [value, setValue] = useState('');
-  const [timer, setTimer] = useState(120);
+  const [timer, setTimer] = useState(90);
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
@@ -90,7 +90,7 @@ const OTPVerification = ({navigation, route}: OTPVerificationProps) => {
 
       const resp = await resendOTP(data);
       if (resp?.data) {
-        setTimer(120);
+        setTimer(90);
         showAlert('Resent OTP', 'The OTP has been resent.');
       } else {
         showAlert('Error', resp?.error?.data?.message);

@@ -10,6 +10,7 @@ export const Routes = {
   ResetPassword: 'ResetPassword',
   AuthStack: 'AuthStack',
   AppStack: 'AppStack',
+  RequestsStack: 'RequestsStack',
   AddRequestStack: 'AddRequestStack',
   PolicyAndTerms: 'PolicyAndTerms',
   PersonalInfo: 'PersonalInfo',

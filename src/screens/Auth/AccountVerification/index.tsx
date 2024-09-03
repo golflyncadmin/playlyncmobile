@@ -33,8 +33,8 @@ const CELL_COUNT = 6;
 const AccountVerification = ({navigation, route}: AccountVerificationProps) => {
   const {email, phone} = route?.params;
   const [value, setValue] = useState('');
-  const [timer, setTimer] = useState(120);
-  const [verifyType, setVerifyType] = useState(email ? EMAIL_ENUM : PHONE_ENUM);
+  const [timer, setTimer] = useState(90);
+  const [verifyType, setVerifyType] = useState(EMAIL_ENUM);
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
   const [props, getCellOnLayoutHandler] = useClearByFocusCell({
     value,
@@ -43,6 +43,10 @@ const AccountVerification = ({navigation, route}: AccountVerificationProps) => {
 
   const [resendOTP, {isLoading}] = useResendOTPMutation();
   const [verifyOTP, {isLoading: loading}] = useVerifyOTPMutation();
+
+  useEffect(() => {
+    if (!email) setVerifyType(PHONE_ENUM);
+  }, [route]);
 
   useEffect(() => {
     if (timer > 0) {
@@ -100,7 +104,7 @@ const AccountVerification = ({navigation, route}: AccountVerificationProps) => {
 
       const resp = await resendOTP(data);
       if (resp?.data) {
-        setTimer(120);
+        setTimer(90);
         showAlert('Resent OTP', 'The OTP has been resent.');
       } else {
         showAlert('Error', resp?.error?.data?.message);

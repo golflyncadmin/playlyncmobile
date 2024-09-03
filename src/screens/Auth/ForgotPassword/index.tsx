@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState} from 'react';
 import {View, Text, Image} from 'react-native';
 import {Formik} from 'formik';
 import {AppButton, AppInput, AppLoader, MainWrapper} from '../../../components';
@@ -10,8 +10,10 @@ import {
 } from '../../../shared/exporter';
 import {useForgotPasswordMutation} from '../../../redux/auth/authApiSlice';
 import {
-  forgotPassForm,
-  forgotPassValidationSchema,
+  forgotPassPhoneForm,
+  forgotPassEmailForm,
+  forgotPassPhoneSchema,
+  forgotPassEmailSchema,
 } from '../../../shared/utils/validations';
 import styles from './styles';
 import {svgIcon} from '../../../assets/svg';
@@ -23,20 +25,25 @@ interface ForgotPasswordProps {
 const ForgotPassword = ({navigation}: ForgotPasswordProps) => {
   let isValidForm = true;
   const formikRef = useRef(null);
+  const [isPhone, setIsPhone] = useState<boolean>(false);
 
   const [forgotPassword, {isLoading}] = useForgotPasswordMutation();
 
   const handleForgotPassword = async (values: any) => {
     try {
-      const data = {
-        phone_number: values?.phoneNumber,
-      };
+      const data = isPhone
+        ? {
+            phone_number: values?.phoneNumber,
+          }
+        : {
+            email: values?.email,
+          };
 
       const resp = await forgotPassword(data);
       if (resp?.data) {
         navigation.replace(Routes.OTPVerification, {
-          isForgot: true,
-          email: values.phoneNumber,
+          phone: values.phoneNumber || '',
+          email: values.email || '',
         });
       } else {
         showAlert('Error', resp?.error?.data?.message);
@@ -58,8 +65,10 @@ const ForgotPassword = ({navigation}: ForgotPasswordProps) => {
         </View>
         <Formik
           innerRef={formikRef}
-          initialValues={forgotPassForm}
-          validationSchema={forgotPassValidationSchema}
+          initialValues={isPhone ? forgotPassPhoneForm : forgotPassEmailForm}
+          validationSchema={
+            isPhone ? forgotPassPhoneSchema : forgotPassEmailSchema
+          }
           onSubmit={(values: any) => handleForgotPassword(values)}>
           {({values, errors, touched, isValid, handleSubmit, handleChange}) => {
             if (isValidForm) {
@@ -69,22 +78,47 @@ const ForgotPassword = ({navigation}: ForgotPasswordProps) => {
             return (
               <View style={styles.contentContainer}>
                 <Text style={styles.headingStyle}>Forgot Password</Text>
-                <AppInput
-                  placeholder="Phone Number*"
-                  value={values.phoneNumber}
-                  touched={touched.phoneNumber}
-                  autoCapitalize="none"
-                  keyboardType="phone-pad"
-                  leftIcon={svgIcon.PhoneIcon}
-                  errorMessage={errors.phoneNumber}
-                  onChangeText={handleChange('phoneNumber')}
-                />
+                {isPhone ? (
+                  <AppInput
+                    placeholder="Phone Number*"
+                    value={values.phoneNumber}
+                    touched={touched.phoneNumber}
+                    autoCapitalize="none"
+                    keyboardType="phone-pad"
+                    leftIcon={svgIcon.PhoneIcon}
+                    errorMessage={errors.phoneNumber}
+                    onChangeText={handleChange('phoneNumber')}
+                  />
+                ) : (
+                  <AppInput
+                    placeholder="Email*"
+                    value={values.email}
+                    touched={touched.email}
+                    autoCapitalize="none"
+                    leftIcon={svgIcon.MailIcon}
+                    errorMessage={errors.email}
+                    onChangeText={handleChange('email')}
+                  />
+                )}
                 <AppButton
                   title={'Send'}
                   disabled={!isValid}
                   handleClick={handleSubmit}
                   buttonStyle={styles.buttonStyle}
                 />
+                <Text style={styles.otpChoiceStyle}>
+                  Get OPT via{' '}
+                  <Text
+                    suppressHighlighting
+                    onPress={() => {
+                      formikRef?.current?.setFieldValue('email', '');
+                      formikRef?.current?.setFieldValue('phoneNumber', '');
+                      setIsPhone(!isPhone);
+                    }}
+                    style={styles.choiceStyle}>
+                    {isPhone ? 'Email' : 'Phone'}
+                  </Text>
+                </Text>
               </View>
             );
           }}

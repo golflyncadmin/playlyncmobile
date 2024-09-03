@@ -39,9 +39,8 @@ const SignUp = ({navigation}: SignUpProps) => {
 
       const resp = await signUp(data);
       if (resp?.data) {
-        navigation.navigate(Routes.OTPVerification, {
+        navigation.navigate(Routes.AccountVerification, {
           email: email,
-          isForgot: false,
           phone: phoneNumber,
         });
       } else {

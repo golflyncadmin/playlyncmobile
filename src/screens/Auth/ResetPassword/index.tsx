@@ -24,15 +24,20 @@ interface ResetPasswordProps {
 const ResetPassword = ({navigation, route}: ResetPasswordProps) => {
   let isValidForm = true;
   const formikRef = useRef(null);
-  const {phoneNumber} = route?.params;
+  const {email, phone} = route?.params;
   const [resetPassword, {isLoading}] = useResetPasswordMutation();
 
   const handleResetPassword = async (values: any) => {
     try {
-      const data = {
-        phone_number: phoneNumber,
-        password: values?.password,
-      };
+      const data = email
+        ? {
+            email: email,
+            new_password: values?.password,
+          }
+        : {
+            phone_number: phone,
+            new_password: values?.password,
+          };
 
       const resp = await resetPassword(data);
       if (resp?.data) {

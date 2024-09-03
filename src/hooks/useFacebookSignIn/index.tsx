@@ -12,7 +12,7 @@ export const useFacebookSignIn = (
         'email',
       ]);
       if (result.isCancelled) {
-        showAlert('Login cancelled', '');
+        // showAlert('Login cancelled', '');
       } else {
         // Get the access token
         const data = await AccessToken.getCurrentAccessToken();

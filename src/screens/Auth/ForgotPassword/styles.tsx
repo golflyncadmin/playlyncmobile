@@ -40,6 +40,16 @@ const styles = StyleSheet.create({
   buttonStyle: {
     marginTop: WP('5'),
   },
+  otpChoiceStyle: {
+    marginTop: WP('2'),
+    color: GLColors.Natural.N9,
+    fontSize: GLFontSize.FONT_SIZE_14,
+    fontFamily: GLFontsFamily.Poppins_Regular,
+  },
+  choiceStyle: {
+    color: GLColors.Blue.B2,
+    fontFamily: GLFontsFamily.Poppins_Medium,
+  },
 });
 
 export default styles;

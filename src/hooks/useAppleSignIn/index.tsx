@@ -19,7 +19,8 @@ export const useAppleSignIn = (
       const {identityToken} = appleAuthRequestResponse;
       setAppleToken(identityToken); // set the token
     } catch (err) {
-      showAlert('Apple Sign-In failed', err?.message);
+      console.log('Error => ', err?.message);
+      // showAlert('Apple Sign-In Failed', 'The operation couldn’t be completed.');
     }
   };
 

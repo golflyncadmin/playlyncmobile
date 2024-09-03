@@ -20,6 +20,9 @@ import {
   showAlert,
   INS_SCOPES,
   LOGIN_TYPES,
+  VERIFY_BOTH,
+  VERIFY_EMAIL,
+  VERIFY_PHONE,
   GENERIC_ERROR_TEXT,
 } from '../../../shared/exporter';
 import {
@@ -73,10 +76,10 @@ const Login = ({navigation}: LoginProps) => {
         setInsToken(null);
         setAppleToken(null);
         setFacebookToken(null);
-        showAlert('Login Error', resp?.error?.data?.message);
+        showAlert('Error', resp?.error?.data?.message);
       }
     } catch (error: any) {
-      showAlert('Login Error', GENERIC_ERROR_TEXT);
+      showAlert('Error', GENERIC_ERROR_TEXT);
     }
   };
 
@@ -92,7 +95,25 @@ const Login = ({navigation}: LoginProps) => {
       if (resp?.data) {
         handleLoginSuccess(resp?.data);
       } else {
-        showAlert('Error', resp?.error?.data?.message);
+        const {message} = resp?.error?.data;
+        const {data} = resp?.error?.data;
+        if (message === VERIFY_EMAIL || message === VERIFY_BOTH) {
+          showAlert('Error', message, () => {
+            navigation.navigate(Routes.AccountVerification, {
+              email: data?.email,
+              phone: data?.phone_number,
+            });
+          });
+        } else if (message === VERIFY_PHONE) {
+          showAlert('Error', message, () => {
+            navigation.navigate(Routes.AccountVerification, {
+              email: '',
+              phone: data?.phone_number,
+            });
+          });
+        } else {
+          showAlert('Error', message);
+        }
       }
     } catch (error: any) {
       showAlert('Error', GENERIC_ERROR_TEXT);

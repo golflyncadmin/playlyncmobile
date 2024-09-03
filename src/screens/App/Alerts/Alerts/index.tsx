@@ -1,6 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Text, Image, FlatList, ListRenderItemInfo} from 'react-native';
-import {AppButton, MainWrapper} from '../../../../components';
+import {useIsFocused} from '@react-navigation/native';
+import {AppButton, AppLoader, MainWrapper} from '../../../../components';
+import {useGetRequestAlertsQuery} from '../../../../redux/app/appApiSlice';
 import styles from './styles';
 import {appIcons} from '../../../../shared/exporter';
 import {svgIcon} from '../../../../assets/svg';
@@ -14,29 +16,22 @@ type Alert = {
   title: string;
 };
 
-const MY_ALERTS: Alert[] = [
-  {
-    id: 1,
-    title: 'Riverside Golf Course',
-  },
-  {
-    id: 2,
-    title: 'Green Valley Golf Course',
-  },
-  {
-    id: 3,
-    title: 'Sunset Golf Course',
-  },
-  {
-    id: 4,
-    title: 'Hillside Golf Course',
-  },
-];
 
 const ALL_TIME_SLOTS = [1, 2, 3, 4, 5, 6, 7];
 
 const Alerts = ({navigation}: AlertsProps) => {
+  const isFocused = useIsFocused();
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
+
+  const {
+    data: alertsData,
+    isLoading: alertsLoading,
+    refetch: alertsRefetch,
+  } = useGetRequestAlertsQuery(undefined);
+
+  useEffect(() => {
+    if (isFocused) alertsRefetch();
+  }, [isFocused]);
 
   const toggleSeeAll = (index: number) => {
     setExpandedIndex(expandedIndex === index ? null : index);
@@ -87,16 +82,16 @@ const Alerts = ({navigation}: AlertsProps) => {
     return (
       <View style={styles.itemContainer}>
         <View style={styles.itemRowContainer}>
-          <Text style={styles.titleStyle}>{item?.title}</Text>
-          <Text style={styles.infoStyle}>5/18/24</Text>
+          <Text style={styles.titleStyle}>{item?.facility_name}</Text>
+          <Text style={styles.infoStyle}>{item?.facility_date}</Text>
         </View>
         <View style={styles.itemRowContainer}>
           <Text style={styles.timeTextStyle}>Available Tee Times</Text>
-          <Text style={styles.infoStyle}>Morning</Text>
+          <Text style={styles.infoStyle}>{item?.start_time}</Text>
         </View>
         {timeSlots.map((slot, idx) => (
           <Text key={idx} style={styles.timeTextStyle}>
-            #1 - 5-18-24 6:40 AM | Max Players: 2
+            #1 - {item?.facility_date} {item?.start_time} | Max Players: {item?.players}
           </Text>
         ))}
         <AppButton
@@ -113,14 +108,14 @@ const Alerts = ({navigation}: AlertsProps) => {
 
   return (
     <MainWrapper style={styles.container}>
-      {MY_ALERTS?.length > 0 && (
+      {alertsData?.data?.length > 0 && (
         <View style={styles.dataContainer}>
           <View style={styles.headerContainer}>
             {svgIcon.NotificationsIcon}
             <Text style={styles.alertTextStyle}>Alerts</Text>
           </View>
           <FlatList
-            data={MY_ALERTS}
+            data={alertsData?.data}
             renderItem={renderItem}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.flContainer}
@@ -128,7 +123,8 @@ const Alerts = ({navigation}: AlertsProps) => {
           />
         </View>
       )}
-      {MY_ALERTS?.length === 0 && <NoAlertView />}
+      {alertsData?.data?.length === 0 && <NoAlertView />}
+      {alertsLoading && <AppLoader />}
     </MainWrapper>
   );
 };

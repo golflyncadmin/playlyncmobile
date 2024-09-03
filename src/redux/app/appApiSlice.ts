@@ -4,20 +4,36 @@ export const appApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
     createRequest: builder.mutation({
       query: data => ({
-        url: 'creators/tours',
+        url: 'requests',
         method: 'post',
         body: data,
       }),
     }),
-    getMyRequests: builder.query({
-      query: data => ({
-        url: 'creators/tours/my_tours',
-        method: 'post',
-        body: data,
+    getRequests: builder.query({
+      query: () => ({
+        url: 'requests',
+        method: 'get',
+      }),
+    }),
+    deleteRequest: builder.mutation({
+      query: reqId => ({
+        url: `requests/${reqId}`,
+        method: 'delete',
+      }),
+    }),
+    getRequestAlerts: builder.query({
+      query: () => ({
+        url: 'alerts',
+        method: 'get',
       }),
     }),
   }),
   overrideExisting: true,
 });
 
-export const {useCreateRequestMutation, useGetMyRequestsQuery} = appApiSlice;
+export const {
+  useCreateRequestMutation,
+  useGetRequestsQuery,
+  useDeleteRequestMutation,
+  useGetRequestAlertsQuery,
+} = appApiSlice;

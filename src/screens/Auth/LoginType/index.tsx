@@ -177,9 +177,10 @@ const LoginType = ({navigation}: LoginTypeProps) => {
         closeStyle={styles.closeStyle}
         wrapperStyle={styles.wrapperStyle}
         containerStyle={styles.containerStyle}
-        onLoginSuccess={(token: object | any) =>
-          setInsToken(token?.access_token)
-        }
+        onLoginSuccess={(token: object | any) => {
+          setInsToken(token?.access_token);
+          console.log('Ins Token => ', token?.access_token);
+        }}
         onLoginFailure={(data: any) => console.log('Ins Error => ', data)}
       />
     </MainWrapper>

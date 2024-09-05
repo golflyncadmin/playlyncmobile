@@ -27,7 +27,7 @@ import {
   showAlert,
   GENERIC_ERROR_TEXT,
 } from '../../../../shared/exporter';
-import {LOCATIONS_DATA} from '../../../../shared/utils/constant';
+import {LOCATIONS_DATA, TIME_ORDER} from '../../../../shared/utils/constant';
 
 interface AddRequestProps {
   navigation: any;
@@ -51,24 +51,38 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
   const [startDate, setStartDate] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
   const [playersCount, setPlayersCount] = useState<number>(1);
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [selectedTimes, setSelectedTimes] = useState<any>([]);
 
   const [createRequest, {isLoading}] = useCreateRequestMutation();
 
-  const handleCheckBoxChange = (label: string) =>
-    setSelectedTime(prevLabel => (prevLabel === label ? null : label));
+  const handleCheckBoxChange = (label: any) => {
+    if (selectedTimes.includes(label)) {
+      // Remove from selected times if already selected
+      setSelectedTimes((prev: any) =>
+        prev.filter((time: any) => time !== label),
+      );
+    } else {
+      // Add to selected times if not selected
+      setSelectedTimes((prev: any) => [...prev, label]);
+    }
+  };
 
   const handleAddRequest = async (values: any) => {
     if (location === '') return showAlert('Error', 'Please select Location');
     if (playersCount <= 0)
       return showAlert('Error', 'Please select number of players');
-    if (selectedTime === null) return showAlert('Error', 'Please select time');
+    if (selectedTimes?.length === 0)
+      return showAlert('Error', 'Please select time');
+
+    const orderedTime = selectedTimes.sort(
+      (a: any, b: any) => TIME_ORDER.indexOf(a) - TIME_ORDER.indexOf(b),
+    );
 
     try {
       const data = {
         start_date: startDate,
         end_date: endDate,
-        time: selectedTime,
+        time: orderedTime,
         location: location,
         players: playersCount,
       };
@@ -76,11 +90,10 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
       if (resp?.data) {
         showAlert('Request Submitted', resp?.data?.message, () => {
           navigation.navigate(Routes.RequestsStack);
-          // setLocation('');
           setPlayersCount(1);
           setEndDate('');
           setStartDate('');
-          setSelectedTime(null);
+          setSelectedTimes([]);
           formikRef?.current?.setFieldValue('dateRange', '');
         });
       } else {
@@ -91,7 +104,8 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
     }
   };
 
-  const incrementPlayers = () => setPlayersCount(prevCount => prevCount + 1);
+  const incrementPlayers = () =>
+    setPlayersCount(prevCount => (prevCount < 4 ? prevCount + 1 : 4));
   const decrementPlayers = () =>
     setPlayersCount(prevCount => (prevCount > 0 ? prevCount - 1 : 0));
 
@@ -161,12 +175,14 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
                 <View style={styles.countContainer}>
                   <TouchableOpacity
                     onPress={decrementPlayers}
+                    disabled={playersCount === 0}
                     style={styles.countButtonStyle}>
                     <Text style={styles.countButtonText}>-</Text>
                   </TouchableOpacity>
                   <Text style={styles.countTextStyle}>{playersCount}</Text>
                   <TouchableOpacity
                     onPress={incrementPlayers}
+                    disabled={playersCount === 4}
                     style={styles.countButtonStyle}>
                     <Text style={styles.countButtonText}>+</Text>
                   </TouchableOpacity>
@@ -198,11 +214,11 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
                     <View key={option.id} style={styles.checkboxContainer}>
                       <CheckBox
                         boxType="square"
-                        value={selectedTime === option.label}
+                        value={selectedTimes.includes(option.label)}
                         style={styles.checkboxStyle}
                         onValueChange={() => handleCheckBoxChange(option.label)}
                         tintColor={
-                          selectedTime === option.label
+                          selectedTimes.includes(option.label)
                             ? GLColors.Blue.B2
                             : GLColors.Natural.N4
                         }

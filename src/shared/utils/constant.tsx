@@ -20,7 +20,7 @@ export const UNEXPECTED_ERROR = 'Something went wrong. Please try again later.';
 
 export const VERIFY_BOTH =
   'Please verify both your phone number and email before login. OTPs have been sent.';
-  
+
 export const VERIFY_EMAIL =
   'Please verify your email before login. An OTP has been sent to your email.';
 
@@ -110,57 +110,57 @@ export const LOGIN_TYPES: LoginTypes[] = [
 ];
 
 type Requests = {
-  id: number;
+  id: string | number;
   title: string;
 };
 
 export const MY_REQUESTS: Requests[] = [
   {
-    id: 1,
+    id: '1REQ',
     title: 'Make Game Request',
   },
   {
-    id: 2,
+    id: '2REQ',
     title: 'Make Game Request',
   },
   {
-    id: 3,
+    id: '3REQ',
     title: 'Make Game Request',
   },
   {
-    id: 4,
+    id: '4REQ',
     title: 'Make Game Request',
   },
   {
-    id: 5,
+    id: '5REQ',
     title: 'Make Game Request',
   },
   {
-    id: 6,
+    id: '6REQ',
     title: 'Make Game Request',
   },
   {
-    id: 7,
+    id: '7REQ',
     title: 'Make Game Request',
   },
   {
-    id: 8,
+    id: '8REQ',
     title: 'Make Game Request',
   },
   {
-    id: 9,
+    id: '9REQ',
     title: 'Make Game Request',
   },
   {
-    id: 10,
+    id: '10REQ',
     title: 'Make Game Request',
   },
   {
-    id: 11,
+    id: '11REQ',
     title: 'Make Game Request',
   },
   {
-    id: 12,
+    id: '12REQ',
     title: 'Make Game Request',
   },
 ];
@@ -189,8 +189,14 @@ export const GENERIC_ERROR_TEXT = 'Something went wrong. Please try again.';
 export const INS_SCOPES = ['user_profile', 'user_media'];
 
 export const LOCATIONS_DATA = [
-  {id: 0, value: 'Rochester, NY, US', label: 'Rochester, NY, US'},
-  {id: 1, value: 'Rochester Hills, MI, US', label: 'Rochester Hills, MI, US'},
-  {id: 2, value: 'Orlando, FL, US', label: 'Orlando, FL, US'},
-  {id: 3, value: 'Rochelle, GA, US', label: 'Rochelle, GA, US'},
+  {id: 0, value: 'Fairways Country Club', label: 'Fairways Country Club'},
+  {id: 1, value: 'Dubsdread Golf Course', label: 'Dubsdread Golf Course'},
+  {
+    id: 2,
+    value: 'Cathcart Castle Golf Club',
+    label: 'Cathcart Castle Golf Club',
+  },
+  {id: 3, value: 'Miami Beach Golf Club', label: 'Miami Beach Golf Club'},
 ];
+
+export const TIME_ORDER = ['Morning', 'Afternoon', 'Evening'];

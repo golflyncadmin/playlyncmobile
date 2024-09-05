@@ -159,7 +159,7 @@ const LoginType = ({route, navigation}: LoginTypeProps) => {
         </Text>
         <Text
           suppressHighlighting
-          onPress={() => {}}
+          onPress={() => navigation.navigate(Routes.ReportIssue)}
           style={styles.contactUsStyle}>
           Contact Us
         </Text>

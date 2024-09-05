@@ -64,8 +64,21 @@ const Requests = ({navigation}: RequestsProps) => {
     </View>
   );
 
+  const formatDates = (start: any, end: any) => {
+    const startObj = new Date(start);
+    const endObj = new Date(end);
+
+    const startMonth = String(startObj.getMonth() + 1).padStart(2, '0');
+    const startDay = String(startObj.getDate()).padStart(2, '0');
+    const endDay = String(endObj.getDate()).padStart(2, '0');
+    const year = startObj.getFullYear();
+
+    return `${startMonth}/${startDay}-${endDay}/${year}`;
+  };
+
   const renderItem = ({item, index}: any) => {
     const isCreated = item?.hasOwnProperty('location');
+    const dateRange = formatDates(item?.start_date, item?.end_date);
     return (
       <View
         key={item?.id}
@@ -93,8 +106,11 @@ const Requests = ({navigation}: RequestsProps) => {
           {isCreated ? (
             <View>
               <DisplayInfo icon={svgIcon.LocationIcon} label={item?.location} />
-              <DisplayInfo icon={svgIcon.DateIcon} label="5/18-24/2024" />
-              <DisplayInfo icon={svgIcon.TimeIcon} label={item?.time} />
+              <DisplayInfo icon={svgIcon.DateIcon} label={dateRange} />
+              <DisplayInfo
+                icon={svgIcon.TimeIcon}
+                label={item?.time?.join(', ')}
+              />
               <AppButton
                 title={'Delete Request'}
                 textStyle={styles.textStyle}

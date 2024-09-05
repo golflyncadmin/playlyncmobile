@@ -61,6 +61,13 @@ const styles = StyleSheet.create({
     fontSize: GLFontSize.FONT_SIZE_14,
     fontFamily: GLFontsFamily.Poppins_Medium,
   },
+  timeSlotStyle: {
+    width: '50%',
+    textAlign: 'right',
+    color: GLColors.Blue.B2,
+    fontSize: GLFontSize.FONT_SIZE_14,
+    fontFamily: GLFontsFamily.Poppins_Medium,
+  },
   smallButtonStyle: {
     width: WP('32.5'),
     height: WP('6'),

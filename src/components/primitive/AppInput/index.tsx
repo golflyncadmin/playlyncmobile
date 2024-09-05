@@ -87,7 +87,7 @@ const AppInput: React.FC<AppInputProps> = ({
           <TouchableOpacity
             activeOpacity={0.7}
             onPress={() => (icon ? rightIconPress() : setShowPass(!showPass))}>
-            {icon ? icon : showPass ? svgIcon.EyeOffIcon : svgIcon.EyeOnIcon}
+            {icon ? icon : showPass ? svgIcon.EyeOnIcon : svgIcon.EyeOffIcon}
           </TouchableOpacity>
         )}
       </View>

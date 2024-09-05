@@ -25,13 +25,13 @@ import {
 } from '../../../shared/exporter';
 
 interface LoginTypeProps {
+  route: any;
   navigation: any;
 }
 
-const LoginType = ({navigation}: LoginTypeProps) => {
+const LoginType = ({route, navigation}: LoginTypeProps) => {
   const insRef = useRef();
   const dispatch = useDispatch();
-  const [apiRes, setApiRes] = useState(false);
   const [isSelected, setSelection] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [insToken, setInsToken] = useState<string | null>(null);
@@ -42,6 +42,10 @@ const LoginType = ({navigation}: LoginTypeProps) => {
   const {signInWithFacebook} = useFacebookSignIn(setFacebookToken);
 
   const [socialLogin, {isLoading}] = useSocialLoginMutation();
+
+  useEffect(() => {
+    setModalVisible(route?.params?.showModal);
+  }, [route]);
 
   useEffect(() => {
     if (appleToken) handleSocialLogin(appleToken, 'apple');
@@ -65,8 +69,10 @@ const LoginType = ({navigation}: LoginTypeProps) => {
       const resp = await socialLogin(data);
 
       if (resp?.data) {
-        setApiRes(resp?.data);
-        setModalVisible(true);
+        dispatch(setLoginUser(resp?.data));
+        dispatch(setAccessToken(resp?.data?.token));
+
+        navigation.replace(Routes.AppStack);
       } else {
         setInsToken(null);
         setAppleToken(null);
@@ -93,7 +99,7 @@ const LoginType = ({navigation}: LoginTypeProps) => {
         insRef.current.show();
         break;
       case 'Manual':
-        navigation.navigate(Routes.Login);
+        setModalVisible(true);
         break;
 
       default:
@@ -109,10 +115,8 @@ const LoginType = ({navigation}: LoginTypeProps) => {
         setInsToken(null);
         setAppleToken(null);
         setFacebookToken(null);
-        dispatch(setLoginUser(apiRes?.data));
-        dispatch(setAccessToken(apiRes?.data?.token));
 
-        navigation.replace(Routes.AppStack);
+        navigation.replace(Routes.Login);
       }, 500);
     } else {
       showAlert('Missing Selection', 'Select agreement to proceed further.');

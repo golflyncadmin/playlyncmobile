@@ -68,6 +68,8 @@
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen.storyboard</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>arm64</string>

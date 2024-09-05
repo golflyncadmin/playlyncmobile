@@ -95,8 +95,7 @@ const Login = ({navigation}: LoginProps) => {
       if (resp?.data) {
         handleLoginSuccess(resp?.data);
       } else {
-        const {message} = resp?.error?.data;
-        const {data} = resp?.error?.data;
+        const {message, data} = resp?.error?.data;
         if (message === VERIFY_EMAIL || message === VERIFY_BOTH) {
           showAlert('Error', message, () => {
             navigation.navigate(Routes.AccountVerification, {

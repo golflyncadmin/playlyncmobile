@@ -2,17 +2,24 @@ import React from 'react';
 import {View, Text, ScrollView} from 'react-native';
 import {AppHeader, MainWrapper} from '../../../../components';
 import styles from './styles';
+import {Routes} from '../../../../shared/exporter';
 
 interface PolicyAndTermsProps {
   route: any;
+  navigation: any;
 }
 
-const PolicyAndTerms = ({route}: PolicyAndTermsProps) => {
+const PolicyAndTerms = ({route, navigation}: PolicyAndTermsProps) => {
   const {privacy} = route?.params;
 
   return (
     <MainWrapper style={styles.container}>
-      <AppHeader title={privacy ? 'Privacy Policy' : 'Terms & Conditions'} />
+      <AppHeader
+        title={privacy ? 'Privacy Policy' : 'Terms & Conditions'}
+        onPressBack={() =>
+          navigation.navigate(Routes.LoginType, {showModal: true})
+        }
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Text style={[styles.descTextStyle, styles.generalDescStyle]}>
           Aliquam euismod sodales enim, eget gravida justo vestibulum ac. In

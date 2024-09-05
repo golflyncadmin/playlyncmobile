@@ -30,7 +30,7 @@ const Requests = ({navigation}: RequestsProps) => {
   const sheetRef = useRef(null);
   const isFocused = useIsFocused();
   const [reqId, setReqId] = useState('');
-  const [allRequests, setAllRequests] = useState([]);
+  const [allRequests, setAllRequests] = useState(MY_REQUESTS);
   const [modalVisible, setModalVisible] = useState(false);
 
   const {
@@ -46,9 +46,9 @@ const Requests = ({navigation}: RequestsProps) => {
   }, [isFocused]);
 
   useEffect(() => {
-    const {data} = requestsData;
-    if (data) {
-      const n = data.length;
+    if (requestsData?.data) {
+      const {data} = requestsData;
+      const n = data?.length;
       const mergedRequests: any = [...MY_REQUESTS];
       for (let i = 0; i < n; i++) {
         mergedRequests[i] = data[i];
@@ -122,7 +122,6 @@ const Requests = ({navigation}: RequestsProps) => {
     try {
       const resp = await deleteRequest(reqId);
       if (resp?.data) {
-        console.log('Del RES => ', resp);
         setReqId('');
         setModalVisible(false);
         requestsRefetch();

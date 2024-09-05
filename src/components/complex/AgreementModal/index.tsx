@@ -4,11 +4,13 @@ import Modal from 'react-native-modal';
 import CheckBox from '@react-native-community/checkbox';
 import {
   WP,
+  Routes,
   GLColors,
   GLFontSize,
   GLFontsFamily,
 } from '../../../shared/exporter';
 import {AppButton} from '../AppButton';
+import {useNavigation} from '@react-navigation/native';
 
 interface AgreementModalProps {
   isSelected: boolean;
@@ -24,47 +26,57 @@ const AgreementModal: React.FC<AgreementModalProps> = ({
   handleClick,
   setSelection,
   setModalVisible,
-}) => (
-  <Modal
-    useNativeDriver
-    isVisible={modalVisible}
-    onBackdropPress={setModalVisible}
-    style={styles.modalContainer}>
-    <Text style={styles.headingStyle}>Terms and Conditions</Text>
-    <View style={styles.agreementContainer}>
-      <CheckBox
-        boxType="square"
-        value={isSelected}
-        style={styles.checkboxStyle}
-        onValueChange={setSelection}
-        tintColor={isSelected ? GLColors.Blue.B2 : GLColors.Natural.N4}
-        tintColors={{true: GLColors.Blue.B2, false: GLColors.Natural.N4}}
-      />
-      <Text style={styles.agreementTextStyle}>
-        I agree to the{' '}
-        <Text
-          suppressHighlighting
-          onPress={() => {}}
-          style={styles.termsConditionStyle}>
-          Terms
-        </Text>{' '}
-        and{' '}
-        <Text
-          suppressHighlighting
-          onPress={() => {}}
-          style={styles.termsConditionStyle}>
-          Conditions
+}) => {
+  const navigation: any = useNavigation();
+
+  return (
+    <Modal
+      useNativeDriver
+      isVisible={modalVisible}
+      onBackdropPress={setModalVisible}
+      style={styles.modalContainer}>
+      <Text style={styles.headingStyle}>Terms and Conditions</Text>
+      <View style={styles.agreementContainer}>
+        <CheckBox
+          boxType="square"
+          value={isSelected}
+          style={styles.checkboxStyle}
+          onValueChange={setSelection}
+          tintColor={isSelected ? GLColors.Blue.B2 : GLColors.Natural.N4}
+          tintColors={{true: GLColors.Blue.B2, false: GLColors.Natural.N4}}
+        />
+        <Text style={styles.agreementTextStyle}>
+          I agree to the{' '}
+          <Text
+            suppressHighlighting
+            style={styles.termsConditionStyle}
+            onPress={() => {
+              setModalVisible();
+              navigation.navigate(Routes.PolicyAndTerms, {privacy: true});
+            }}>
+            Privacy Policy
+          </Text>{' '}
+          and{' '}
+          <Text
+            suppressHighlighting
+            style={styles.termsConditionStyle}
+            onPress={() => {
+              setModalVisible();
+              navigation.navigate(Routes.PolicyAndTerms, {privacy: false});
+            }}>
+            Terms & Conditions
+          </Text>
+          .
         </Text>
-        .
-      </Text>
-    </View>
-    <AppButton
-      title={'I accept'}
-      handleClick={handleClick}
-      buttonStyle={styles.buttonStyle}
-    />
-  </Modal>
-);
+      </View>
+      <AppButton
+        title={'I accept'}
+        handleClick={handleClick}
+        buttonStyle={styles.buttonStyle}
+      />
+    </Modal>
+  );
+};
 
 export {AgreementModal};
 
@@ -94,6 +106,7 @@ const styles = StyleSheet.create({
     marginRight: WP('3'),
   },
   agreementTextStyle: {
+    width: '88%',
     color: GLColors.Natural.N16,
     fontSize: GLFontSize.FONT_SIZE_12,
     fontFamily: GLFontsFamily.Poppins_Regular,

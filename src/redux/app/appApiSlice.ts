@@ -33,7 +33,7 @@ export const appApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useCreateRequestMutation,
-  useGetRequestsQuery,
+  useLazyGetRequestsQuery,
   useDeleteRequestMutation,
-  useGetRequestAlertsQuery,
+  useLazyGetRequestAlertsQuery,
 } = appApiSlice;

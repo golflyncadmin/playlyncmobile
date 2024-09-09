@@ -11,7 +11,7 @@ import {
 } from '../../../../components';
 import styles from './styles';
 import {
-  useGetRequestsQuery,
+  useLazyGetRequestsQuery,
   useDeleteRequestMutation,
 } from '../../../../redux/app/appApiSlice';
 import {svgIcon} from '../../../../assets/svg';
@@ -33,29 +33,31 @@ const Requests = ({navigation}: RequestsProps) => {
   const [allRequests, setAllRequests] = useState(MY_REQUESTS);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const {
-    data: requestsData,
-    isLoading: reqLoading,
-    refetch: requestsRefetch,
-  } = useGetRequestsQuery(undefined);
+  const [fetchRequests, {isLoading: reqLoading}] =
+    useLazyGetRequestsQuery(undefined);
 
   const [deleteRequest, {isLoading: delLoading}] = useDeleteRequestMutation();
 
   useEffect(() => {
-    if (isFocused) requestsRefetch();
+    (async () => {
+      if (isFocused) {
+        const res = await fetchRequests(undefined);
+        handleFetchedRequests(res);
+      }
+    })();
   }, [isFocused]);
 
-  useEffect(() => {
-    if (requestsData?.data) {
-      const {data} = requestsData;
-      const n = data?.length;
+  const handleFetchedRequests = (res: any) => {
+    const requestsData = res?.data?.data;
+    if (requestsData) {
+      const n = requestsData?.length;
       const mergedRequests: any = [...MY_REQUESTS];
       for (let i = 0; i < n; i++) {
-        mergedRequests[i] = data[i];
+        mergedRequests[i] = requestsData[i];
       }
       setAllRequests(mergedRequests);
     }
-  }, [requestsData]);
+  };
 
   const DisplayInfo = ({icon, label}) => (
     <View style={styles.innerRow}>
@@ -140,7 +142,8 @@ const Requests = ({navigation}: RequestsProps) => {
       if (resp?.data) {
         setReqId('');
         setModalVisible(false);
-        requestsRefetch();
+        const res = await fetchRequests(undefined);
+        handleFetchedRequests(res);
       } else {
         showAlert('Error', resp?.error?.data?.message);
       }
@@ -159,7 +162,7 @@ const Requests = ({navigation}: RequestsProps) => {
         style={styles.previousRequestsStyle}>
         Previous requests
       </Text> */}
-      {allRequests?.length > 0 && (
+      {!reqLoading && allRequests?.length > 0 && (
         <FlatList
           data={allRequests}
           extraData={allRequests}

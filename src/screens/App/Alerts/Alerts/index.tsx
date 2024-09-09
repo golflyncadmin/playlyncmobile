@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {View, Text, Image, Linking, FlatList} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import {AppButton, AppLoader, MainWrapper} from '../../../../components';
-import {useGetRequestAlertsQuery} from '../../../../redux/app/appApiSlice';
+import {useLazyGetRequestAlertsQuery} from '../../../../redux/app/appApiSlice';
 import styles from './styles';
 import {appIcons} from '../../../../shared/exporter';
 import {svgIcon} from '../../../../assets/svg';
@@ -13,16 +13,20 @@ interface AlertsProps {
 
 const Alerts = ({navigation}: AlertsProps) => {
   const isFocused = useIsFocused();
+  const [allAlerts, setAllAlerts] = useState<any>([]);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
-  const {
-    data: alertsData,
-    isLoading: alertsLoading,
-    refetch: alertsRefetch,
-  } = useGetRequestAlertsQuery(undefined);
+  const [fetchAlerts, {isLoading: alertsLoading}] =
+    useLazyGetRequestAlertsQuery(undefined);
 
   useEffect(() => {
-    if (isFocused) alertsRefetch();
+    (async () => {
+      if (isFocused) {
+        const res = await fetchAlerts(undefined);
+        const alertsData = res?.data?.data;
+        if (alertsData) setAllAlerts(res?.data?.data);
+      }
+    })();
   }, [isFocused]);
 
   const toggleSeeAll = (index: number) => {
@@ -116,8 +120,7 @@ const Alerts = ({navigation}: AlertsProps) => {
         />
         <AppButton
           title={'Book Now'}
-          handleClick={() => handleOpenURL('https://www.golfnow.com/')}
-          // handleClick={() => handleOpenURL(item?.booking_url)}
+          handleClick={() => handleOpenURL(item?.common_url)}
         />
       </View>
     );
@@ -125,14 +128,14 @@ const Alerts = ({navigation}: AlertsProps) => {
 
   return (
     <MainWrapper style={styles.container}>
-      {alertsData?.data?.length > 0 && (
+      {allAlerts?.length > 0 && (
         <View style={styles.dataContainer}>
           <View style={styles.headerContainer}>
             {svgIcon.NotificationsIcon}
             <Text style={styles.alertTextStyle}>Alerts</Text>
           </View>
           <FlatList
-            data={alertsData?.data}
+            data={allAlerts}
             renderItem={renderItem}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.flContainer}
@@ -140,7 +143,7 @@ const Alerts = ({navigation}: AlertsProps) => {
           />
         </View>
       )}
-      {alertsData?.data?.length === 0 && <NoAlertView />}
+      {!alertsLoading && allAlerts?.length === 0 && <NoAlertView />}
       {alertsLoading && <AppLoader />}
     </MainWrapper>
   );

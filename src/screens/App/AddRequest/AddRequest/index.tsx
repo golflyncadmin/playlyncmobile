@@ -67,7 +67,7 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
     }
   };
 
-  const handleAddRequest = async (values: any) => {
+  const handleAddRequest = async (values: any, {resetForm}) => {
     if (location === '') return showAlert('Error', 'Please select Location');
     if (playersCount <= 0)
       return showAlert('Error', 'Please select number of players');
@@ -90,11 +90,12 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
       if (resp?.data) {
         showAlert('Request Submitted', resp?.data?.message, () => {
           navigation.navigate(Routes.RequestsStack);
+          setLocation('');
           setPlayersCount(1);
           setEndDate('');
           setStartDate('');
           setSelectedTimes([]);
-          formikRef?.current?.setFieldValue('dateRange', '');
+          resetForm();
         });
       } else {
         showAlert('Error', resp?.error?.data?.message);
@@ -166,6 +167,7 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
                 <Text style={styles.headingTextStyle}>Location*</Text>
                 <Dropdown
                   onChange={onChange}
+                  location={location}
                   placeholder="Pick Location"
                   locationsArr={LOCATIONS_DATA}
                 />

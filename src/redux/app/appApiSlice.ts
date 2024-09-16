@@ -3,7 +3,7 @@ import {apiSlice} from '../api/apiSlice';
 export const appApiSlice = apiSlice.injectEndpoints({
   endpoints: builder => ({
     createRequest: builder.mutation({
-      query: data => ({
+      query: (data: any) => ({
         url: 'requests',
         method: 'post',
         body: data,
@@ -16,7 +16,7 @@ export const appApiSlice = apiSlice.injectEndpoints({
       }),
     }),
     deleteRequest: builder.mutation({
-      query: reqId => ({
+      query: (reqId: string | number) => ({
         url: `requests/${reqId}`,
         method: 'delete',
       }),
@@ -25,6 +25,39 @@ export const appApiSlice = apiSlice.injectEndpoints({
       query: () => ({
         url: 'alerts',
         method: 'get',
+      }),
+    }),
+    getProfile: builder.query({
+      query: (id: string | number) => ({
+        url: `profiles/${id}`,
+        method: 'get',
+      }),
+    }),
+    updateProfile: builder.mutation({
+      query: ({id, data}: any) => ({
+        url: `profiles/${id}`,
+        method: 'patch',
+        body: data,
+      }),
+    }),
+    deleteAccount: builder.mutation({
+      query: (id: string | number) => ({
+        url: `profiles/${id}`,
+        method: 'delete',
+      }),
+    }),
+    submitCourseReq: builder.mutation({
+      query: (data: any) => ({
+        url: 'courses',
+        method: 'post',
+        body: data,
+      }),
+    }),
+    reportIssue: builder.mutation({
+      query: (data: any) => ({
+        url: 'issues',
+        method: 'post',
+        body: data,
       }),
     }),
   }),
@@ -36,4 +69,9 @@ export const {
   useLazyGetRequestsQuery,
   useDeleteRequestMutation,
   useLazyGetRequestAlertsQuery,
+  useLazyGetProfileQuery,
+  useUpdateProfileMutation,
+  useDeleteAccountMutation,
+  useSubmitCourseReqMutation,
+  useReportIssueMutation,
 } = appApiSlice;

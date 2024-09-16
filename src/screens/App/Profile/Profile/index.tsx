@@ -1,18 +1,28 @@
 import React, {useState} from 'react';
 import {View, Text, TouchableOpacity} from 'react-native';
-import {useDispatch} from 'react-redux';
+import {useDispatch, useSelector} from 'react-redux';
 import {LoginManager} from 'react-native-fbsdk-next';
 import CookieManager from '@react-native-cookies/cookies';
 import {
   AppButton,
   AppHeader,
+  AppLoader,
   DeleteModal,
   MainWrapper,
 } from '../../../../components';
 import styles from './styles';
 import {svgIcon} from '../../../../assets/svg';
-import {Routes} from '../../../../shared/exporter';
-import {logOut} from '../../../../redux/auth/authSlice';
+import {
+  Routes,
+  showAlert,
+  GENERIC_ERROR_TEXT,
+} from '../../../../shared/exporter';
+import {
+  logOut,
+  setLoginUser,
+  setAccessToken,
+} from '../../../../redux/auth/authSlice';
+import {useDeleteAccountMutation} from '../../../../redux/app/appApiSlice';
 
 interface ProfileProps {
   navigation: any;
@@ -21,22 +31,34 @@ interface ProfileProps {
 const Profile = ({navigation}: ProfileProps) => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
+  const {loginUser} = useSelector((state: object | any) => state?.auth);
 
-  const deleteAccount = () => {
+  const [deleteAccount, {isLoading}] = useDeleteAccountMutation();
+
+  const handleDeleteAccount = async () => {
     setModalVisible(false);
-    setTimeout(() => {
-      handleNavigation();
-    }, 500);
+    try {
+      const resp = await deleteAccount(loginUser?.id);
+      if (resp?.data) {
+        showAlert('Delete Account', resp?.data?.message, () => {
+          setTimeout(() => {
+            handleLogout();
+          }, 500);
+        });
+      } else {
+        showAlert('Error', resp?.error?.data?.message);
+      }
+    } catch (error: any) {
+      showAlert('Error', GENERIC_ERROR_TEXT);
+    }
   };
 
-  const handleLogout = () => {
-    handleNavigation();
-  };
-
-  const handleNavigation = async () => {
-    dispatch(logOut());
+  const handleLogout = async () => {
     LoginManager.logOut(); // FB logout
     await CookieManager.clearAll(true); // Ins logout
+    dispatch(setLoginUser(null)); // Clear session
+    dispatch(setAccessToken(null)); // Clear session
+    dispatch(logOut());
     navigation.replace(Routes.AuthStack);
   };
 
@@ -110,10 +132,11 @@ const Profile = ({navigation}: ProfileProps) => {
       </View>
       <DeleteModal
         modalVisible={modalVisible}
-        handleClick={() => deleteAccount()}
+        handleClick={() => handleDeleteAccount()}
         setModalVisible={() => setModalVisible(false)}
         heading="Are you sure you want to delete your profile?"
       />
+      {isLoading && <AppLoader />}
     </MainWrapper>
   );
 };

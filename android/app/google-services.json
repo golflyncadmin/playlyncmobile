@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "403842376856",
+    "project_id": "playlync-dae15",
+    "storage_bucket": "playlync-dae15.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:403842376856:android:e837fcae46fe1aa6eedced",
+        "android_client_info": {
+          "package_name": "org.golfcorp.PlayLync"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDrusd-5LjsSegukT2rNH_PCYuS_naxEnQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

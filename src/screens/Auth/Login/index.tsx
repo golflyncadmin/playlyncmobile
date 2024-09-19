@@ -1,5 +1,6 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
+import PushNotification from 'react-native-push-notification';
 import {Formik} from 'formik';
 import {useDispatch} from 'react-redux';
 import InstagramLogin from 'react-native-instagram-login';
@@ -10,14 +11,18 @@ import {
   useLoginMutation,
   useSocialLoginMutation,
 } from '../../../redux/auth/authApiSlice';
+import {notificationListener} from '../../../shared/utils/notificationService';
 import {AppButton, AppInput, AppLoader, MainWrapper} from '../../../components';
 import {setAccessToken, setLoginUser} from '../../../redux/auth/authSlice';
 import styles from './styles';
 import {
   isIOS,
+  APPLE,
   Routes,
   appIcons,
+  FACEBOOK,
   showAlert,
+  INSTAGRAM,
   INS_SCOPES,
   LOGIN_TYPES,
   VERIFY_BOTH,
@@ -37,7 +42,7 @@ interface LoginProps {
 
 const Login = ({navigation}: LoginProps) => {
   let isValidForm = true;
-  const insRef = useRef();
+  const insRef: any = useRef();
   const dispatch = useDispatch();
   const formikRef = useRef(null);
   const [insToken, setInsToken] = useState<string | null>(null);
@@ -51,15 +56,25 @@ const Login = ({navigation}: LoginProps) => {
   const [socialLogin, {isLoading}] = useSocialLoginMutation();
 
   useEffect(() => {
-    if (appleToken) handleSocialLogin(appleToken, 'apple');
+    notificationListener(navigation);
+    return () => {
+      PushNotification.getDeliveredNotifications(all => {
+        PushNotification.removeAllDeliveredNotifications();
+        PushNotification.cancelAllLocalNotifications();
+      });
+    };
+  }, []);
+
+  useEffect(() => {
+    if (appleToken) handleSocialLogin(appleToken, APPLE);
   }, [appleToken]);
 
   useEffect(() => {
-    if (facebookToken) handleSocialLogin(facebookToken, 'facebook');
+    if (facebookToken) handleSocialLogin(facebookToken, FACEBOOK);
   }, [facebookToken]);
 
   useEffect(() => {
-    if (insToken) handleSocialLogin(insToken, 'instagram');
+    if (insToken) handleSocialLogin(insToken, INSTAGRAM);
   }, [insToken]);
 
   const handleSocialLogin = async (token: string, provider: string) => {
@@ -192,6 +207,7 @@ const Login = ({navigation}: LoginProps) => {
                       if (isNoIcon) return;
                       return (
                         <TouchableOpacity
+                          key={item?.id}
                           activeOpacity={0.7}
                           onPress={() => handleSocialSignIn(item?.type)}
                           style={styles.iconView}>

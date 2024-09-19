@@ -9,16 +9,23 @@ import {
   MainWrapper,
   AgreementModal,
 } from '../../../components';
+import {
+  getFCMToken,
+  createNotifyChannel,
+} from '../../../shared/utils/notificationService';
 import {INS_APP_ID, INS_APP_SECRET, INS_REDIRECTION_URL} from '@env';
 import {useSocialLoginMutation} from '../../../redux/auth/authApiSlice';
 import {setAccessToken, setLoginUser} from '../../../redux/auth/authSlice';
 import styles from './styles';
 import {
   EMAIL,
+  APPLE,
   Routes,
   GLColors,
   appIcons,
+  FACEBOOK,
   showAlert,
+  INSTAGRAM,
   INS_SCOPES,
   LOGIN_TYPES,
   GENERIC_ERROR_TEXT,
@@ -44,19 +51,27 @@ const LoginType = ({route, navigation}: LoginTypeProps) => {
   const [socialLogin, {isLoading}] = useSocialLoginMutation();
 
   useEffect(() => {
+    (async () => {
+      const token = await getFCMToken();
+      console.log('Token => ', token?.fcmToken);
+      if (token?.fcmToken) createNotifyChannel();
+    })();
+  }, []);
+
+  useEffect(() => {
     setModalVisible(route?.params?.showModal);
   }, [route]);
 
   useEffect(() => {
-    if (appleToken) handleSocialLogin(appleToken, 'apple');
+    if (appleToken) handleSocialLogin(appleToken, APPLE);
   }, [appleToken]);
 
   useEffect(() => {
-    if (facebookToken) handleSocialLogin(facebookToken, 'facebook');
+    if (facebookToken) handleSocialLogin(facebookToken, FACEBOOK);
   }, [facebookToken]);
 
   useEffect(() => {
-    if (insToken) handleSocialLogin(insToken, 'instagram');
+    if (insToken) handleSocialLogin(insToken, INSTAGRAM);
   }, [insToken]);
 
   const handleSocialLogin = async (token: string, provider: string) => {
@@ -140,19 +155,21 @@ const LoginType = ({route, navigation}: LoginTypeProps) => {
       </View>
       <View style={styles.contentContainer}>
         {LOGIN_TYPES?.map((item: object | any) => (
-          <AppButton
-            icon={item?.icon}
-            title={item?.title}
-            handleClick={() => handleLogin(item?.type)}
-            textStyle={
-              item?.title !== EMAIL ? {color: GLColors.Natural.Black} : {}
-            }
-            buttonStyle={
-              item?.title !== EMAIL
-                ? {backgroundColor: GLColors.Natural.White}
-                : {}
-            }
-          />
+          <View key={item?.id}>
+            <AppButton
+              icon={item?.icon}
+              title={item?.title}
+              handleClick={() => handleLogin(item?.type)}
+              textStyle={
+                item?.title !== EMAIL ? {color: GLColors.Natural.Black} : {}
+              }
+              buttonStyle={
+                item?.title !== EMAIL
+                  ? {backgroundColor: GLColors.Natural.White}
+                  : {}
+              }
+            />
+          </View>
         ))}
         <Text style={styles.accountTextStyle}>
           Don't have an account?{' '}
@@ -187,10 +204,9 @@ const LoginType = ({route, navigation}: LoginTypeProps) => {
         closeStyle={styles.closeStyle}
         wrapperStyle={styles.wrapperStyle}
         containerStyle={styles.containerStyle}
-        onLoginSuccess={(token: object | any) => {
-          setInsToken(token?.access_token);
-          console.log('Ins Token => ', token?.access_token);
-        }}
+        onLoginSuccess={(token: object | any) =>
+          setInsToken(token?.access_token)
+        }
         onLoginFailure={(data: any) => console.log('Ins Error => ', data)}
       />
     </MainWrapper>

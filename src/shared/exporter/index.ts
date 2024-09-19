@@ -1,8 +1,11 @@
 export {
   EMAIL,
   TERMS,
+  APPLE,
   POLICY,
   showAlert,
+  FACEBOOK,
+  INSTAGRAM,
   INS_SCOPES,
   EMAIL_ENUM,
   TERMS_DESC,

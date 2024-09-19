@@ -68,7 +68,7 @@ const Profile = ({navigation}: ProfileProps) => {
       style={styles.rowContainer}
       onPress={() => {
         if (isParams) {
-          navigation.navigate(screen, {privacy: title === 'Privacy Policy'});
+          navigation.navigate(screen, {isProfile: true});
         } else {
           navigation.navigate(screen);
         }
@@ -99,13 +99,13 @@ const Profile = ({navigation}: ProfileProps) => {
           isParams={true}
           title="Privacy Policy"
           icon={svgIcon.LockIcon}
-          screen={Routes.PolicyAndTerms}
+          screen={Routes.PrivacyPolicy}
         />
         <DisplayOption
           isParams={true}
           title="Terms of Services"
           icon={svgIcon.TermsIcon}
-          screen={Routes.PolicyAndTerms}
+          screen={Routes.TermsAndConditions}
         />
       </View>
       <View style={styles.innerContainer}>

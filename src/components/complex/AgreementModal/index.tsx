@@ -52,7 +52,7 @@ const AgreementModal: React.FC<AgreementModalProps> = ({
             style={styles.termsConditionStyle}
             onPress={() => {
               setModalVisible();
-              navigation.navigate(Routes.PolicyAndTerms, {privacy: true});
+              navigation.navigate(Routes.PrivacyPolicy, {isProfile: false});
             }}>
             Privacy Policy
           </Text>{' '}
@@ -62,7 +62,9 @@ const AgreementModal: React.FC<AgreementModalProps> = ({
             style={styles.termsConditionStyle}
             onPress={() => {
               setModalVisible();
-              navigation.navigate(Routes.PolicyAndTerms, {privacy: false});
+              navigation.navigate(Routes.TermsAndConditions, {
+                isProfile: false,
+              });
             }}>
             Terms & Conditions
           </Text>

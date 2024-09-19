@@ -5,7 +5,8 @@ import AuthStack from './Stacks/AuthStack';
 import IntroStack from './Stacks/IntroStack';
 import AppStack from './BottomTabs';
 import Splash from '@authScreens/Splash';
-import PolicyAndTerms from '@appScreens/Profile/PolicyAndTerms';
+import PrivacyPolicy from '@appScreens/Profile/PrivacyPolicy';
+import TermsAndConditions from '@appScreens/Profile/TermsAndConditions';
 import PersonalInfo from '@appScreens/Profile/PersonalInfo';
 import SuggestCourse from '@appScreens/Profile/SuggestCourse';
 import ReportIssue from '@appScreens/Profile/ReportIssue';
@@ -24,7 +25,11 @@ const AppNavigation = () => {
         <Stack.Screen name="IntroStack" component={IntroStack} />
 
         {/* General */}
-        <Stack.Screen name={'PolicyAndTerms'} component={PolicyAndTerms} />
+        <Stack.Screen name={'PrivacyPolicy'} component={PrivacyPolicy} />
+        <Stack.Screen
+          name={'TermsAndConditions'}
+          component={TermsAndConditions}
+        />
         <Stack.Screen name={'PersonalInfo'} component={PersonalInfo} />
         <Stack.Screen name={'SuggestCourse'} component={SuggestCourse} />
         <Stack.Screen name={'ReportIssue'} component={ReportIssue} />

@@ -69,10 +69,7 @@ const LoginType = ({route, navigation}: LoginTypeProps) => {
       const resp = await socialLogin(data);
 
       if (resp?.data) {
-        dispatch(setLoginUser(resp?.data));
-        dispatch(setAccessToken(resp?.data?.token));
-
-        navigation.replace(Routes.AppStack);
+        handleLoginSuccess(resp?.data);
       } else {
         setInsToken(null);
         setAppleToken(null);
@@ -107,8 +104,17 @@ const LoginType = ({route, navigation}: LoginTypeProps) => {
     }
   };
 
+  const handleLoginSuccess = (res: any) => {
+    setInsToken(null);
+    setAppleToken(null);
+    setFacebookToken(null);
+    dispatch(setLoginUser(res?.data));
+    dispatch(setAccessToken(res?.data?.token));
+
+    navigation.replace(Routes.AppStack);
+  };
+
   const handleNavigation = () => {
-    // TODO: Check if account is verified or not
     if (isSelected) {
       setModalVisible(false);
       setTimeout(() => {

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {
   WP,
@@ -14,7 +14,7 @@ interface ComponentProps {
   dropDownStyle?: object;
   placeholder?: string;
   onChange?: (v: any) => void;
-  location?: any;
+  location: any;
   selectedTextStyle?: any;
 }
 
@@ -26,7 +26,11 @@ function Dropdown({
   placeholder,
   selectedTextStyle,
 }: ComponentProps) {
-  const [value, setValue] = useState(location ? location : '');
+  const [value, setValue] = useState(location || '');
+
+  useEffect(() => {
+    setValue(location || '');
+  }, [location]);
 
   const handleChange = (item: any) => {
     setValue(item.value);

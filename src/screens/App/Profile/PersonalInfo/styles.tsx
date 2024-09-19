@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     fontSize: GLFontSize.FONT_SIZE_14,
     fontFamily: GLFontsFamily.Poppins_Medium,
   },
-  emailTextStyle: {
+  valueTextStyle: {
     marginTop: WP('5'),
     color: GLColors.Natural.N11,
     fontSize: GLFontSize.FONT_SIZE_14,

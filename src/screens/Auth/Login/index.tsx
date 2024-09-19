@@ -140,7 +140,6 @@ const Login = ({navigation}: LoginProps) => {
   };
 
   const handleLoginSuccess = (res: any) => {
-    // TODO: Check if account is verified or not
     setInsToken(null);
     setAppleToken(null);
     setFacebookToken(null);

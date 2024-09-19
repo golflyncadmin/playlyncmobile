@@ -1,6 +1,8 @@
-import React, {useRef} from 'react';
+import React, {useRef, useState, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import {Formik} from 'formik';
+import {useSelector} from 'react-redux';
+import {useIsFocused} from '@react-navigation/native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   personalInfoForm,
@@ -10,21 +12,66 @@ import {
   AppButton,
   AppHeader,
   AppInput,
+  AppLoader,
   MainWrapper,
 } from '../../../../components';
 import styles from './styles';
-import {isIOS} from '../../../../shared/exporter';
+import {
+  isIOS,
+  showAlert,
+  GENERIC_ERROR_TEXT,
+} from '../../../../shared/exporter';
+import {
+  useLazyGetProfileQuery,
+  useUpdateProfileMutation,
+} from '../../../../redux/app/appApiSlice';
 
 interface PersonalInfoProps {
   navigation: any;
 }
 
 const PersonalInfo = ({navigation}: PersonalInfoProps) => {
-  const formikRef = useRef(null);
+  const formikRef: any = useRef(null);
+  const isFocused = useIsFocused();
+  const [userProfile, setUserProfile] = useState<any>('');
+  const {loginUser} = useSelector((state: object | any) => state?.auth);
 
-  const handleUpdateInfo = (values: any) => {
-    console.log('Values => ', values);
-    navigation.goBack();
+  const [fetchRequests, {isLoading: fetchLoading}] =
+    useLazyGetProfileQuery(undefined);
+
+  const [updateProfile, {isLoading: updateLoading}] =
+    useUpdateProfileMutation();
+
+  useEffect(() => {
+    (async () => {
+      if (isFocused) {
+        const res = await fetchRequests(loginUser?.id);
+        const data = res?.data?.data;
+        formikRef?.current?.setFieldValue('firstName', data?.first_name);
+        formikRef?.current?.setFieldValue('lastName', data?.last_name);
+        setUserProfile(data);
+      }
+    })();
+  }, [isFocused]);
+
+  const handleUpdateInfo = async (values: any, {resetForm}) => {
+    try {
+      const data = {
+        first_name: values?.firstName,
+        last_name: values?.lastName,
+      };
+      const resp = await updateProfile({id: loginUser?.id, data});
+      if (resp?.data) {
+        showAlert('Profile Updated', resp?.data?.message, () => {
+          navigation.goBack();
+          resetForm();
+        });
+      } else {
+        showAlert('Error', resp?.error?.data?.message);
+      }
+    } catch (error: any) {
+      showAlert('Error', GENERIC_ERROR_TEXT);
+    }
   };
 
   return (
@@ -40,12 +87,16 @@ const PersonalInfo = ({navigation}: PersonalInfoProps) => {
           innerRef={formikRef}
           initialValues={personalInfoForm}
           validationSchema={personalInfoSchema}
-          onSubmit={(values: any) => handleUpdateInfo(values)}>
+          onSubmit={handleUpdateInfo}>
           {({values, errors, touched, handleSubmit, handleChange}) => (
             <View style={styles.contentContainer}>
               <View style={styles.innerView}>
                 <Text style={styles.headingTextStyle}>Email</Text>
-                <Text style={styles.emailTextStyle}>janegolf@gmail.com</Text>
+                <Text style={styles.valueTextStyle}>{userProfile?.email}</Text>
+                {/* <Text style={styles.headingTextStyle}>Phone Number</Text>
+                <Text style={styles.valueTextStyle}>
+                  +{userProfile?.phone_number}
+                </Text> */}
                 <Text style={styles.headingTextStyle}>First name</Text>
                 <AppInput
                   placeholder="First name"
@@ -90,6 +141,7 @@ const PersonalInfo = ({navigation}: PersonalInfoProps) => {
           )}
         </Formik>
       </KeyboardAwareScrollView>
+      {(fetchLoading || updateLoading) && <AppLoader />}
     </MainWrapper>
   );
 };

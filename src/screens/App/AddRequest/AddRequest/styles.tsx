@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
   },
   dateInputStyle: {
     width: '90%',
+    color: GLColors.Natural.Black,
     fontFamily: GLFontsFamily.Poppins_Medium,
   },
   countContainer: {

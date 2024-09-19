@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useRef, useEffect} from 'react';
 import {View, Text} from 'react-native';
 import {Formik} from 'formik';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -7,24 +7,56 @@ import {
   reportIssueSchema,
 } from '../../../../shared/utils/validations';
 import {
+  AppInput,
   AppButton,
   AppHeader,
-  AppInput,
+  AppLoader,
   MainWrapper,
 } from '../../../../components';
 import styles from './styles';
-import {isIOS} from '../../../../shared/exporter';
+import {
+  isIOS,
+  showAlert,
+  GENERIC_ERROR_TEXT,
+} from '../../../../shared/exporter';
+import {useReportIssueMutation} from '../../../../redux/app/appApiSlice';
+import {useSelector} from 'react-redux';
 
 interface ReportIssueProps {
   navigation: any;
 }
 
 const ReportIssue = ({navigation}: ReportIssueProps) => {
-  const formikRef = useRef(null);
+  const formikRef: any = useRef(null);
+  const {loginUser} = useSelector((state: object | any) => state?.auth);
 
-  const handleReportIssue = (values: any) => {
-    console.log('Values => ', values);
-    navigation.goBack();
+  const [reportIssue, {isLoading}] = useReportIssueMutation();
+
+  useEffect(() => {
+    if (loginUser) {
+      formikRef?.current?.setFieldValue('email', loginUser?.email);
+    }
+  }, [loginUser]);
+
+  const handleReportIssue = async (values: any, {resetForm}) => {
+    try {
+      const data = {
+        email: values?.email,
+        subject: values?.subject,
+        body: values?.description,
+      };
+      const resp = await reportIssue(data);
+      if (resp?.data) {
+        showAlert('Report Issue', resp?.data?.message, () => {
+          navigation.goBack();
+          resetForm();
+        });
+      } else {
+        showAlert('Error', resp?.error?.data?.message);
+      }
+    } catch (error: any) {
+      showAlert('Error', GENERIC_ERROR_TEXT);
+    }
   };
 
   return (
@@ -40,7 +72,7 @@ const ReportIssue = ({navigation}: ReportIssueProps) => {
           innerRef={formikRef}
           initialValues={reportIssueForm}
           validationSchema={reportIssueSchema}
-          onSubmit={(values: any) => handleReportIssue(values)}>
+          onSubmit={handleReportIssue}>
           {({values, errors, touched, handleSubmit, handleChange}) => (
             <View style={styles.contentContainer}>
               <View style={styles.innerView}>
@@ -102,6 +134,7 @@ const ReportIssue = ({navigation}: ReportIssueProps) => {
           )}
         </Formik>
       </KeyboardAwareScrollView>
+      {isLoading && <AppLoader />}
     </MainWrapper>
   );
 };

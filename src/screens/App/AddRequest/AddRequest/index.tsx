@@ -1,6 +1,7 @@
-import React, {useRef, useState, useCallback} from 'react';
+import React, {useRef, useState, useEffect, useCallback} from 'react';
 import {Text, View, TouchableOpacity} from 'react-native';
 import {Formik} from 'formik';
+import {useIsFocused} from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
 import {
   AppInput,
@@ -11,7 +12,10 @@ import {
   MainWrapper,
   DateRangePicker,
 } from '../../../../components';
-import {useCreateRequestMutation} from '../../../../redux/app/appApiSlice';
+import {
+  useLazyGetCoursesQuery,
+  useCreateRequestMutation,
+} from '../../../../redux/app/appApiSlice';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   addRequestForm,
@@ -25,35 +29,45 @@ import {
   Routes,
   GLColors,
   showAlert,
+  transformAPIData,
   GENERIC_ERROR_TEXT,
 } from '../../../../shared/exporter';
-import {LOCATIONS_DATA, TIME_ORDER} from '../../../../shared/utils/constant';
+import {
+  TIME_ORDER,
+  TIME_OPTIONS,
+  LOCATIONS_DATA,
+} from '../../../../shared/utils/constant';
 
 interface AddRequestProps {
   navigation: any;
 }
 
-interface Option {
-  id: number;
-  label: string;
-}
-
-const options: Option[] = [
-  {id: 1, label: 'Morning'},
-  {id: 2, label: 'Afternoon'},
-  {id: 3, label: 'Evening'},
-];
-
 const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
   const formikRef = useRef<any>(null);
+  const isFocused = useIsFocused();
   const [endDate, setEndDate] = useState('');
-  const [location, setLocation] = useState('');
   const [startDate, setStartDate] = useState('');
+  const [selLocation, setSelLocation] = useState('');
+  const [locations, setLocations] = useState<any[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [playersCount, setPlayersCount] = useState<number>(1);
   const [selectedTimes, setSelectedTimes] = useState<any>([]);
 
+  const [fetchCourses, {isLoading: fetchLoading}] =
+    useLazyGetCoursesQuery(undefined);
   const [createRequest, {isLoading}] = useCreateRequestMutation();
+
+  useEffect(() => {
+    (async () => {
+      if (isFocused) {
+        const res = await fetchCourses(undefined);
+        const data = res?.data?.data;
+        // transformAPIData(data, 'location');
+        console.log('RES => ', res?.data?.data);
+        // setLocations(transformAPIData(data, 'location'));
+      }
+    })();
+  }, [isFocused]);
 
   const handleCheckBoxChange = (label: any) => {
     if (selectedTimes.includes(label)) {
@@ -68,7 +82,7 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
   };
 
   const handleAddRequest = async (values: any, {resetForm}) => {
-    if (location === '') return showAlert('Error', 'Please select Location');
+    if (selLocation === '') return showAlert('Error', 'Please select Location');
     if (playersCount <= 0)
       return showAlert('Error', 'Please select number of players');
     if (selectedTimes?.length === 0)
@@ -83,14 +97,14 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
         start_date: startDate,
         end_date: endDate,
         time: orderedTime,
-        location: location,
+        location: selLocation,
         players: playersCount,
       };
       const resp = await createRequest(data);
       if (resp?.data) {
         showAlert('Request Submitted', resp?.data?.message, () => {
           navigation.navigate(Routes.RequestsStack);
-          setLocation('');
+          setSelLocation('');
           setPlayersCount(1);
           setEndDate('');
           setStartDate('');
@@ -143,7 +157,7 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
   };
 
   const onChange = (item: any) => {
-    setLocation(item?.label);
+    setSelLocation(item?.label);
   };
 
   return (
@@ -167,7 +181,7 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
                 <Text style={styles.headingTextStyle}>Location*</Text>
                 <Dropdown
                   onChange={onChange}
-                  location={location}
+                  location={selLocation}
                   placeholder="Pick Location"
                   locationsArr={LOCATIONS_DATA}
                 />
@@ -212,7 +226,7 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
                   Time *
                 </Text>
                 <View style={styles.checkboxContainer}>
-                  {options.map(option => (
+                  {TIME_OPTIONS.map(option => (
                     <View key={option.id} style={styles.checkboxContainer}>
                       <CheckBox
                         boxType="square"
@@ -244,7 +258,7 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
           )}
         </Formik>
       </KeyboardAwareScrollView>
-      {isLoading && <AppLoader />}
+      {(fetchLoading || isLoading) && <AppLoader />}
     </MainWrapper>
   );
 };

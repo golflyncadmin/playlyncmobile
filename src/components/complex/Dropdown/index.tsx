@@ -54,6 +54,9 @@ function Dropdown({
         placeholder={placeholder}
         value={value}
         onChange={handleChange}
+        search
+        searchPlaceholder={'Search Location'}
+        inputSearchStyle={styles.inputSearchStyle}
         containerStyle={styles.dropDownContainer}
       />
     </View>
@@ -66,6 +69,10 @@ const styles = StyleSheet.create({
   },
   dropDownContainer: {
     top: isIOS() ? 0 : -5,
+  },
+  inputSearchStyle: {
+    height: WP('10'),
+    borderRadius: WP('1.5'),
   },
   dropDownStyle: {
     width: '100%',

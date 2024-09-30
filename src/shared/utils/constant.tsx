@@ -204,6 +204,17 @@ export const LOCATIONS_DATA = [
   {id: 3, value: 'Miami Beach Golf Club', label: 'Miami Beach Golf Club'},
 ];
 
+interface TIME_OPTION {
+  id: number;
+  label: string;
+}
+
+export const TIME_OPTIONS: TIME_OPTION[] = [
+  {id: 1, label: 'Morning'},
+  {id: 2, label: 'Afternoon'},
+  {id: 3, label: 'Evening'},
+];
+
 export const TIME_ORDER = ['Morning', 'Afternoon', 'Evening'];
 
 export const TERMS_DESC = `We are Golflync Corp (" Company ," " we ," " us ," " our "), a company registered in Arizona, United States at 1445 E Via Linda 2-616, Scottsdale, AZ 85259.

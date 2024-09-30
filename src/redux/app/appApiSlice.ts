@@ -46,6 +46,13 @@ export const appApiSlice = apiSlice.injectEndpoints({
         method: 'delete',
       }),
     }),
+    getCourses: builder.query({
+      query: (data: any) => ({
+        url: 'courses',
+        method: 'get',
+        body: data,
+      }),
+    }),
     submitCourseReq: builder.mutation({
       query: (data: any) => ({
         url: 'courses',
@@ -72,6 +79,7 @@ export const {
   useLazyGetProfileQuery,
   useUpdateProfileMutation,
   useDeleteAccountMutation,
+  useLazyGetCoursesQuery,
   useSubmitCourseReqMutation,
   useReportIssueMutation,
 } = appApiSlice;

@@ -106,11 +106,7 @@ export const LocalNotification = (notify: any, navigation: any) => {
 
 const onClickNotification = (notify: any, navigation: any) => {
   console.log('onClickNotification called');
-
+  navigation.navigate(Routes.AlertsStack);
   // const notificationObj = notify?.data;
   // const payload = JSON?.parse(notificationObj?.data);
-  // navigation.navigate(Routes.AlertsStack, {
-  //   screen: 'Alerts',
-  //   params: {payload},
-  // });
 };

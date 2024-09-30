@@ -33,10 +33,11 @@ export const IMAGE_OPTIONS = {
   includeBase64: false,
 };
 
-export const APPLE = 'apple';
-export const GOOGLE = 'google';
-export const FACEBOOK = 'facebook';
-export const INSTAGRAM = 'instagram';
+export const APPLE = 'Apple';
+export const GOOGLE = 'Google';
+export const FACEBOOK = 'Facebook';
+export const INSTAGRAM = 'Instagram';
+export const MANUAL = 'Manual';
 export const EMAIL_ENUM = 'email';
 export const PHONE_ENUM = 'phone';
 export const EMAIL = 'Log In with your Email';

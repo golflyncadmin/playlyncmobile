@@ -28,8 +28,8 @@
 		E9008773D1B04601AEEC79BF /* PlusJakartaSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 602D14533DE848B38302F9AE /* PlusJakartaSans-Regular.ttf */; };
 		EEC90A03871A409A92C9D5F9 /* Poppins-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8DC34B51C5B54D9098FE6A3C /* Poppins-SemiBold.ttf */; };
 		F09BDADB7A5B4710B015BC1D /* PlusJakartaSans-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA4D4403447F470D8FC54579 /* PlusJakartaSans-Medium.ttf */; };
-		FA5A623D2C9C457B007FB4D4 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FA5A623C2C9C457B007FB4D4 /* GoogleService-Info.plist */; };
 		FA8511762C78B3EE00572848 /* File.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA8511752C78B3EE00572848 /* File.swift */; };
+		FAD813952CA6D5E10086CBB2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = FAD813942CA6D5E10086CBB2 /* GoogleService-Info.plist */; };
 		FD3DE8B0310840CCBA5B360D /* Poppins-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAF77DEF764941F7B59263D1 /* Poppins-Light.ttf */; };
 		FD3E924FBF1543C18EDBBC67 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4CE6D36ACF944F50B2D2149D /* Colors.xcassets */; };
 /* End PBXBuildFile section */
@@ -80,9 +80,9 @@
 		F87B020DBE584357A239A510 /* Poppins-Black.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Black.ttf"; path = "../src/assets/fonts/Poppins-Black.ttf"; sourceTree = "<group>"; };
 		F96A3A7295BA4F6A8F529A85 /* Poppins-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Poppins-Bold.ttf"; path = "../src/assets/fonts/Poppins-Bold.ttf"; sourceTree = "<group>"; };
 		FA05C7802C776BD10073CDE2 /* GameLync.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = GameLync.entitlements; path = GameLync/GameLync.entitlements; sourceTree = "<group>"; };
-		FA5A623C2C9C457B007FB4D4 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		FA8511742C78B3EE00572848 /* GameLync-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "GameLync-Bridging-Header.h"; sourceTree = "<group>"; };
 		FA8511752C78B3EE00572848 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		FAD813942CA6D5E10086CBB2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -125,7 +125,7 @@
 		13B07FAE1A68108700A75B9A /* GameLync */ = {
 			isa = PBXGroup;
 			children = (
-				FA5A623C2C9C457B007FB4D4 /* GoogleService-Info.plist */,
+				FAD813942CA6D5E10086CBB2 /* GoogleService-Info.plist */,
 				FA05C7802C776BD10073CDE2 /* GameLync.entitlements */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.mm */,
@@ -321,7 +321,7 @@
 				FD3DE8B0310840CCBA5B360D /* Poppins-Light.ttf in Resources */,
 				91782F135E164570BE773266 /* Poppins-Medium.ttf in Resources */,
 				C1C1854E78E74D2C8632632C /* Poppins-Regular.ttf in Resources */,
-				FA5A623D2C9C457B007FB4D4 /* GoogleService-Info.plist in Resources */,
+				FAD813952CA6D5E10086CBB2 /* GoogleService-Info.plist in Resources */,
 				EEC90A03871A409A92C9D5F9 /* Poppins-SemiBold.ttf in Resources */,
 				15519E042DD442A89F4BC1AF /* Poppins-Thin.ttf in Resources */,
 				7D72C9D389B4485CB2D1C577 /* BootSplash.storyboard in Resources */,
@@ -700,10 +700,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;
@@ -775,10 +772,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				USE_HERMES = true;

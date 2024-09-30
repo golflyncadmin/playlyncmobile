@@ -20,25 +20,28 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
-    <key>CFBundleURLTypes</key>
-    <array>
-        <dict>
-            <key>CFBundleTypeRole</key>
-            <string>Editor</string>
-            <key>CFBundleURLSchemes</key>
-            <array>
-                <string>fb491364600289754</string>
-            </array>
-            <key>FacebookAppID</key>
-            <string>491364600289754</string>
-            <key>FacebookClientToken</key>
-            <string>93df21fc5825386e0ca948ddbd3a4063</string>
-            <key>FacebookDisplayName</key>
-            <string>PlayLync</string>
-        </dict>
-    </array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.237907112482-vr2nspcnipb0lin7n1uach1tgh0i0mf5</string>
+				<string>fb491364600289754</string>
+			</array>
+			<key>FacebookAppID</key>
+			<string>491364600289754</string>
+			<key>FacebookClientToken</key>
+			<string>93df21fc5825386e0ca948ddbd3a4063</string>
+			<key>FacebookDisplayName</key>
+			<string>PlayLync</string>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -68,8 +71,6 @@
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen.storyboard</string>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>arm64</string>

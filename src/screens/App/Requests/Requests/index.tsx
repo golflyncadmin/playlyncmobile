@@ -1,6 +1,7 @@
 import React, {useRef, useState, useEffect} from 'react';
-import {Text, View, FlatList, ListRenderItemInfo} from 'react-native';
+import {Text, View, FlatList} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
+import PushNotification from 'react-native-push-notification';
 import {
   AppButton,
   AppHeader,
@@ -14,6 +15,7 @@ import {
   useLazyGetRequestsQuery,
   useDeleteRequestMutation,
 } from '../../../../redux/app/appApiSlice';
+import {notificationListener} from '../../../../shared/utils/notificationService';
 import {svgIcon} from '../../../../assets/svg';
 import {
   Routes,
@@ -37,6 +39,16 @@ const Requests = ({navigation}: RequestsProps) => {
     useLazyGetRequestsQuery(undefined);
 
   const [deleteRequest, {isLoading: delLoading}] = useDeleteRequestMutation();
+
+  useEffect(() => {
+    notificationListener(navigation);
+    return () => {
+      PushNotification.getDeliveredNotifications((all: any) => {
+        PushNotification.removeAllDeliveredNotifications();
+        PushNotification.cancelAllLocalNotifications();
+      });
+    };
+  }, []);
 
   useEffect(() => {
     (async () => {

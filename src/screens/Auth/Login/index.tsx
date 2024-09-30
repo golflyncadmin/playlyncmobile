@@ -1,17 +1,23 @@
 import React, {useRef, useState, useEffect} from 'react';
 import {View, Text, Image, TouchableOpacity} from 'react-native';
-import PushNotification from 'react-native-push-notification';
 import {Formik} from 'formik';
 import {useDispatch} from 'react-redux';
 import InstagramLogin from 'react-native-instagram-login';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useAppleSignIn, useFacebookSignIn} from '../../../hooks';
+import {
+  useAppleSignIn,
+  useGoogleSignIn,
+  useFacebookSignIn,
+} from '../../../hooks';
 import {INS_APP_ID, INS_APP_SECRET, INS_REDIRECTION_URL} from '@env';
 import {
   useLoginMutation,
   useSocialLoginMutation,
 } from '../../../redux/auth/authApiSlice';
-import {notificationListener} from '../../../shared/utils/notificationService';
+import {
+  getFCMToken,
+  createNotifyChannel,
+} from '../../../shared/utils/notificationService';
 import {AppButton, AppInput, AppLoader, MainWrapper} from '../../../components';
 import {setAccessToken, setLoginUser} from '../../../redux/auth/authSlice';
 import styles from './styles';
@@ -19,6 +25,7 @@ import {
   isIOS,
   APPLE,
   Routes,
+  GOOGLE,
   appIcons,
   FACEBOOK,
   showAlert,
@@ -45,29 +52,36 @@ const Login = ({navigation}: LoginProps) => {
   const insRef: any = useRef();
   const dispatch = useDispatch();
   const formikRef = useRef(null);
+  const [fcmToken, setFCMToken] = useState<string>('');
   const [insToken, setInsToken] = useState<string | null>(null);
   const [appleToken, setAppleToken] = useState<string | null>(null);
+  const [googleToken, setGoogleToken] = useState<string | null>(null);
   const [facebookToken, setFacebookToken] = useState<string | null>(null);
 
   const {signInWithApple} = useAppleSignIn(setAppleToken);
+  const {signInWithGoogle} = useGoogleSignIn(setGoogleToken);
   const {signInWithFacebook} = useFacebookSignIn(setFacebookToken);
 
   const [login, {isLoading: loading}] = useLoginMutation();
   const [socialLogin, {isLoading}] = useSocialLoginMutation();
 
   useEffect(() => {
-    notificationListener(navigation);
-    return () => {
-      PushNotification.getDeliveredNotifications(all => {
-        PushNotification.removeAllDeliveredNotifications();
-        PushNotification.cancelAllLocalNotifications();
-      });
-    };
+    (async () => {
+      const token = await getFCMToken();
+      if (token?.fcmToken) {
+        setFCMToken(token?.fcmToken);
+        createNotifyChannel();
+      }
+    })();
   }, []);
 
   useEffect(() => {
     if (appleToken) handleSocialLogin(appleToken, APPLE);
   }, [appleToken]);
+
+  useEffect(() => {
+    if (googleToken) handleSocialLogin(googleToken, GOOGLE);
+  }, [googleToken]);
 
   useEffect(() => {
     if (facebookToken) handleSocialLogin(facebookToken, FACEBOOK);
@@ -81,7 +95,8 @@ const Login = ({navigation}: LoginProps) => {
     try {
       const data = {
         token: token,
-        provider: provider,
+        provider: provider.toLowerCase(),
+        // fcmToken: fcmToken,
       };
 
       const resp = await socialLogin(data);
@@ -104,6 +119,7 @@ const Login = ({navigation}: LoginProps) => {
       const data = {
         email: email,
         password: password,
+        // fcmToken: fcmToken,
       };
 
       const resp = await login(data);
@@ -136,16 +152,16 @@ const Login = ({navigation}: LoginProps) => {
 
   const handleSocialSignIn = (type: string) => {
     switch (type) {
-      case 'Google':
-        navigation.navigate('');
+      case GOOGLE:
+        signInWithGoogle();
         break;
-      case 'Apple':
+      case APPLE:
         signInWithApple();
         break;
-      case 'Facebook':
+      case FACEBOOK:
         signInWithFacebook();
         break;
-      case 'Instagram':
+      case INSTAGRAM:
         insRef.current.show();
         break;
 

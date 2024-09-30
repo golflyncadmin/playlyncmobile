@@ -2,25 +2,31 @@ import React, {useRef, useState, useEffect} from 'react';
 import {View, Text, Image} from 'react-native';
 import {useDispatch} from 'react-redux';
 import InstagramLogin from 'react-native-instagram-login';
-import {useAppleSignIn, useFacebookSignIn} from '../../../hooks';
+import {
+  useAppleSignIn,
+  useGoogleSignIn,
+  useFacebookSignIn,
+} from '../../../hooks';
 import {
   AppButton,
   AppLoader,
   MainWrapper,
   AgreementModal,
 } from '../../../components';
+import {INS_APP_ID, INS_APP_SECRET, INS_REDIRECTION_URL} from '@env';
+import {useSocialLoginMutation} from '../../../redux/auth/authApiSlice';
+import {setAccessToken, setLoginUser} from '../../../redux/auth/authSlice';
 import {
   getFCMToken,
   createNotifyChannel,
 } from '../../../shared/utils/notificationService';
-import {INS_APP_ID, INS_APP_SECRET, INS_REDIRECTION_URL} from '@env';
-import {useSocialLoginMutation} from '../../../redux/auth/authApiSlice';
-import {setAccessToken, setLoginUser} from '../../../redux/auth/authSlice';
 import styles from './styles';
 import {
   EMAIL,
   APPLE,
   Routes,
+  GOOGLE,
+  MANUAL,
   GLColors,
   appIcons,
   FACEBOOK,
@@ -40,12 +46,15 @@ const LoginType = ({route, navigation}: LoginTypeProps) => {
   const insRef = useRef();
   const dispatch = useDispatch();
   const [isSelected, setSelection] = useState(false);
+  const [fcmToken, setFCMToken] = useState<string>('');
   const [modalVisible, setModalVisible] = useState(false);
   const [insToken, setInsToken] = useState<string | null>(null);
   const [appleToken, setAppleToken] = useState<string | null>(null);
+  const [googleToken, setGoogleToken] = useState<string | null>(null);
   const [facebookToken, setFacebookToken] = useState<string | null>(null);
 
   const {signInWithApple} = useAppleSignIn(setAppleToken);
+  const {signInWithGoogle} = useGoogleSignIn(setGoogleToken);
   const {signInWithFacebook} = useFacebookSignIn(setFacebookToken);
 
   const [socialLogin, {isLoading}] = useSocialLoginMutation();
@@ -53,14 +62,20 @@ const LoginType = ({route, navigation}: LoginTypeProps) => {
   useEffect(() => {
     (async () => {
       const token = await getFCMToken();
-      console.log('Token => ', token?.fcmToken);
-      if (token?.fcmToken) createNotifyChannel();
+      if (token?.fcmToken) {
+        setFCMToken(token?.fcmToken);
+        createNotifyChannel();
+      }
     })();
   }, []);
 
   useEffect(() => {
     setModalVisible(route?.params?.showModal);
   }, [route]);
+
+  useEffect(() => {
+    if (googleToken) handleSocialLogin(googleToken, GOOGLE);
+  }, [googleToken]);
 
   useEffect(() => {
     if (appleToken) handleSocialLogin(appleToken, APPLE);
@@ -78,7 +93,8 @@ const LoginType = ({route, navigation}: LoginTypeProps) => {
     try {
       const data = {
         token: token,
-        provider: provider,
+        provider: provider.toLowerCase(),
+        // fcmToken: fcmToken,
       };
 
       const resp = await socialLogin(data);
@@ -98,19 +114,19 @@ const LoginType = ({route, navigation}: LoginTypeProps) => {
 
   const handleLogin = (type: string) => {
     switch (type) {
-      case 'Google':
-        navigation.navigate('UserDetails');
+      case GOOGLE:
+        signInWithGoogle();
         break;
-      case 'Apple':
+      case APPLE:
         signInWithApple();
         break;
-      case 'Facebook':
+      case FACEBOOK:
         signInWithFacebook();
         break;
-      case 'Instagram':
+      case INSTAGRAM:
         insRef.current.show();
         break;
-      case 'Manual':
+      case MANUAL:
         setModalVisible(true);
         break;
 

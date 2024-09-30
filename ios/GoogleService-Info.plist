@@ -2,18 +2,24 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CLIENT_ID</key>
+	<string>237907112482-vr2nspcnipb0lin7n1uach1tgh0i0mf5.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.237907112482-vr2nspcnipb0lin7n1uach1tgh0i0mf5</string>
+	<key>ANDROID_CLIENT_ID</key>
+	<string>237907112482-jjhkd3oas7j9n6aigv4lje72482vuju2.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyAAgYhXunQ0w5_CHb0I2Y5v2TEmnOb1U4I</string>
+	<string>AIzaSyDokIL2sZgi5E4DHucLzI9KeKfYslJb7tA</string>
 	<key>GCM_SENDER_ID</key>
-	<string>403842376856</string>
+	<string>237907112482</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>org.golfcorp.PlayLync</string>
 	<key>PROJECT_ID</key>
-	<string>playlync-dae15</string>
+	<string>playlync-7637d</string>
 	<key>STORAGE_BUCKET</key>
-	<string>playlync-dae15.appspot.com</string>
+	<string>playlync-7637d.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +31,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:403842376856:ios:1c8bc7aabd41ebb6eedced</string>
+	<string>1:237907112482:ios:b479d959263998df45907b</string>
 </dict>
 </plist>

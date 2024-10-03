@@ -193,17 +193,6 @@ export const GENERIC_ERROR_TEXT = 'Something went wrong. Please try again.';
 
 export const INS_SCOPES = ['user_profile', 'user_media'];
 
-export const LOCATIONS_DATA = [
-  {id: 0, value: 'Fairways Country Club', label: 'Fairways Country Club'},
-  {id: 1, value: 'Dubsdread Golf Course', label: 'Dubsdread Golf Course'},
-  {
-    id: 2,
-    value: 'Cathcart Castle Golf Club',
-    label: 'Cathcart Castle Golf Club',
-  },
-  {id: 3, value: 'Miami Beach Golf Club', label: 'Miami Beach Golf Club'},
-];
-
 interface TIME_OPTION {
   id: number;
   label: string;

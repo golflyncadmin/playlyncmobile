@@ -93,8 +93,8 @@ const LoginType = ({route, navigation}: LoginTypeProps) => {
     try {
       const data = {
         token: token,
+        fcm_token: fcmToken,
         provider: provider.toLowerCase(),
-        // fcmToken: fcmToken,
       };
 
       const resp = await socialLogin(data);

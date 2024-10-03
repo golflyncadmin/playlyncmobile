@@ -95,8 +95,8 @@ const Login = ({navigation}: LoginProps) => {
     try {
       const data = {
         token: token,
+        fcm_token: fcmToken,
         provider: provider.toLowerCase(),
-        // fcmToken: fcmToken,
       };
 
       const resp = await socialLogin(data);
@@ -119,7 +119,7 @@ const Login = ({navigation}: LoginProps) => {
       const data = {
         email: email,
         password: password,
-        // fcmToken: fcmToken,
+        fcm_token: fcmToken,
       };
 
       const resp = await login(data);

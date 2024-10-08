@@ -1,6 +1,7 @@
 import React, {useRef, useState, useEffect} from 'react';
-import {Text, View, FlatList, ListRenderItemInfo} from 'react-native';
+import {Text, View, FlatList} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
+import PushNotification from 'react-native-push-notification';
 import {
   AppButton,
   AppHeader,
@@ -11,9 +12,10 @@ import {
 } from '../../../../components';
 import styles from './styles';
 import {
-  useGetRequestsQuery,
+  useLazyGetRequestsQuery,
   useDeleteRequestMutation,
 } from '../../../../redux/app/appApiSlice';
+import {notificationListener} from '../../../../shared/utils/notificationService';
 import {svgIcon} from '../../../../assets/svg';
 import {
   Routes,
@@ -30,32 +32,44 @@ const Requests = ({navigation}: RequestsProps) => {
   const sheetRef = useRef(null);
   const isFocused = useIsFocused();
   const [reqId, setReqId] = useState('');
-  const [allRequests, setAllRequests] = useState([]);
+  const [allRequests, setAllRequests] = useState(MY_REQUESTS);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const {
-    data: requestsData,
-    isLoading: reqLoading,
-    refetch: requestsRefetch,
-  } = useGetRequestsQuery(undefined);
+  const [fetchRequests, {isLoading: reqLoading}] =
+    useLazyGetRequestsQuery(undefined);
 
   const [deleteRequest, {isLoading: delLoading}] = useDeleteRequestMutation();
 
   useEffect(() => {
-    if (isFocused) requestsRefetch();
-  }, [isFocused]);
+    notificationListener(navigation);
+    return () => {
+      PushNotification.getDeliveredNotifications((all: any) => {
+        PushNotification.removeAllDeliveredNotifications();
+        PushNotification.cancelAllLocalNotifications();
+      });
+    };
+  }, []);
 
   useEffect(() => {
-    const {data} = requestsData;
-    if (data) {
-      const n = data.length;
+    (async () => {
+      if (isFocused) {
+        const res = await fetchRequests(undefined);
+        handleFetchedRequests(res);
+      }
+    })();
+  }, [isFocused]);
+
+  const handleFetchedRequests = (res: any) => {
+    const requestsData = res?.data?.data;
+    if (requestsData) {
+      const n = requestsData?.length;
       const mergedRequests: any = [...MY_REQUESTS];
       for (let i = 0; i < n; i++) {
-        mergedRequests[i] = data[i];
+        mergedRequests[i] = requestsData[i];
       }
       setAllRequests(mergedRequests);
     }
-  }, [requestsData]);
+  };
 
   const DisplayInfo = ({icon, label}) => (
     <View style={styles.innerRow}>
@@ -64,8 +78,21 @@ const Requests = ({navigation}: RequestsProps) => {
     </View>
   );
 
+  const formatDates = (start: any, end: any) => {
+    const startObj = new Date(start);
+    const endObj = new Date(end);
+
+    const startMonth = String(startObj.getMonth() + 1).padStart(2, '0');
+    const startDay = String(startObj.getDate()).padStart(2, '0');
+    const endDay = String(endObj.getDate()).padStart(2, '0');
+    const year = startObj.getFullYear();
+
+    return `${startMonth}/${startDay}-${endDay}/${year}`;
+  };
+
   const renderItem = ({item, index}: any) => {
     const isCreated = item?.hasOwnProperty('location');
+    const dateRange = formatDates(item?.start_date, item?.end_date);
     return (
       <View
         key={item?.id}
@@ -93,8 +120,11 @@ const Requests = ({navigation}: RequestsProps) => {
           {isCreated ? (
             <View>
               <DisplayInfo icon={svgIcon.LocationIcon} label={item?.location} />
-              <DisplayInfo icon={svgIcon.DateIcon} label="5/18-24/2024" />
-              <DisplayInfo icon={svgIcon.TimeIcon} label={item?.time} />
+              <DisplayInfo icon={svgIcon.DateIcon} label={dateRange} />
+              <DisplayInfo
+                icon={svgIcon.TimeIcon}
+                label={item?.time?.join(', ')}
+              />
               <AppButton
                 title={'Delete Request'}
                 textStyle={styles.textStyle}
@@ -122,10 +152,10 @@ const Requests = ({navigation}: RequestsProps) => {
     try {
       const resp = await deleteRequest(reqId);
       if (resp?.data) {
-        console.log('Del RES => ', resp);
         setReqId('');
         setModalVisible(false);
-        requestsRefetch();
+        const res = await fetchRequests(undefined);
+        handleFetchedRequests(res);
       } else {
         showAlert('Error', resp?.error?.data?.message);
       }
@@ -144,7 +174,7 @@ const Requests = ({navigation}: RequestsProps) => {
         style={styles.previousRequestsStyle}>
         Previous requests
       </Text> */}
-      {allRequests?.length > 0 && (
+      {!reqLoading && allRequests?.length > 0 && (
         <FlatList
           data={allRequests}
           extraData={allRequests}

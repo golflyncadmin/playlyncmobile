@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "237907112482",
+    "project_id": "playlync-7637d",
+    "storage_bucket": "playlync-7637d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:237907112482:android:1e33912c7c79139745907b",
+        "android_client_info": {
+          "package_name": "org.golfcorp.PlayLync"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "237907112482-jjhkd3oas7j9n6aigv4lje72482vuju2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.golfcorp.PlayLync",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "237907112482-kfhag167e2u88i9c4nd900ied75dnptf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.golfcorp.PlayLync",
+            "certificate_hash": "ecdeb24e6f372bc63ac0ead6a3822d69f017234b"
+          }
+        },
+        {
+          "client_id": "237907112482-vhn0o9tq3jl5vn6tn4n6bsl13cd150u3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgOFAgoeKl9HgXWn0YuCkhuCKJ04TXYms"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "237907112482-i5no4routr18becfl5o9sl61kel745lc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "237907112482-vr2nspcnipb0lin7n1uach1tgh0i0mf5.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.golfcorp.PlayLync"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

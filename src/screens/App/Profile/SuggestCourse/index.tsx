@@ -10,10 +10,16 @@ import {
   AppButton,
   AppHeader,
   AppInput,
+  AppLoader,
   MainWrapper,
 } from '../../../../components';
 import styles from './styles';
-import {isIOS} from '../../../../shared/exporter';
+import {
+  isIOS,
+  showAlert,
+  GENERIC_ERROR_TEXT,
+} from '../../../../shared/exporter';
+import {useSubmitCourseReqMutation} from '../../../../redux/app/appApiSlice';
 
 interface SuggestCourseProps {
   navigation: any;
@@ -22,9 +28,26 @@ interface SuggestCourseProps {
 const SuggestCourse = ({navigation}: SuggestCourseProps) => {
   const formikRef = useRef(null);
 
-  const handleSuggestCourse = (values: any) => {
-    console.log('Values => ', values);
-    navigation.goBack();
+  const [submitCourseReq, {isLoading}] = useSubmitCourseReqMutation();
+
+  const handleSuggestCourse = async (values: any, {resetForm}) => {
+    try {
+      const data = {
+        course_name: values?.courseName,
+        course_location: values?.courseLocation,
+      };
+      const resp = await submitCourseReq(data);
+      if (resp?.data) {
+        showAlert('Suggest Course', resp?.data?.message, () => {
+          navigation.goBack();
+          resetForm();
+        });
+      } else {
+        showAlert('Error', resp?.error?.data?.message);
+      }
+    } catch (error: any) {
+      showAlert('Error', GENERIC_ERROR_TEXT);
+    }
   };
 
   return (
@@ -40,7 +63,7 @@ const SuggestCourse = ({navigation}: SuggestCourseProps) => {
           innerRef={formikRef}
           initialValues={suggestCourseForm}
           validationSchema={suggestCourseSchema}
-          onSubmit={(values: any) => handleSuggestCourse(values)}>
+          onSubmit={handleSuggestCourse}>
           {({values, errors, touched, handleSubmit, handleChange}) => (
             <View style={styles.contentContainer}>
               <View style={styles.innerView}>
@@ -100,6 +123,7 @@ const SuggestCourse = ({navigation}: SuggestCourseProps) => {
           )}
         </Formik>
       </KeyboardAwareScrollView>
+      {isLoading && <AppLoader />}
     </MainWrapper>
   );
 };

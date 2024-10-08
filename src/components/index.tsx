@@ -9,6 +9,7 @@ export * from './complex/Dropdown'
 export * from './complex/AppButton';
 export * from './complex/AppHeader';
 export * from './complex/DeleteModal';
+export * from './complex/CoursesModal';
 export * from './complex/AgreementModal';
 export * from './complex/DateRangePicker';
 export * from './complex/PreviousReqSheet';

@@ -85,6 +85,7 @@ const styles = StyleSheet.create({
     marginBottom: WP('2'),
   },
   infoTextStyle: {
+    width: '90%',
     marginLeft: WP('2'),
     color: GLColors.Natural.N11,
     fontSize: GLFontSize.FONT_SIZE_14,

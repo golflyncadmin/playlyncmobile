@@ -3,21 +3,34 @@ import {View, Text, Image, TouchableOpacity} from 'react-native';
 import {Formik} from 'formik';
 import {useDispatch} from 'react-redux';
 import InstagramLogin from 'react-native-instagram-login';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {useAppleSignIn, useFacebookSignIn} from '../../../hooks';
+import {
+  useAppleSignIn,
+  useGoogleSignIn,
+  useFacebookSignIn,
+} from '../../../hooks';
 import {INS_APP_ID, INS_APP_SECRET, INS_REDIRECTION_URL} from '@env';
 import {
   useLoginMutation,
   useSocialLoginMutation,
 } from '../../../redux/auth/authApiSlice';
+import {
+  getFCMToken,
+  createNotifyChannel,
+} from '../../../shared/utils/notificationService';
 import {AppButton, AppInput, AppLoader, MainWrapper} from '../../../components';
 import {setAccessToken, setLoginUser} from '../../../redux/auth/authSlice';
 import styles from './styles';
 import {
   isIOS,
+  APPLE,
   Routes,
+  GOOGLE,
   appIcons,
+  FACEBOOK,
   showAlert,
+  INSTAGRAM,
   INS_SCOPES,
   LOGIN_TYPES,
   VERIFY_BOTH,
@@ -37,36 +50,54 @@ interface LoginProps {
 
 const Login = ({navigation}: LoginProps) => {
   let isValidForm = true;
-  const insRef = useRef();
+  const insRef: any = useRef();
   const dispatch = useDispatch();
   const formikRef = useRef(null);
+  const [fcmToken, setFCMToken] = useState<string>('');
   const [insToken, setInsToken] = useState<string | null>(null);
   const [appleToken, setAppleToken] = useState<string | null>(null);
+  const [googleToken, setGoogleToken] = useState<string | null>(null);
   const [facebookToken, setFacebookToken] = useState<string | null>(null);
 
   const {signInWithApple} = useAppleSignIn(setAppleToken);
+  const {signInWithGoogle} = useGoogleSignIn(setGoogleToken);
   const {signInWithFacebook} = useFacebookSignIn(setFacebookToken);
 
   const [login, {isLoading: loading}] = useLoginMutation();
   const [socialLogin, {isLoading}] = useSocialLoginMutation();
 
   useEffect(() => {
-    if (appleToken) handleSocialLogin(appleToken, 'apple');
+    (async () => {
+      const token = await getFCMToken();
+      if (token?.fcmToken) {
+        setFCMToken(token?.fcmToken);
+        createNotifyChannel();
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (appleToken) handleSocialLogin(appleToken, APPLE);
   }, [appleToken]);
 
   useEffect(() => {
-    if (facebookToken) handleSocialLogin(facebookToken, 'facebook');
+    if (googleToken) handleSocialLogin(googleToken, GOOGLE);
+  }, [googleToken]);
+
+  useEffect(() => {
+    if (facebookToken) handleSocialLogin(facebookToken, FACEBOOK);
   }, [facebookToken]);
 
   useEffect(() => {
-    if (insToken) handleSocialLogin(insToken, 'instagram');
+    if (insToken) handleSocialLogin(insToken, INSTAGRAM);
   }, [insToken]);
 
   const handleSocialLogin = async (token: string, provider: string) => {
     try {
       const data = {
         token: token,
-        provider: provider,
+        fcm_token: fcmToken,
+        provider: provider.toLowerCase(),
       };
 
       const resp = await socialLogin(data);
@@ -76,9 +107,11 @@ const Login = ({navigation}: LoginProps) => {
         setInsToken(null);
         setAppleToken(null);
         setFacebookToken(null);
-        showAlert('Error', resp?.error?.data?.message);
+        await GoogleSignin.signOut();
+        showAlert('Error', resp?.error?.data?.message || GENERIC_ERROR_TEXT);
       }
     } catch (error: any) {
+      await GoogleSignin.signOut();
       showAlert('Error', GENERIC_ERROR_TEXT);
     }
   };
@@ -89,6 +122,7 @@ const Login = ({navigation}: LoginProps) => {
       const data = {
         email: email,
         password: password,
+        fcm_token: fcmToken,
       };
 
       const resp = await login(data);
@@ -121,16 +155,16 @@ const Login = ({navigation}: LoginProps) => {
 
   const handleSocialSignIn = (type: string) => {
     switch (type) {
-      case 'Google':
-        navigation.navigate('');
+      case GOOGLE:
+        signInWithGoogle();
         break;
-      case 'Apple':
+      case APPLE:
         signInWithApple();
         break;
-      case 'Facebook':
+      case FACEBOOK:
         signInWithFacebook();
         break;
-      case 'Instagram':
+      case INSTAGRAM:
         insRef.current.show();
         break;
 
@@ -192,6 +226,7 @@ const Login = ({navigation}: LoginProps) => {
                       if (isNoIcon) return;
                       return (
                         <TouchableOpacity
+                          key={item?.id}
                           activeOpacity={0.7}
                           onPress={() => handleSocialSignIn(item?.type)}
                           style={styles.iconView}>

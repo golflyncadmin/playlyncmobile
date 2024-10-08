@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     marginHorizontal: WP('5'),
   },
-  headingTextStyle: {
+  titleTextStyle: {
     marginTop: WP('4'),
     marginBottom: WP('-2'),
     color: GLColors.Natural.N8,
@@ -39,8 +39,7 @@ const styles = StyleSheet.create({
     fontFamily: GLFontsFamily.Poppins_Medium,
   },
   inputStyle: {
-    width: '100%',
-    top: isIOS() ? 0 : 2,
+    paddingTop: isIOS() ? 0 : WP('3'),
     fontFamily: GLFontsFamily.Poppins_Medium,
   },
   dateInputStyle: {
@@ -99,6 +98,62 @@ const styles = StyleSheet.create({
   bottomView: {
     bottom: 0,
     position: 'absolute',
+  },
+  locationsContainer: {
+    zIndex: 99,
+    width: '90%',
+    alignSelf: 'center',
+    marginTop: isIOS() ? scrHeight / 3.7 : scrHeight / 4.3,
+    height: scrHeight / 1.6,
+    position: 'absolute',
+    marginHorizontal: WP('5'),
+    paddingVertical: WP('2'),
+    borderBottomEndRadius: WP('2'),
+    borderBottomStartRadius: WP('2'),
+    backgroundColor: GLColors.Natural.White,
+    shadowColor: '#000000',
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.17,
+    shadowRadius: 3.05,
+    elevation: 4,
+    borderWidth: 1,
+    paddingHorizontal: WP('4'),
+    borderColor: GLColors.Natural.N3,
+  },
+  headingTextStyle: {
+    marginVertical: WP('2'),
+    color: GLColors.Natural.N11,
+    fontSize: GLFontSize.FONT_SIZE_16,
+    fontFamily: GLFontsFamily.Poppins_SemiBold,
+  },
+  itemContainer: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    borderRadius: WP('1'),
+    marginVertical: WP('1'),
+    paddingVertical: WP('1'),
+    paddingHorizontal: WP('1.5'),
+    backgroundColor: GLColors.Natural.N3,
+  },
+  itemTextStyle: {
+    width: '95%',
+    color: GLColors.Natural.N11,
+    paddingHorizontal: WP('1.5'),
+    fontSize: GLFontSize.FONT_SIZE_14,
+    fontFamily: GLFontsFamily.Poppins_Medium,
+  },
+  emptyView: {
+    alignItems: 'center',
+    height: scrHeight / 4,
+    justifyContent: 'center',
+  },
+  emptyTextStyle: {
+    color: GLColors.Natural.N11,
+    fontSize: GLFontSize.FONT_SIZE_14,
+    fontFamily: GLFontsFamily.Poppins_Medium,
   },
 });
 

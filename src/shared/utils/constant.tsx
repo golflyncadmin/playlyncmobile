@@ -33,6 +33,11 @@ export const IMAGE_OPTIONS = {
   includeBase64: false,
 };
 
+export const APPLE = 'Apple';
+export const GOOGLE = 'Google';
+export const FACEBOOK = 'Facebook';
+export const INSTAGRAM = 'Instagram';
+export const MANUAL = 'Manual';
 export const EMAIL_ENUM = 'email';
 export const PHONE_ENUM = 'phone';
 export const EMAIL = 'Log In with your Email';
@@ -188,15 +193,15 @@ export const GENERIC_ERROR_TEXT = 'Something went wrong. Please try again.';
 
 export const INS_SCOPES = ['user_profile', 'user_media'];
 
-export const LOCATIONS_DATA = [
-  {id: 0, value: 'Fairways Country Club', label: 'Fairways Country Club'},
-  {id: 1, value: 'Dubsdread Golf Course', label: 'Dubsdread Golf Course'},
-  {
-    id: 2,
-    value: 'Cathcart Castle Golf Club',
-    label: 'Cathcart Castle Golf Club',
-  },
-  {id: 3, value: 'Miami Beach Golf Club', label: 'Miami Beach Golf Club'},
+interface TIME_OPTION {
+  id: number;
+  label: string;
+}
+
+export const TIME_OPTIONS: TIME_OPTION[] = [
+  {id: 1, label: 'Morning'},
+  {id: 2, label: 'Afternoon'},
+  {id: 3, label: 'Evening'},
 ];
 
 export const TIME_ORDER = ['Morning', 'Afternoon', 'Evening'];

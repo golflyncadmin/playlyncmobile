@@ -3,6 +3,7 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {LoginManager} from 'react-native-fbsdk-next';
 import CookieManager from '@react-native-cookies/cookies';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {
   AppButton,
   AppHeader,
@@ -56,8 +57,10 @@ const Profile = ({navigation}: ProfileProps) => {
   const handleLogout = async () => {
     LoginManager.logOut(); // FB logout
     await CookieManager.clearAll(true); // Ins logout
-    dispatch(setLoginUser(null)); // Clear session
-    dispatch(setAccessToken(null)); // Clear session
+    await GoogleSignin.signOut(); // Google logout
+    // Clear session
+    dispatch(setLoginUser(null));
+    dispatch(setAccessToken(null));
     dispatch(logOut());
     navigation.replace(Routes.AuthStack);
   };

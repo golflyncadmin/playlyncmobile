@@ -1,17 +1,21 @@
 import React, {useRef, useState, useCallback} from 'react';
-import {Text, View, TouchableOpacity} from 'react-native';
+import {Text, View, FlatList, ScrollView, TouchableOpacity} from 'react-native';
 import {Formik} from 'formik';
 import CheckBox from '@react-native-community/checkbox';
 import {
   AppInput,
-  Dropdown,
   AppButton,
   AppHeader,
   AppLoader,
   MainWrapper,
+  CoursesModal,
   DateRangePicker,
 } from '../../../../components';
-import {useCreateRequestMutation} from '../../../../redux/app/appApiSlice';
+import {
+  useCreateRequestMutation,
+  useSearchLocationsMutation,
+  useLocationsCoursesMutation,
+} from '../../../../redux/app/appApiSlice';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   addRequestForm,
@@ -27,33 +31,33 @@ import {
   showAlert,
   GENERIC_ERROR_TEXT,
 } from '../../../../shared/exporter';
-import {LOCATIONS_DATA, TIME_ORDER} from '../../../../shared/utils/constant';
+import {TIME_ORDER, TIME_OPTIONS} from '../../../../shared/utils/constant';
+import {debounce} from '../../../../shared/utils/helpers';
 
 interface AddRequestProps {
   navigation: any;
 }
 
-interface Option {
-  id: number;
-  label: string;
-}
-
-const options: Option[] = [
-  {id: 1, label: 'Morning'},
-  {id: 2, label: 'Afternoon'},
-  {id: 3, label: 'Evening'},
-];
-
 const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
+  const DEBOUNCE_DELAY = 500;
   const formikRef = useRef<any>(null);
   const [endDate, setEndDate] = useState('');
-  const [location, setLocation] = useState('');
   const [startDate, setStartDate] = useState('');
+  const [courses, setCourses] = useState<any[]>([]);
+  const [selCourseId, setSelCourseId] = useState('');
+  const [locations, setLocations] = useState<any[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [playersCount, setPlayersCount] = useState<number>(1);
   const [selectedTimes, setSelectedTimes] = useState<any>([]);
+  const [displayDropDown, setDisplayDropDown] = useState(false);
+  const [locationCourses, setLocationCourses] = useState<any[]>([]);
+  const [coursesModalVisible, setCoursesModalVisible] = useState(false);
 
   const [createRequest, {isLoading}] = useCreateRequestMutation();
+  const [searchLocations, {isLoading: searchLoading}] =
+    useSearchLocationsMutation();
+  const [getLocationCourses, {isLoading: fetchLoading}] =
+    useLocationsCoursesMutation();
 
   const handleCheckBoxChange = (label: any) => {
     if (selectedTimes.includes(label)) {
@@ -68,7 +72,6 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
   };
 
   const handleAddRequest = async (values: any, {resetForm}) => {
-    if (location === '') return showAlert('Error', 'Please select Location');
     if (playersCount <= 0)
       return showAlert('Error', 'Please select number of players');
     if (selectedTimes?.length === 0)
@@ -83,14 +86,14 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
         start_date: startDate,
         end_date: endDate,
         time: orderedTime,
-        location: location,
+        location: values?.location,
+        course_id: selCourseId,
         players: playersCount,
       };
       const resp = await createRequest(data);
       if (resp?.data) {
         showAlert('Request Submitted', resp?.data?.message, () => {
           navigation.navigate(Routes.RequestsStack);
-          setLocation('');
           setPlayersCount(1);
           setEndDate('');
           setStartDate('');
@@ -98,7 +101,7 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
           resetForm();
         });
       } else {
-        showAlert('Error', resp?.error?.data?.message);
+        showAlert('Error', resp?.error?.data?.message || GENERIC_ERROR_TEXT);
       }
     } catch (error: any) {
       showAlert('Error', GENERIC_ERROR_TEXT);
@@ -142,8 +145,72 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
     formikRef.current?.setFieldValue('dateRange', formattedDate);
   };
 
-  const onChange = (item: any) => {
-    setLocation(item?.label);
+  const handleSelectCourse = (course: any) => {
+    const {course_id, course_name} = course;
+    setSelCourseId(course_id);
+    setDisplayDropDown(false);
+    setCoursesModalVisible(false);
+    formikRef?.current?.setFieldValue('location', course_name);
+  };
+
+  const handleSearch = async (query: string) => {
+    if (!query) return;
+    try {
+      const data = {search: query};
+
+      const resp = await searchLocations(data);
+      if (resp?.data) {
+        const data = resp?.data?.data;
+        setCourses(data?.course_suggestions);
+        setLocations(data?.location_suggestions);
+      } else {
+        console.log('Error => ', resp?.error?.data?.message);
+      }
+    } catch (error: any) {
+      showAlert('Error', GENERIC_ERROR_TEXT);
+    }
+  };
+
+  // Debounced version of handleSearch
+  const debouncedHandleSearch = debounce(handleSearch, DEBOUNCE_DELAY);
+
+  const handleGetCourses = async (location: string) => {
+    try {
+      const data = {location: location};
+
+      const resp = await getLocationCourses(data);
+      if (resp?.data) {
+        const data = resp?.data?.data;
+        setLocationCourses(data?.course_suggestions);
+        setCoursesModalVisible(true);
+      } else {
+        console.log('Error => ', resp?.error?.data?.message);
+      }
+    } catch (error: any) {
+      showAlert('Error', GENERIC_ERROR_TEXT);
+    }
+  };
+
+  const renderItem = ({item}: any, type: string) => {
+    const isCourses = type === 'courses';
+    return (
+      <TouchableOpacity
+        key={item}
+        activeOpacity={0.7}
+        style={styles.itemContainer}
+        onPress={() => {
+          if (isCourses) {
+            handleSelectCourse(item);
+          } else {
+            handleGetCourses(item);
+          }
+        }}>
+        {svgIcon.LocationIcon}
+        <Text style={styles.itemTextStyle}>
+          {isCourses ? item?.course_name : item}
+        </Text>
+      </TouchableOpacity>
+    );
   };
 
   return (
@@ -161,17 +228,32 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
           initialValues={addRequestForm}
           validationSchema={addRequestSchema}
           onSubmit={handleAddRequest}>
-          {({values, errors, touched, handleSubmit, handleChange}) => (
+          {({
+            values,
+            errors,
+            touched,
+            handleSubmit,
+            handleChange,
+            setFieldValue,
+          }) => (
             <View style={styles.contentContainer}>
               <View style={styles.innerView}>
-                <Text style={styles.headingTextStyle}>Location*</Text>
-                <Dropdown
-                  onChange={onChange}
-                  location={location}
-                  placeholder="Pick Location"
-                  locationsArr={LOCATIONS_DATA}
+                <Text style={styles.titleTextStyle}>Location*</Text>
+                <AppInput
+                  placeholder="Search Location"
+                  value={values.location}
+                  touched={touched.location}
+                  autoCapitalize="none"
+                  leftIcon={svgIcon.LocationIcon}
+                  errorMessage={errors.location}
+                  onChangeText={txt => {
+                    debouncedHandleSearch(txt);
+                    setFieldValue('location', txt);
+                    setDisplayDropDown(txt ? true : false);
+                  }}
+                  inputStyle={styles.inputStyle}
                 />
-                <Text style={[styles.headingTextStyle, {marginTop: WP('6')}]}>
+                <Text style={[styles.titleTextStyle, {marginTop: WP('6')}]}>
                   Number of players *
                 </Text>
                 <View style={styles.countContainer}>
@@ -189,7 +271,7 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
                     <Text style={styles.countButtonText}>+</Text>
                   </TouchableOpacity>
                 </View>
-                <Text style={styles.headingTextStyle}>Date Range *</Text>
+                <Text style={styles.titleTextStyle}>Date Range *</Text>
                 <AppInput
                   placeholder="Pick date range"
                   value={values.dateRange}
@@ -208,11 +290,11 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
                   handleClick={handleSelectRange}
                   setModalVisible={() => setModalVisible(false)}
                 />
-                <Text style={[styles.headingTextStyle, {marginTop: WP('6')}]}>
+                <Text style={[styles.titleTextStyle, {marginTop: WP('6')}]}>
                   Time *
                 </Text>
                 <View style={styles.checkboxContainer}>
-                  {options.map(option => (
+                  {TIME_OPTIONS.map(option => (
                     <View key={option.id} style={styles.checkboxContainer}>
                       <CheckBox
                         boxType="square"
@@ -244,7 +326,56 @@ const AddRequest: React.FC<AddRequestProps> = ({navigation}) => {
           )}
         </Formik>
       </KeyboardAwareScrollView>
-      {isLoading && <AppLoader />}
+      {displayDropDown && (
+        <View style={styles.locationsContainer}>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {courses?.length > 0 && (
+              <>
+                <Text style={styles.headingTextStyle}>Courses</Text>
+                <View>
+                  <FlatList
+                    key="1"
+                    data={courses}
+                    scrollEnabled={false}
+                    renderItem={item => renderItem(item, 'courses')}
+                    showsVerticalScrollIndicator={false}
+                    keyExtractor={(item: any) => item?.toString()}
+                  />
+                </View>
+              </>
+            )}
+            <Text style={[styles.headingTextStyle, {marginTop: WP('5')}]}>
+              Locations
+            </Text>
+            {locations?.length > 0 ? (
+              <View>
+                <FlatList
+                  key="2"
+                  data={locations}
+                  scrollEnabled={false}
+                  renderItem={item => renderItem(item, 'locations')}
+                  showsVerticalScrollIndicator={false}
+                  keyExtractor={(item: any) => item?.toString()}
+                />
+              </View>
+            ) : (
+              <View style={styles.emptyView}>
+                <Text style={styles.emptyTextStyle}>
+                  {!searchLoading &&
+                    'No results found. Please try another search'}
+                </Text>
+              </View>
+            )}
+          </ScrollView>
+        </View>
+      )}
+      <CoursesModal
+        data={locationCourses}
+        modalVisible={coursesModalVisible}
+        handleClick={handleSelectCourse}
+        setModalVisible={() => setCoursesModalVisible(false)}
+      />
+      {(isLoading || searchLoading || fetchLoading) && <AppLoader />}
     </MainWrapper>
   );
 };

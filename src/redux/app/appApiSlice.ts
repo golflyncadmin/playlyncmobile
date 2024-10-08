@@ -60,6 +60,20 @@ export const appApiSlice = apiSlice.injectEndpoints({
         body: data,
       }),
     }),
+    searchLocations: builder.mutation({
+      query: (data: any) => ({
+        url: 'search',
+        method: 'post',
+        body: data,
+      }),
+    }),
+    locationsCourses: builder.mutation({
+      query: (data: any) => ({
+        url: 'location/courses',
+        method: 'post',
+        body: data,
+      }),
+    }),
   }),
   overrideExisting: true,
 });
@@ -74,4 +88,6 @@ export const {
   useDeleteAccountMutation,
   useSubmitCourseReqMutation,
   useReportIssueMutation,
+  useSearchLocationsMutation,
+  useLocationsCoursesMutation,
 } = appApiSlice;

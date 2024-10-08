@@ -97,6 +97,9 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     if (startDate && endDate) {
       handleClick({startDate, endDate});
       setModalVisible();
+      setStartDate('');
+      setEndDate('');
+      setMarkedDates([]);
     } else {
       showAlert('Error', 'Both start and end dates must be selected.');
     }
@@ -115,6 +118,13 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
     ),
     [],
   );
+
+  const handleCancel = () => {
+    setModalVisible();
+    setStartDate('');
+    setEndDate('');
+    setMarkedDates([]);
+  };
 
   return (
     <Modal
@@ -140,7 +150,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
           title="Cancel"
           isEmpty={false}
           textStyle={styles.cancelTextStyle}
-          handleClick={setModalVisible}
+          handleClick={() => handleCancel()}
           buttonStyle={styles.cancelButtonStyle}
         />
         <AppButton

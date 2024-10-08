@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {
   WP,
@@ -14,7 +14,7 @@ interface ComponentProps {
   dropDownStyle?: object;
   placeholder?: string;
   onChange?: (v: any) => void;
-  location?: any;
+  location: any;
   selectedTextStyle?: any;
 }
 
@@ -26,7 +26,11 @@ function Dropdown({
   placeholder,
   selectedTextStyle,
 }: ComponentProps) {
-  const [value, setValue] = useState(location ? location : '');
+  const [value, setValue] = useState(location || '');
+
+  useEffect(() => {
+    setValue(location || '');
+  }, [location]);
 
   const handleChange = (item: any) => {
     setValue(item.value);
@@ -50,6 +54,9 @@ function Dropdown({
         placeholder={placeholder}
         value={value}
         onChange={handleChange}
+        search
+        searchPlaceholder={'Search Location'}
+        inputSearchStyle={styles.inputSearchStyle}
         containerStyle={styles.dropDownContainer}
       />
     </View>
@@ -62,6 +69,10 @@ const styles = StyleSheet.create({
   },
   dropDownContainer: {
     top: isIOS() ? 0 : -5,
+  },
+  inputSearchStyle: {
+    height: WP('10'),
+    borderRadius: WP('1.5'),
   },
   dropDownStyle: {
     width: '100%',

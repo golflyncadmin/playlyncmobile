@@ -14,17 +14,21 @@ interface AppHeaderProps {
   title?: string;
   leftIcon?: boolean;
   rightIcon?: boolean;
+  onPressBack?: () => {};
 }
 const AppHeader: React.FC<AppHeaderProps> = ({
   title,
+  onPressBack,
   leftIcon = true,
   rightIcon = false,
 }) => {
-  const navigation = useNavigation();
+  const navigation: any = useNavigation();
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.goBack()}>
+      <TouchableOpacity
+        activeOpacity={0.7}
+        onPress={() => (onPressBack ? onPressBack() : navigation.goBack())}>
         {leftIcon ? svgIcon.BackIcon : <View style={styles.emptyView} />}
       </TouchableOpacity>
       <Text style={styles.textStyle}>{title}</Text>

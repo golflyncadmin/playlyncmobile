@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, Image, FlatList, ListRenderItemInfo} from 'react-native';
+import {View, Text, Image, Linking, FlatList} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 import {AppButton, AppLoader, MainWrapper} from '../../../../components';
-import {useGetRequestAlertsQuery} from '../../../../redux/app/appApiSlice';
+import {useLazyGetRequestAlertsQuery} from '../../../../redux/app/appApiSlice';
 import styles from './styles';
 import {appIcons} from '../../../../shared/exporter';
 import {svgIcon} from '../../../../assets/svg';
@@ -11,26 +11,22 @@ interface AlertsProps {
   navigation: any;
 }
 
-type Alert = {
-  id: number;
-  title: string;
-};
-
-
-const ALL_TIME_SLOTS = [1, 2, 3, 4, 5, 6, 7];
-
 const Alerts = ({navigation}: AlertsProps) => {
   const isFocused = useIsFocused();
+  const [allAlerts, setAllAlerts] = useState<any>([]);
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
 
-  const {
-    data: alertsData,
-    isLoading: alertsLoading,
-    refetch: alertsRefetch,
-  } = useGetRequestAlertsQuery(undefined);
+  const [fetchAlerts, {isLoading: alertsLoading}] =
+    useLazyGetRequestAlertsQuery(undefined);
 
   useEffect(() => {
-    if (isFocused) alertsRefetch();
+    (async () => {
+      if (isFocused) {
+        const res = await fetchAlerts(undefined);
+        const alertsData = res?.data?.data;
+        if (alertsData) setAllAlerts(res?.data?.data);
+      }
+    })();
   }, [isFocused]);
 
   const toggleSeeAll = (index: number) => {
@@ -75,23 +71,44 @@ const Alerts = ({navigation}: AlertsProps) => {
     </View>
   );
 
-  const renderItem = ({item, index}: ListRenderItemInfo<Alert>) => {
+  const handleOpenURL = async (url: string) => {
+    await Linking.openURL(url);
+  };
+
+  const renderItem = ({item, index}: any) => {
     const isExpanded = expandedIndex === index;
-    const timeSlots = isExpanded ? ALL_TIME_SLOTS : ALL_TIME_SLOTS.slice(0, 3);
+
+    const teaTimes = item?.tee_times;
+    const allTeaTimes = [
+      ...teaTimes?.morning_tee_times,
+      ...teaTimes?.afternoon_tee_times,
+      ...teaTimes?.evening_tee_times,
+    ];
+
+    const times: any = [];
+
+    if (teaTimes?.morning_tee_times?.length) times.push('Morning');
+
+    if (teaTimes?.afternoon_tee_times?.length) times.push('Afternoon');
+
+    if (teaTimes?.evening_tee_times?.length) times.push('Evening');
+
+    const timeSlots = isExpanded ? allTeaTimes : allTeaTimes.slice(0, 3);
 
     return (
       <View style={styles.itemContainer}>
         <View style={styles.itemRowContainer}>
-          <Text style={styles.titleStyle}>{item?.facility_name}</Text>
-          <Text style={styles.infoStyle}>{item?.facility_date}</Text>
+          <Text style={styles.titleStyle}>{item?.course_name}</Text>
+          <Text style={styles.infoStyle}>{item?.course_date}</Text>
         </View>
         <View style={styles.itemRowContainer}>
           <Text style={styles.timeTextStyle}>Available Tee Times</Text>
-          <Text style={styles.infoStyle}>{item?.start_time}</Text>
+          <Text style={styles.timeSlotStyle}>{times?.join(', ')}</Text>
         </View>
-        {timeSlots.map((slot, idx) => (
+        {timeSlots?.map((slot, idx) => (
           <Text key={idx} style={styles.timeTextStyle}>
-            #1 - {item?.facility_date} {item?.start_time} | Max Players: {item?.players}
+            #{idx + 1} - {slot?.course_date} {slot?.start_time} | Max Players:{' '}
+            {slot?.max_players}
           </Text>
         ))}
         <AppButton
@@ -101,29 +118,32 @@ const Alerts = ({navigation}: AlertsProps) => {
           buttonStyle={styles.smallButtonStyle}
           handleClick={() => toggleSeeAll(index)}
         />
-        <AppButton title={'Book Now'} handleClick={() => {}} />
+        <AppButton
+          title={'Book Now'}
+          handleClick={() => handleOpenURL(item?.common_url)}
+        />
       </View>
     );
   };
 
   return (
     <MainWrapper style={styles.container}>
-      {alertsData?.data?.length > 0 && (
+      {allAlerts?.length > 0 && (
         <View style={styles.dataContainer}>
           <View style={styles.headerContainer}>
             {svgIcon.NotificationsIcon}
             <Text style={styles.alertTextStyle}>Alerts</Text>
           </View>
           <FlatList
-            data={alertsData?.data}
+            data={allAlerts}
             renderItem={renderItem}
             showsVerticalScrollIndicator={false}
             contentContainerStyle={styles.flContainer}
-            keyExtractor={item => item.id.toString()}
+            keyExtractor={item => item?.id?.toString()}
           />
         </View>
       )}
-      {alertsData?.data?.length === 0 && <NoAlertView />}
+      {!alertsLoading && allAlerts?.length === 0 && <NoAlertView />}
       {alertsLoading && <AppLoader />}
     </MainWrapper>
   );

@@ -25,7 +25,7 @@ const AppIntro = ({navigation}: AppIntroScreenProps) => {
 
   const onDone = () => {
     dispatch(setIsWalkthrough());
-    navigation.navigate(Routes.AuthStack);
+    navigation.replace(Routes.AuthStack);
   };
 
   const renderNextButton = () => (

@@ -3,6 +3,7 @@ import {View, Text, Image, TouchableOpacity} from 'react-native';
 import {Formik} from 'formik';
 import {useDispatch} from 'react-redux';
 import InstagramLogin from 'react-native-instagram-login';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   useAppleSignIn,
@@ -106,9 +107,11 @@ const Login = ({navigation}: LoginProps) => {
         setInsToken(null);
         setAppleToken(null);
         setFacebookToken(null);
-        showAlert('Error', resp?.error?.data?.message);
+        await GoogleSignin.signOut();
+        showAlert('Error', resp?.error?.data?.message || GENERIC_ERROR_TEXT);
       }
     } catch (error: any) {
+      await GoogleSignin.signOut();
       showAlert('Error', GENERIC_ERROR_TEXT);
     }
   };

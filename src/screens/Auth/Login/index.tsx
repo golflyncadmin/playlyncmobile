@@ -277,7 +277,9 @@ const Login = ({navigation}: LoginProps) => {
                   </Text>
                   <Text
                     suppressHighlighting
-                    onPress={() => navigation.navigate(Routes.ReportIssue)}
+                    onPress={() =>
+                      navigation.navigate(Routes.ReportIssue, {message: ''})
+                    }
                     style={styles.contactUsStyle}>
                     Contact Us
                   </Text>

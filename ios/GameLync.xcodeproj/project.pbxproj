@@ -570,7 +570,7 @@
 				CODE_SIGN_ENTITLEMENTS = GameLync/GameLync.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = 3F3263533K;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = GameLync/Info.plist;
@@ -604,7 +604,7 @@
 				CODE_SIGN_ENTITLEMENTS = GameLync/GameLync.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 10;
 				DEVELOPMENT_TEAM = 3F3263533K;
 				INFOPLIST_FILE = GameLync/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = AppLync;

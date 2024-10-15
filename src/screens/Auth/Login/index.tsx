@@ -161,12 +161,12 @@ const Login = ({navigation}: LoginProps) => {
       case APPLE:
         signInWithApple();
         break;
-      case FACEBOOK:
-        signInWithFacebook();
-        break;
-      case INSTAGRAM:
-        insRef.current.show();
-        break;
+      // case FACEBOOK:
+      //   signInWithFacebook();
+      //   break;
+      // case INSTAGRAM:
+      //   insRef.current.show();
+      //   break;
 
       default:
         break;
@@ -277,7 +277,9 @@ const Login = ({navigation}: LoginProps) => {
                   </Text>
                   <Text
                     suppressHighlighting
-                    onPress={() => navigation.navigate(Routes.ReportIssue)}
+                    onPress={() =>
+                      navigation.navigate(Routes.ReportIssue, {message: ''})
+                    }
                     style={styles.contactUsStyle}>
                     Contact Us
                   </Text>

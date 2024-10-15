@@ -123,12 +123,12 @@ const LoginType = ({route, navigation}: LoginTypeProps) => {
       case APPLE:
         signInWithApple();
         break;
-      case FACEBOOK:
-        signInWithFacebook();
-        break;
-      case INSTAGRAM:
-        insRef.current.show();
-        break;
+      // case FACEBOOK:
+      //   signInWithFacebook();
+      //   break;
+      // case INSTAGRAM:
+      //   insRef.current.show();
+      //   break;
       case MANUAL:
         setModalVisible(true);
         break;

@@ -161,12 +161,12 @@ const Login = ({navigation}: LoginProps) => {
       case APPLE:
         signInWithApple();
         break;
-      case FACEBOOK:
-        signInWithFacebook();
-        break;
-      case INSTAGRAM:
-        insRef.current.show();
-        break;
+      // case FACEBOOK:
+      //   signInWithFacebook();
+      //   break;
+      // case INSTAGRAM:
+      //   insRef.current.show();
+      //   break;
 
       default:
         break;

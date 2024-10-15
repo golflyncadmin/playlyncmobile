@@ -57,8 +57,8 @@ const styles = StyleSheet.create({
   contentContainer: {
     width: '90%',
     maxHeight: '85%',
-    paddingTop: WP('5'),
     borderRadius: WP('5'),
+    paddingVertical: WP('5'),
     justifyContent: 'center',
     paddingHorizontal: WP('6'),
     backgroundColor: GLColors.Natural.White,

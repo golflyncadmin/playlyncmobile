@@ -167,13 +167,13 @@ export const personalInfoSchema = yup.object().shape({
     .string()
     .optional()
     .matches(/^\S*$/, 'Space Not Allowed')
-    .matches(/^[a-zA-Z0-9]*$/, 'Special Characters Are Not Allowed')
+    .matches(/^[a-zA-Z].*$/, 'Must start with a letter')
     .max(25, 'Maximum 25 Characters Allowed'),
   lastName: yup
     .string()
     .optional()
     .matches(/^\S*$/, 'Space Not Allowed')
-    .matches(/^[a-zA-Z0-9]*$/, 'Special Characters Are Not Allowed')
+    .matches(/^[a-zA-Z].*$/, 'Must start with a letter')
     .max(25, 'Maximum 25 Characters Allowed'),
 });
 
@@ -181,11 +181,13 @@ export const suggestCourseSchema = yup.object().shape({
   courseName: yup
     .string()
     .required('Course Name Required')
-    .max(25, 'Maximum 25 Characters Allowed'),
+    .matches(/^[a-zA-Z].*$/, 'Must start with a letter')
+    .max(50, 'Maximum 50 characters Allowed'),
   courseLocation: yup
     .string()
     .required('Course Location Required')
-    .max(25, 'Maximum 25 Characters Allowed'),
+    .matches(/^[a-zA-Z].*$/, 'Must start with a letter')
+    .max(50, 'Maximum 50 characters Allowed'),
 });
 
 export const reportIssueSchema = yup.object().shape({
@@ -199,6 +201,7 @@ export const reportIssueSchema = yup.object().shape({
   subject: yup
     .string()
     .required('Subject Required')
+    .matches(/^[a-zA-Z]*$/, 'Only Alphabets Are Allowed')
     .max(25, 'Maximum 25 Characters Allowed'),
   description: yup
     .string()

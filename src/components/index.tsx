@@ -13,3 +13,4 @@ export * from './complex/CoursesModal';
 export * from './complex/AgreementModal';
 export * from './complex/DateRangePicker';
 export * from './complex/PreviousReqSheet';
+export * from './complex/AdminResponseModal';

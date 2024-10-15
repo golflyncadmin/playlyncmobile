@@ -123,12 +123,12 @@ const LoginType = ({route, navigation}: LoginTypeProps) => {
       case APPLE:
         signInWithApple();
         break;
-      case FACEBOOK:
-        signInWithFacebook();
-        break;
-      case INSTAGRAM:
-        insRef.current.show();
-        break;
+      // case FACEBOOK:
+      //   signInWithFacebook();
+      //   break;
+      // case INSTAGRAM:
+      //   insRef.current.show();
+      //   break;
       case MANUAL:
         setModalVisible(true);
         break;
@@ -201,7 +201,7 @@ const LoginType = ({route, navigation}: LoginTypeProps) => {
         </Text>
         <Text
           suppressHighlighting
-          onPress={() => navigation.navigate(Routes.ReportIssue)}
+          onPress={() => navigation.navigate(Routes.ReportIssue, {message: ''})}
           style={styles.contactUsStyle}>
           Contact Us
         </Text>

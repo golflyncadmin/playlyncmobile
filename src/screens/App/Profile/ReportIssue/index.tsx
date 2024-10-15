@@ -1,4 +1,4 @@
-import React, {useRef, useEffect} from 'react';
+import React, {useRef, useEffect, useState} from 'react';
 import {View, Text} from 'react-native';
 import {Formik} from 'formik';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -12,6 +12,7 @@ import {
   AppHeader,
   AppLoader,
   MainWrapper,
+  AdminResponseModal,
 } from '../../../../components';
 import styles from './styles';
 import {
@@ -23,11 +24,14 @@ import {useReportIssueMutation} from '../../../../redux/app/appApiSlice';
 import {useSelector} from 'react-redux';
 
 interface ReportIssueProps {
+  route: any;
   navigation: any;
 }
 
-const ReportIssue = ({navigation}: ReportIssueProps) => {
+const ReportIssue = ({route, navigation}: ReportIssueProps) => {
   const formikRef: any = useRef(null);
+  const [adminMessage, setAdminMessage] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
   const {loginUser} = useSelector((state: object | any) => state?.auth);
 
   const [reportIssue, {isLoading}] = useReportIssueMutation();
@@ -37,6 +41,16 @@ const ReportIssue = ({navigation}: ReportIssueProps) => {
       formikRef?.current?.setFieldValue('email', loginUser?.email);
     }
   }, [loginUser]);
+
+  useEffect(() => {
+    if (route?.params?.message) {
+      const {body} = route?.params?.message;
+      setAdminMessage(body);
+      setTimeout(() => {
+        setModalVisible(true);
+      }, 500);
+    }
+  }, [route]);
 
   const handleReportIssue = async (values: any, {resetForm}) => {
     try {
@@ -135,6 +149,11 @@ const ReportIssue = ({navigation}: ReportIssueProps) => {
         </Formik>
       </KeyboardAwareScrollView>
       {isLoading && <AppLoader />}
+      <AdminResponseModal
+        message={adminMessage}
+        modalVisible={modalVisible}
+        setModalVisible={() => setModalVisible(false)}
+      />
     </MainWrapper>
   );
 };

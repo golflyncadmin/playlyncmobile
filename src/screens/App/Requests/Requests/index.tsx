@@ -32,8 +32,8 @@ const Requests = ({navigation}: RequestsProps) => {
   const sheetRef = useRef(null);
   const isFocused = useIsFocused();
   const [reqId, setReqId] = useState('');
-  const [allRequests, setAllRequests] = useState(MY_REQUESTS);
   const [modalVisible, setModalVisible] = useState(false);
+  const [allRequests, setAllRequests] = useState(MY_REQUESTS);
 
   const [fetchRequests, {isLoading: reqLoading}] =
     useLazyGetRequestsQuery(undefined);

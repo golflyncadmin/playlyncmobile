@@ -5,6 +5,7 @@ const authSlice = createSlice({
   initialState: {
     loginUser: null,
     accessToken: null,
+    userFCMToken: null,
     refreshToken: {},
     isTokenValid: false,
     isWalkthrough: false,
@@ -15,6 +16,9 @@ const authSlice = createSlice({
     },
     setAccessToken: (state, action) => {
       state.accessToken = action?.payload;
+    },
+    setUserFCMToken: (state, action) => {
+      state.userFCMToken = action?.payload;
     },
     setLoginUser: (state, action) => {
       state.loginUser = action?.payload;
@@ -37,6 +41,7 @@ export const {
   setRefreshToken,
   logOut,
   setAccessToken,
+  setUserFCMToken,
   setLoginUser,
   setIsTokenValid,
   setIsWalkthrough,

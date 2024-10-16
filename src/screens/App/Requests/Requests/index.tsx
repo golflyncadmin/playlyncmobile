@@ -41,8 +41,13 @@ const Requests = ({navigation}: RequestsProps) => {
   const [deleteRequest, {isLoading: delLoading}] = useDeleteRequestMutation();
 
   useEffect(() => {
-    notificationListener(navigation);
+    const unsubscribeNotificationListener: any =
+      notificationListener(navigation);
     return () => {
+      // Cleanup notification listeners
+      unsubscribeNotificationListener();
+
+      // Clear all delivered and local notifications
       PushNotification.getDeliveredNotifications((all: any) => {
         PushNotification.removeAllDeliveredNotifications();
         PushNotification.cancelAllLocalNotifications();

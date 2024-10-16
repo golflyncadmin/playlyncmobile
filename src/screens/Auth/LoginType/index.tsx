@@ -16,7 +16,11 @@ import {
 } from '../../../components';
 import {INS_APP_ID, INS_APP_SECRET, INS_REDIRECTION_URL} from '@env';
 import {useSocialLoginMutation} from '../../../redux/auth/authApiSlice';
-import {setAccessToken, setLoginUser} from '../../../redux/auth/authSlice';
+import {
+  setLoginUser,
+  setAccessToken,
+  setUserFCMToken,
+} from '../../../redux/auth/authSlice';
 import {
   getFCMToken,
   createNotifyChannel,
@@ -143,6 +147,7 @@ const LoginType = ({route, navigation}: LoginTypeProps) => {
     setAppleToken(null);
     setFacebookToken(null);
     dispatch(setLoginUser(res?.data));
+    dispatch(setUserFCMToken(fcmToken));
     dispatch(setAccessToken(res?.data?.token));
 
     navigation.replace(Routes.AppStack);

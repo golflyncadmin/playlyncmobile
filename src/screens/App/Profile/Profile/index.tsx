@@ -23,6 +23,7 @@ import {
   setLoginUser,
   setAccessToken,
 } from '../../../../redux/auth/authSlice';
+import {useLogoutUserMutation} from '../../../../redux/auth/authApiSlice';
 import {useDeleteAccountMutation} from '../../../../redux/app/appApiSlice';
 
 interface ProfileProps {
@@ -32,9 +33,12 @@ interface ProfileProps {
 const Profile = ({navigation}: ProfileProps) => {
   const dispatch = useDispatch();
   const [modalVisible, setModalVisible] = useState(false);
-  const {loginUser} = useSelector((state: object | any) => state?.auth);
+  const {loginUser, userFCMToken} = useSelector(
+    (state: object | any) => state?.auth,
+  );
 
   const [deleteAccount, {isLoading}] = useDeleteAccountMutation();
+  const [logoutUser, {isLoading: logoutLoading}] = useLogoutUserMutation();
 
   const handleDeleteAccount = async () => {
     setModalVisible(false);
@@ -55,14 +59,27 @@ const Profile = ({navigation}: ProfileProps) => {
   };
 
   const handleLogout = async () => {
-    LoginManager.logOut(); // FB logout
-    await CookieManager.clearAll(true); // Ins logout
-    await GoogleSignin.signOut(); // Google logout
-    // Clear session
-    dispatch(setLoginUser(null));
-    dispatch(setAccessToken(null));
-    dispatch(logOut());
-    navigation.replace(Routes.AuthStack);
+    try {
+      const data = {
+        email: loginUser?.email,
+        fcm_token: userFCMToken,
+      };
+      const resp = await logoutUser(data);
+      if (resp?.data) {
+        LoginManager.logOut(); // FB logout
+        await CookieManager.clearAll(true); // Ins logout
+        await GoogleSignin.signOut(); // Google logout
+        // Clear session
+        dispatch(setLoginUser(null));
+        dispatch(setAccessToken(null));
+        dispatch(logOut());
+        navigation.replace(Routes.AuthStack);
+      } else {
+        showAlert('Error', resp?.error?.data?.message);
+      }
+    } catch (error: any) {
+      showAlert('Error', GENERIC_ERROR_TEXT);
+    }
   };
 
   const DisplayOption = ({title, icon, screen, isParams = false}) => (
@@ -139,7 +156,7 @@ const Profile = ({navigation}: ProfileProps) => {
         setModalVisible={() => setModalVisible(false)}
         heading="Are you sure you want to delete your profile?"
       />
-      {isLoading && <AppLoader />}
+      {(isLoading || logoutLoading) && <AppLoader />}
     </MainWrapper>
   );
 };

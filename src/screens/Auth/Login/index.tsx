@@ -20,7 +20,11 @@ import {
   createNotifyChannel,
 } from '../../../shared/utils/notificationService';
 import {AppButton, AppInput, AppLoader, MainWrapper} from '../../../components';
-import {setAccessToken, setLoginUser} from '../../../redux/auth/authSlice';
+import {
+  setLoginUser,
+  setAccessToken,
+  setUserFCMToken,
+} from '../../../redux/auth/authSlice';
 import styles from './styles';
 import {
   isIOS,
@@ -178,6 +182,7 @@ const Login = ({navigation}: LoginProps) => {
     setAppleToken(null);
     setFacebookToken(null);
     dispatch(setLoginUser(res?.data));
+    dispatch(setUserFCMToken(fcmToken));
     dispatch(setAccessToken(res?.data?.token));
 
     navigation.replace(Routes.AppStack);

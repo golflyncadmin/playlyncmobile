@@ -4,56 +4,86 @@ import PushNotification, {Importance} from 'react-native-push-notification';
 import PushNotificationIOS from '@react-native-community/push-notification-ios';
 import {Routes} from './routes';
 
+/**
+ * Request notification permissions based on the platform.
+ * Android requires POST_NOTIFICATIONS permission (API 33+), and iOS uses Firebase's requestPermission.
+ */
 export async function requestPermission() {
-  if (Platform.OS === 'android' && Platform.Version >= 33) {
-    let result = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+  try {
+    if (Platform.OS === 'android') {
+      if (Platform.Version >= 33) {
+        const result = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+        );
+        return result === PermissionsAndroid.RESULTS.GRANTED;
+      }
+      return true; // No need for explicit permission request below API 33
+    }
+
+    const authStatus = await messaging().requestPermission();
+    return (
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL
     );
-    return result === 'granted';
+  } catch (error) {
+    console.error('Error requesting notification permissions', error);
+    return false;
   }
-  const authStatus = await messaging().requestPermission();
-  return (
-    authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-    authStatus === messaging.AuthorizationStatus.PROVISIONAL
-  );
 }
 
+/**
+ * Get FCM token after ensuring the notification permissions are granted.
+ */
 export async function getFCMToken() {
-  const enable = await requestPermission();
-  if (enable) {
-    let token = await messaging().getToken();
+  try {
+    const hasPermission = await requestPermission();
+    if (!hasPermission) return {fcmToken: ''};
+
+    const token = await messaging().getToken();
     return {fcmToken: token};
-  } else {
+  } catch (error) {
+    console.error('Error getting FCM token', error);
     return {fcmToken: ''};
   }
 }
 
+/**
+ * Create a notification channel (for Android only) if it doesn't already exist.
+ */
 export const createNotifyChannel = () => {
-  PushNotification.createChannel(
-    {
-      channelId: 'PlayLync', // (required)
-      channelName: 'PlayLync', // (required)
-      channelDescription: 'A channel to categories your notifications', // (optional) default: undefined.
-      soundName: 'default', // (optional) See `soundName` parameter of `localNotification` function
-      importance: Importance.HIGH, // (optional) default: 4. Int value of the Android notification importance
-      vibrate: true, // (optional) default: true. Creates the default vibration patten if true.
-    },
-    (created: any) => console.log(`createChannel returned '${created}'`), // (optional) callback returns whether the channel was created, false means it already existed.
-  );
+  if (Platform.OS === 'android') {
+    PushNotification.createChannel(
+      {
+        channelId: 'PlayLync', // Required for Android
+        channelName: 'PlayLync Notifications', // Required for Android
+        channelDescription: 'Channel for PlayLync notifications',
+        importance: Importance.HIGH,
+        soundName: 'default', // Default notification sound
+        vibrate: true,
+      },
+      (created: any) => {
+        console.log(`Notification channel creation status: ${created}`);
+      },
+    );
+  }
 };
 
+/**
+ * Listener to handle different notification states (foreground, background, quit state).
+ * Cleans up listeners on unmount.
+ */
 export const notificationListener = (navigation: any) => {
-  // When the application is running, but in the background
-  messaging().onNotificationOpenedApp(async remoteMessage => {
-    console.log('Background State Notification', remoteMessage);
-    // onClickNotification(remoteMessage, navigation);
-  });
-  // To listen to messages in the foreground
-  messaging().onMessage(async remoteMessage => {
-    console.log('Foreground State Notification', remoteMessage);
+  const onNotificationOpenedAppUnsubscribe =
+    messaging().onNotificationOpenedApp(async remoteMessage => {
+      console.log('Notification opened from background:', remoteMessage);
+      if (remoteMessage) onClickNotification(remoteMessage, navigation);
+    });
+
+  const onMessageUnsubscribe = messaging().onMessage(async remoteMessage => {
+    console.log('Notification received in foreground:', remoteMessage);
     LocalNotification(remoteMessage, navigation);
   });
-  // When the application is opened from a quit state
+
   messaging()
     .getInitialNotification()
     .then(remoteMessage => {
@@ -61,41 +91,47 @@ export const notificationListener = (navigation: any) => {
         onClickNotification(remoteMessage, navigation);
       }
     })
-    .catch(err => {
-      console.log('Error ==> ', err);
+    .catch(error => {
+      console.error('Error getting initial notification:', error);
     });
+
+  return () => {
+    onNotificationOpenedAppUnsubscribe();
+    onMessageUnsubscribe();
+  };
 };
 
+/**
+ * Show a local notification when the app is in the foreground.
+ */
 export const LocalNotification = (notify: any, navigation: any) => {
   PushNotification.localNotification({
     channelId: 'PlayLync',
-    title: notify?.notification?.title,
+    title: notify?.notification?.title ?? 'Notification',
+    message: notify?.notification?.body ?? 'You have a new notification',
     smallIcon: 'ic_notification',
     largeIcon: 'ic_launcher',
-    message: notify?.notification?.body,
-    vibrate: true, // (optional) default: true
-    vibration: 300, // vibration length in milliseconds, ignored if vibrate=false, default: 1000
-    playSound: true, // (optional) default: true
-    soundName: 'default', // (optional) Sound to play when the notification is shown. Value of 'default' plays the default sound. It can be set to a custom sound such as 'android.resource://com.xyz/raw/my_sound'. It will look for the 'my_sound' audio file in 'res/raw' directory and play it. default: 'default' (default sound is played)
-    invokeApp: true, // (optional) This enable click on actions to bring back the application to foreground or stay in background, default: true
+    vibrate: true,
+    vibration: 300,
+    playSound: true,
+    soundName: 'default',
+    invokeApp: true,
   });
 
+  // Configure push notification for iOS or Android
   PushNotification.configure({
-    // (optional) Called when Token is generated (iOS and Android)
-    onRegister: function (token: any) {
-      console.log('TOKEN:', token);
+    onRegister: (token: any) => {
+      console.log('Notification token:', token);
     },
-    onNotification: function (notification: any) {
+    onNotification: (notification: any) => {
+      console.log('Notification received:', notification);
       if (notification.userInteraction) {
         onClickNotification(notify, navigation);
-      } else {
-        console.log('User received notification');
       }
       notification.finish(PushNotificationIOS.FetchResult.NoData);
     },
     popInitialNotification: true,
-    requestPermissions: Platform.OS === 'ios' ? true : false,
-    // IOS ONLY (optional): default: all - Permissions to register.
+    requestPermissions: Platform.OS === 'ios',
     permissions: {
       alert: true,
       badge: true,
@@ -104,9 +140,13 @@ export const LocalNotification = (notify: any, navigation: any) => {
   });
 };
 
+/**
+ * Handle the click of a notification and navigate to the appropriate screen.
+ */
 const onClickNotification = (notify: any, navigation: any) => {
   const {data, notification} = notify;
   const {type} = data;
+
   switch (type) {
     case 'alerts':
       navigation.navigate(Routes.AlertsStack);
@@ -115,6 +155,7 @@ const onClickNotification = (notify: any, navigation: any) => {
       navigation.navigate(Routes.ReportIssue, {message: notification});
       break;
     default:
+      console.warn('Unhandled notification type:', type);
       break;
   }
 };

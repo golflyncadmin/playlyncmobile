@@ -20,7 +20,11 @@ import {
   createNotifyChannel,
 } from '../../../shared/utils/notificationService';
 import {AppButton, AppInput, AppLoader, MainWrapper} from '../../../components';
-import {setAccessToken, setLoginUser} from '../../../redux/auth/authSlice';
+import {
+  setLoginUser,
+  setAccessToken,
+  setUserFCMToken,
+} from '../../../redux/auth/authSlice';
 import styles from './styles';
 import {
   isIOS,
@@ -161,12 +165,12 @@ const Login = ({navigation}: LoginProps) => {
       case APPLE:
         signInWithApple();
         break;
-      case FACEBOOK:
-        signInWithFacebook();
-        break;
-      case INSTAGRAM:
-        insRef.current.show();
-        break;
+      // case FACEBOOK:
+      //   signInWithFacebook();
+      //   break;
+      // case INSTAGRAM:
+      //   insRef.current.show();
+      //   break;
 
       default:
         break;
@@ -178,6 +182,7 @@ const Login = ({navigation}: LoginProps) => {
     setAppleToken(null);
     setFacebookToken(null);
     dispatch(setLoginUser(res?.data));
+    dispatch(setUserFCMToken(fcmToken));
     dispatch(setAccessToken(res?.data?.token));
 
     navigation.replace(Routes.AppStack);
@@ -277,7 +282,9 @@ const Login = ({navigation}: LoginProps) => {
                   </Text>
                   <Text
                     suppressHighlighting
-                    onPress={() => navigation.navigate(Routes.ReportIssue)}
+                    onPress={() =>
+                      navigation.navigate(Routes.ReportIssue, {message: ''})
+                    }
                     style={styles.contactUsStyle}>
                     Contact Us
                   </Text>

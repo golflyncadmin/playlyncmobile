@@ -40,6 +40,7 @@ import RightBlueIcon from './right_blue_icon.svg';
 import LeftBlueIcon from './left_blue_icon.svg';
 import CalendarGrayIcon from './calendar_gray_icon.svg';
 import PhoneIcon from './phone_icon.svg';
+import CrossIcon from './cross_icon.svg';
 
 export const svgIcon = {
   ForwardIcon: <ForwardIcon />,
@@ -83,4 +84,5 @@ export const svgIcon = {
   LeftBlueIcon: <LeftBlueIcon />,
   CalendarGrayIcon: <CalendarGrayIcon />,
   PhoneIcon: <PhoneIcon />,
+  CrossIcon: <CrossIcon />,
 };

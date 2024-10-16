@@ -94,18 +94,18 @@ export const LOGIN_TYPES: LoginTypes[] = [
         },
       ]
     : []),
-  {
-    id: 3,
-    type: 'Facebook',
-    title: 'Continue with Facebook',
-    icon: svgIcon.FBIcon,
-  },
-  {
-    id: 4,
-    type: 'Instagram',
-    title: 'Continue with Instagram',
-    icon: svgIcon.InstaIcon,
-  },
+  // {
+  //   id: 3,
+  //   type: 'Facebook',
+  //   title: 'Continue with Facebook',
+  //   icon: svgIcon.FBIcon,
+  // },
+  // {
+  //   id: 4,
+  //   type: 'Instagram',
+  //   title: 'Continue with Instagram',
+  //   icon: svgIcon.InstaIcon,
+  // },
   {
     id: 5,
     type: 'Manual',

@@ -32,8 +32,8 @@ const Requests = ({navigation}: RequestsProps) => {
   const sheetRef = useRef(null);
   const isFocused = useIsFocused();
   const [reqId, setReqId] = useState('');
-  const [allRequests, setAllRequests] = useState(MY_REQUESTS);
   const [modalVisible, setModalVisible] = useState(false);
+  const [allRequests, setAllRequests] = useState(MY_REQUESTS);
 
   const [fetchRequests, {isLoading: reqLoading}] =
     useLazyGetRequestsQuery(undefined);
@@ -41,8 +41,13 @@ const Requests = ({navigation}: RequestsProps) => {
   const [deleteRequest, {isLoading: delLoading}] = useDeleteRequestMutation();
 
   useEffect(() => {
-    notificationListener(navigation);
+    const unsubscribeNotificationListener: any =
+      notificationListener(navigation);
     return () => {
+      // Cleanup notification listeners
+      unsubscribeNotificationListener();
+
+      // Clear all delivered and local notifications
       PushNotification.getDeliveredNotifications((all: any) => {
         PushNotification.removeAllDeliveredNotifications();
         PushNotification.cancelAllLocalNotifications();
